@@ -55,19 +55,35 @@ Most requests run all three in sequence. Skip to Mode 2 if you already have audi
 
 ## Installation
 
-### Claude Code (global)
+### Claude Code — Plugin Marketplace (recommended)
 
 ```bash
-claude install-skill /path/to/ultimate-seo-geo
+# Step 1: Add the marketplace (one-time)
+/plugin marketplace add mykpono/ultimate-seo-geo
+
+# Step 2: Install the plugin
+/plugin install ultimate-seo-geo@ultimate-seo-geo
 ```
 
-### Claude Desktop (Cowork mode)
+Or install directly without a marketplace:
 
-Install the `.skill` file from the [Releases](../../releases) page.
+```bash
+/plugin install https://github.com/mykpono/ultimate-seo-geo.git
+```
 
-### Manual
+### Claude Code — Manual skill install (global)
 
-Copy the `ultimate-seo-geo/` folder into your skills directory:
+```bash
+cp -r ultimate-seo-geo ~/.claude/skills/
+```
+
+### Claude Desktop / Cowork
+
+Install the `.skill` file from the [Releases](https://github.com/mykpono/ultimate-seo-geo/releases) page.
+
+### Manual (any agent)
+
+Copy the folder into your skills directory:
 
 ```
 ~/.claude/skills/ultimate-seo-geo/

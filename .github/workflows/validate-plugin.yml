@@ -1,0 +1,84 @@
+name: Validate Plugin
+
+on:
+  push:
+    paths:
+      - '.claude-plugin/**'
+      - 'plugins/**'
+  pull_request:
+    paths:
+      - '.claude-plugin/**'
+      - 'plugins/**'
+
+jobs:
+  validate-json:
+    name: Validate JSON files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate marketplace.json
+        run: |
+          echo "Validating .claude-plugin/marketplace.json..."
+          python3 -c "
+          import json, sys
+          with open('.claude-plugin/marketplace.json') as f:
+              data = json.load(f)
+          # Check required fields
+          assert 'name' in data, 'Missing: name'
+          assert 'plugins' in data, 'Missing: plugins'
+          assert len(data['plugins']) > 0, 'plugins array is empty'
+          for p in data['plugins']:
+              assert 'name' in p, 'Plugin missing: name'
+              assert 'source' in p, 'Plugin missing: source'
+              assert 'description' in p, 'Plugin missing: description'
+          print('marketplace.json is valid ✓')
+          print(f'  Plugins listed: {[p[\"name\"] for p in data[\"plugins\"]]}')
+          "
+
+      - name: Validate plugin.json
+        run: |
+          echo "Validating plugins/ultimate-seo-geo/.claude-plugin/plugin.json..."
+          python3 -c "
+          import json, sys
+          with open('plugins/ultimate-seo-geo/.claude-plugin/plugin.json') as f:
+              data = json.load(f)
+          assert 'name' in data, 'Missing: name'
+          assert 'version' in data, 'Missing: version'
+          assert 'description' in data, 'Missing: description'
+          # Validate name is kebab-case
+          import re
+          assert re.match(r'^[a-z0-9-]+$', data['name']), f'Plugin name must be kebab-case, got: {data[\"name\"]}'
+          print('plugin.json is valid ✓')
+          print(f'  Name: {data[\"name\"]}')
+          print(f'  Version: {data[\"version\"]}')
+          "
+
+      - name: Check SKILL.md exists
+        run: |
+          if [ -f "plugins/ultimate-seo-geo/skills/ultimate-seo-geo/SKILL.md" ]; then
+            echo "SKILL.md found ✓"
+            wc -l plugins/ultimate-seo-geo/skills/ultimate-seo-geo/SKILL.md
+          else
+            echo "ERROR: plugins/ultimate-seo-geo/skills/ultimate-seo-geo/SKILL.md not found"
+            exit 1
+          fi
+
+      - name: Check references are present
+        run: |
+          REF_DIR="plugins/ultimate-seo-geo/skills/ultimate-seo-geo/references"
+          if [ -d "$REF_DIR" ]; then
+            COUNT=$(ls "$REF_DIR" | wc -l)
+            echo "References directory found with $COUNT files ✓"
+          else
+            echo "ERROR: references directory not found at $REF_DIR"
+            exit 1
+          fi
+
+      - name: Summary
+        run: |
+          echo ""
+          echo "========================================="
+          echo "Plugin validation passed ✓"
+          echo "Ready for: /plugin marketplace add mykpono/ultimate-seo-geo"
+          echo "========================================="
