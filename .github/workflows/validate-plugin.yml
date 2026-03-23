@@ -9,7 +9,6 @@ on:
       - 'references/**'
       - 'scripts/check-plugin-sync.py'
       - 'RELEASE.md'
-      - 'CURSOR_VERIFY.md'
       - '.github/workflows/validate-plugin.yml'
   pull_request:
     paths:
@@ -19,7 +18,6 @@ on:
       - 'references/**'
       - 'scripts/check-plugin-sync.py'
       - 'RELEASE.md'
-      - 'CURSOR_VERIFY.md'
       - '.github/workflows/validate-plugin.yml'
 
 jobs:
