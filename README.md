@@ -57,17 +57,18 @@ Most requests run all three in sequence. Skip to Mode 2 if you already have audi
 
 ### Claude Code — Plugin Marketplace (recommended)
 
-```bash
-# Step 1: Add the marketplace (one-time)
-/plugin marketplace add mykpono/ultimate-seo-geo
+**Use [Claude Code](https://code.claude.com/)** (the terminal-based Claude product). The lines below are **slash commands** you type in the **Claude Code chat**, not in macOS Terminal or zsh. If you paste them into a shell, you will see `zsh: no such file or directory: /plugin` because `/plugin` is not a file on disk.
 
-# Step 2: Install the plugin
+In Claude Code, run:
+
+```text
+/plugin marketplace add mykpono/ultimate-seo-geo
 /plugin install ultimate-seo-geo@ultimate-seo-geo
 ```
 
-Or install directly without a marketplace:
+Or install directly without adding the marketplace first:
 
-```bash
+```text
 /plugin install https://github.com/mykpono/ultimate-seo-geo.git
 ```
 
@@ -235,6 +236,12 @@ Built on research, patterns, and prior work from:
 
 - **[Bhanunamikaze/Agentic-SEO-Skill](https://github.com/Bhanunamikaze/Agentic-SEO-Skill)** — SEO analysis toolkit architecture, specialist agent patterns, technical SEO audit framework
 - **[AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo)** — GEO platform citation data, DataForSEO integration patterns, AI crawler detection tables, subagent delegation architecture
+
+---
+
+## Maintainers
+
+Releases, version alignment, and syncing the plugin skill tree: [RELEASE.md](RELEASE.md).
 
 ---
 

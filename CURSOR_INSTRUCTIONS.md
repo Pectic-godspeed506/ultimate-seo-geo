@@ -4,6 +4,8 @@
 Wraps the existing `ultimate-seo-geo` skill so it can be installed via the
 Claude Code plugin marketplace with `/plugin marketplace add mykpono/ultimate-seo-geo`.
 
+**Maintenance:** Canonical sources are repo-root `SKILL.md` and `references/`. After changing them, run `bash setup-plugin.sh`. CI enforces parity and a single version string via `scripts/check-plugin-sync.py`. For releases, follow `RELEASE.md`.
+
 ## Files to create (all content provided below)
 
 Create these files exactly as specified. Do not modify any existing files.

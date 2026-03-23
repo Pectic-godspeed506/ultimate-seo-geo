@@ -12,18 +12,23 @@
 
 ## Install via Claude Code
 
+These are **slash commands** for **Claude Code**’s chat input—not for Terminal/zsh. Pasting `/plugin …` into a shell causes `no such file or directory: /plugin`.
+
 **Add the marketplace (one-time):**
-```bash
+
+```text
 /plugin marketplace add mykpono/ultimate-seo-geo
 ```
 
 **Install the plugin:**
-```bash
+
+```text
 /plugin install ultimate-seo-geo@ultimate-seo-geo
 ```
 
 **Or install directly without a marketplace:**
-```bash
+
+```text
 /plugin install https://github.com/mykpono/ultimate-seo-geo.git
 ```
 

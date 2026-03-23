@@ -27,8 +27,7 @@ mkdir -p .github/workflows
 
 echo "  Directories created ✓"
 
-# ── 2. Copy provided JSON + config files ────────────────────────────────────
-# (These files are provided alongside this script in the plugin-setup package)
+# ── 2. Copy JSON + workflow from repo root (canonical source lives beside this script)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 copy_unless_same "$SCRIPT_DIR/.claude-plugin/marketplace.json"                      .claude-plugin/marketplace.json
@@ -82,13 +81,11 @@ echo "  plugins/ultimate-seo-geo/README.md"
 echo "  .github/workflows/validate-plugin.yml"
 echo ""
 echo "Next steps:"
-echo "  1. Update root README.md — replace the Installation section"
-echo "     (see CURSOR_INSTRUCTIONS.md for the exact replacement text)"
-echo "  2. git add ."
-echo "  3. git commit -m 'feat: add Claude Code plugin marketplace structure'"
-echo "  4. git push origin main"
+echo "  1. python3 scripts/check-plugin-sync.py   # same checks as CI"
+echo "  2. See RELEASE.md for version bumps before you tag"
+echo "  3. git add . && git commit && git push"
 echo ""
-echo "Test install after pushing:"
+echo "Test install after pushing (type these in Claude Code chat, not in Terminal):"
 echo "  /plugin marketplace add mykpono/ultimate-seo-geo"
 echo "  /plugin install ultimate-seo-geo@ultimate-seo-geo"
 echo "========================================================"

@@ -5,10 +5,20 @@ on:
     paths:
       - '.claude-plugin/**'
       - 'plugins/**'
+      - 'SKILL.md'
+      - 'references/**'
+      - 'scripts/check-plugin-sync.py'
+      - 'RELEASE.md'
+      - '.github/workflows/validate-plugin.yml'
   pull_request:
     paths:
       - '.claude-plugin/**'
       - 'plugins/**'
+      - 'SKILL.md'
+      - 'references/**'
+      - 'scripts/check-plugin-sync.py'
+      - 'RELEASE.md'
+      - '.github/workflows/validate-plugin.yml'
 
 jobs:
   validate-json:
@@ -74,6 +84,9 @@ jobs:
             echo "ERROR: references directory not found at $REF_DIR"
             exit 1
           fi
+
+      - name: Root vs plugin sync + version alignment
+        run: python3 scripts/check-plugin-sync.py
 
       - name: Summary
         run: |
