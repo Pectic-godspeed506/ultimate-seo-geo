@@ -6,7 +6,7 @@ Use this before tagging or publishing a new version. Run everything from the **r
 
 ## 1. Bump the version (same value everywhere)
 
-- `SKILL.md` frontmatter → `metadata.version`
+- `SKILL.md` frontmatter → top-level `version:` (must match marketplace + `plugin.json`)
 - `.claude-plugin/marketplace.json` → `metadata.version` **and** `plugins[0].version`
 - `plugins/ultimate-seo-geo/.claude-plugin/plugin.json` → `version`
 - Optional: `README.md` and `plugins/ultimate-seo-geo/README.md` version badges
@@ -38,7 +38,7 @@ This verifies:
 - Root `references/` matches the plugin copy (filenames + contents)
 - Root `scripts/*.py` (except `check-plugin-sync.py`) matches `plugins/.../skills/.../scripts/`
 - Root `evals/` matches `plugins/.../skills/.../evals/`
-- `metadata.version`, both marketplace version fields, and `plugin.json` use one **identical** version string
+- `SKILL.md` `version:`, both marketplace version fields, and `plugin.json` use one **identical** version string
 
 **Fix failures:** `bash setup-plugin.sh`, then re-run the script.
 

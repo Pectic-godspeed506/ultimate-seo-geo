@@ -27,10 +27,12 @@ def _skill_frontmatter_version(path: Path) -> str:
     except ValueError:
         sys.exit(f"{path}: malformed frontmatter")
     for line in fm.splitlines():
-        m = re.match(r"^  version:\s*(.+?)\s*$", line)
+        m = re.match(r"^version:\s*(.+?)\s*$", line) or re.match(
+            r"^  version:\s*(.+?)\s*$", line
+        )
         if m:
             return m.group(1).strip().strip("'\"")
-    sys.exit(f"{path}: metadata.version not found under frontmatter")
+    sys.exit(f"{path}: version not found in YAML frontmatter (expected top-level version: …)")
 
 
 def main() -> int:
@@ -143,7 +145,7 @@ def main() -> int:
         "marketplace.metadata.version": meta_v,
         "marketplace.plugins[0].version": listed_v,
         "plugin.json version": pj_v,
-        "SKILL.md metadata.version": sk_v,
+        "SKILL.md frontmatter version": sk_v,
     }
     unique = set(versions.values())
     if len(unique) != 1:

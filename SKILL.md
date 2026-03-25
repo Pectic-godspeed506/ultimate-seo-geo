@@ -1,37 +1,9 @@
 ---
 name: ultimate-seo-geo
 license: MIT
-metadata:
-  version: 1.2.0
-  author: Myk Pono
-  website: https://lab.mykpono.com
-  homepage: https://mykpono.com
-  linkedin: https://www.linkedin.com/in/mykolaponomarenko/
-  updated: 2026-03-24
-  credits:
-    - name: Agentic-SEO-Skill
-      author: Bhanunamikaze
-      url: https://github.com/Bhanunamikaze/Agentic-SEO-Skill
-      contribution: SEO analysis toolkit architecture, specialist agent patterns, technical SEO audit framework
-    - name: claude-seo
-      author: AgriciDaniel
-      url: https://github.com/AgriciDaniel/claude-seo
-      contribution: GEO platform citation data, DataForSEO integration patterns, AI crawler detection tables, subagent delegation architecture
-    - name: CORE-EEAT Content Benchmark
-      author: aaron-he-zhu
-      url: https://github.com/aaron-he-zhu/core-eeat-content-benchmark
-      contribution: 80-item CORE-EEAT audit framework, content-type weight tables, GEO-First item mapping
-    - name: CITE Domain Rating
-      author: aaron-he-zhu
-      url: https://github.com/aaron-he-zhu/cite-domain-rating
-      contribution: 40-item CITE domain authority framework, domain-type weights, diagnosis matrix
-    - name: Entity Optimizer
-      author: aaron-he-zhu
-      contribution: 47-signal entity checklist, AI Entity Resolution Test protocol, Knowledge Graph optimization guide
-    - name: AI SEO / GEO Content Optimizer
-      author: aaron-he-zhu
-      contribution: Princeton GEO research data, AI engine preference mapping, content type citation share data
-description: >
+version: 1.2.0
+updated: 2026-03-24
+description: >-
   Universal SEO + GEO skill: scored full-site audits with fixes; technical SEO (CWV/INP,
   crawl, JS rendering); CORE-EEAT (80) + CITE domain (40) scoring; Schema.org JSON-LD;
   entity/KG/Wikidata signals; GEO for AI Overviews, AI Mode, ChatGPT, Perplexity; keywords,
@@ -45,9 +17,32 @@ description: >
 
 # Ultimate SEO + GEO — Universal Search Optimization Skill
 
+| Attribute | Details |
+| --- | --- |
+| **Version** | 1.2.0 |
+| **Updated** | 2026-03-24 |
+| **License** | MIT |
+| **Author** | Myk Pono |
+| **Lab** | [lab.mykpono.com](https://lab.mykpono.com) |
+| **Homepage** | [mykpono.com](https://mykpono.com) |
+| **LinkedIn** | [Profile](https://www.linkedin.com/in/mykolaponomarenko/) |
+
 The definitive SEO and Generative Engine Optimization skill. Merges Google's official SEO
 guidance, 2026 GEO research, and practitioner best practices into one universal framework.
 Every finding comes with a clear fix directive — not just diagnosis.
+
+### Attribution
+
+Frameworks and sources this skill builds on:
+
+| Source | Credit |
+| --- | --- |
+| [Agentic-SEO-Skill](https://github.com/Bhanunamikaze/Agentic-SEO-Skill) | Bhanunamikaze — SEO toolkit architecture, specialist agents, technical SEO audit framework |
+| [claude-seo](https://github.com/AgriciDaniel/claude-seo) | AgriciDaniel — GEO / DataForSEO patterns, AI crawler tables, subagent delegation |
+| [core-eeat-content-benchmark](https://github.com/aaron-he-zhu/core-eeat-content-benchmark) | aaron-he-zhu — CORE-EEAT 80-item framework, weights, GEO-first mapping |
+| [cite-domain-rating](https://github.com/aaron-he-zhu/cite-domain-rating) | aaron-he-zhu — CITE 40-item domain authority, weights, diagnosis matrix |
+| Entity Optimizer | aaron-he-zhu — entity checklist, AI entity resolution, Knowledge Graph guide |
+| AI SEO / GEO Content Optimizer | aaron-he-zhu — Princeton GEO data, engine preference mapping, citation-share data |
 
 ---
 
