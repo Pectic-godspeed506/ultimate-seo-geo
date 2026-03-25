@@ -9,6 +9,7 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$ROOT/.." || exit 1
 PY=python3
 
+echo "=== requirements_check ===" && $PY scripts/requirements-check.py --json
 echo "=== robots_checker ===" && $PY scripts/robots_checker.py "$URL" --json | head -c 2000 && echo "
 ..."
 echo "=== security_headers ===" && $PY scripts/security_headers.py "$URL" --json | head -c 1500 && echo "

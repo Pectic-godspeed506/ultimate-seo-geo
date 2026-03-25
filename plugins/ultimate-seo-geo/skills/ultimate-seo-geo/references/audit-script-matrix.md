@@ -32,6 +32,7 @@ Each major automated check has a **script** you can run alone (usually with `--j
 
 | Script | Role |
 |--------|------|
+| `requirements-check.py` | Preflight: verify `requests` + `beautifulsoup4` (`python scripts/requirements-check.py --json`) |
 | `fetch_page.py` | Fetch HTML to disk for manual inspection |
 | `check-plugin-sync.py` | CI / release: verify plugin bundle matches repo root |
 
@@ -51,6 +52,7 @@ LLM + checklist work uses these references; there is **no separate script** by d
 
 ## Progressive checks
 
+0. **Dependencies:** `python scripts/requirements-check.py` (or `--json`) before URL-based audits.  
 1. **Fast baseline:** `generate_report.py` (one command, all wired checks).  
 2. **Deep dive:** run any row’s script alone for that dimension.  
 3. **Schema after edits:** `validate_schema.py` on saved HTML.  

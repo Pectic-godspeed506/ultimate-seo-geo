@@ -72,7 +72,7 @@ done
 if [ -f scripts/run_individual_checks.sh ]; then
   cp scripts/run_individual_checks.sh plugins/ultimate-seo-geo/skills/ultimate-seo-geo/scripts/
 fi
-echo "  scripts/ copied ($SCRIPT_N audit .py files + optional shell runner) ✓"
+echo "  scripts/ copied ($SCRIPT_N .py files + optional shell runner) ✓"
 
 if [ -d "evals" ]; then
   rm -rf plugins/ultimate-seo-geo/skills/ultimate-seo-geo/evals

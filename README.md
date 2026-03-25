@@ -142,7 +142,7 @@ ultimate-seo-geo/
 │   ├── crawl-indexation.md   Sitemaps, canonicals, crawl budget
 │   └── image-seo.md          Alt text, WebP, responsive images
 │
-├── scripts/               ← 23 audit Python scripts (+ check-plugin-sync.py for CI)
+├── scripts/               ← 24 bundled Python scripts (+ check-plugin-sync.py CI-only at repo root)
 │   ├── generate_report.py    Full-site HTML dashboard (runs all scripts)
 │   ├── validate_schema.py    JSON-LD validation
 │   ├── robots_checker.py     AI crawler access check
@@ -181,13 +181,15 @@ When someone runs `/plugin marketplace add mykpono/ultimate-seo-geo`, the tool r
 
 ## Scripts
 
-The **23 audit** Python scripts (excluding maintainer-only `check-plugin-sync.py`) require Python 3.8+ and install dependencies with:
+There are **23** SEO audit scripts plus **`requirements-check.py`** (dependency preflight); **`check-plugin-sync.py`** is maintainer-only and not copied into the plugin. All bundled scripts require Python 3.8+ and install dependencies with:
 
 ```bash
 pip install -r requirements.txt
 ```
 
 On **PEP 668**–managed Python (e.g. Homebrew), use a venv first: `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`, then run scripts with `.venv/bin/python`.
+
+Preflight (optional): `python scripts/requirements-check.py` or `python scripts/requirements-check.py --json` — exits non-zero if `requests` / `beautifulsoup4` are missing.
 
 Run the full-site report to start any audit:
 
@@ -198,6 +200,7 @@ python scripts/generate_report.py https://example.com --output seo-report.html
 | Script | Purpose |
 |---|---|
 | `generate_report.py` | Full-site HTML dashboard — bundled analysis pipeline |
+| `requirements-check.py` | Preflight: `requests` + `beautifulsoup4` installed (`--json`) |
 | `validate_schema.py` | Validates JSON-LD blocks (pure stdlib) |
 | `robots_checker.py` | robots.txt rules + AI crawler allow/block status |
 | `pagespeed.py` | Core Web Vitals via PageSpeed Insights API |

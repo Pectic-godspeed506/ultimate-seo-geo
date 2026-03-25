@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- `scripts/requirements-check.py` — preflight for `requests` / `beautifulsoup4` (`--json`); `run_individual_checks.sh` runs it first; README, `RELEASE.md`, and `references/audit-script-matrix.md` updated.
+
 ## [1.1.2] - 2026-03-24
 
 ### Added
