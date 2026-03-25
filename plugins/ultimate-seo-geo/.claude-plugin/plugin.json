@@ -1,27 +1,13 @@
 {
   "name": "ultimate-seo-geo",
-  "version": "1.2.1",
   "description": "SEO + GEO for Claude: scored audits, AI search surfaces, schema, CORE-EEAT & CITE, entities. 24 diagnostic scripts + requirements-check + score_eval_transcript. Modes: Audit → Plan → Execute.",
+  "version": "1.2.2",
   "author": {
     "name": "Myk Pono",
     "url": "https://mykpono.com"
   },
+  "skills": "./skills",
   "homepage": "https://github.com/mykpono/ultimate-seo-geo",
   "repository": "https://github.com/mykpono/ultimate-seo-geo",
-  "license": "MIT",
-  "keywords": [
-    "seo",
-    "geo",
-    "audit",
-    "schema",
-    "eeat",
-    "ai-search",
-    "generative-engine-optimization",
-    "google-ai-overviews",
-    "chatgpt-search",
-    "perplexity",
-    "technical-seo",
-    "local-seo",
-    "content-strategy"
-  ]
+  "license": "MIT"
 }
