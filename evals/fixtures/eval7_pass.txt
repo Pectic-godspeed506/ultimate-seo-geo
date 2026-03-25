@@ -1,0 +1,5 @@
+For a regional subscription newspaper:
+
+- Use **Article** or **NewsArticle** JSON-LD in **structured data**, and keep **Organization** / **publisher** signals accurate.
+- **Paywall** and **subscription** pages should have clean **canonical** URLs and avoid **duplicate** thin pages when re-running **syndicated** wire pieces—add unique framing or **crawl** controls where needed.
+- Validate **schema** with Rich Results Test and monitor indexation of section fronts.

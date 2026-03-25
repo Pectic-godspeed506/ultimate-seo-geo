@@ -48,6 +48,8 @@ trap 'rm -f "$TMP"' EXIT
 if curl -fsSL --max-time 20 "$URL" -o "$TMP" 2>/dev/null && [ -s "$TMP" ]; then
   echo "=== parse_html ===" && $PY scripts/parse_html.py "$TMP" --url "$URL" --json | head -c 2000 && echo "
 ..."
+  echo "=== meta_lengths_checker ===" && $PY scripts/meta_lengths_checker.py "$TMP" --base-url "$URL" --json | head -c 2000 && echo "
+..."
   echo "=== readability ===" && $PY scripts/readability.py "$TMP" --json | head -c 1500 && echo "
 ..."
   echo "=== validate_schema ===" && $PY scripts/validate_schema.py "$TMP" --json | head -c 2000 && echo "
@@ -55,7 +57,7 @@ if curl -fsSL --max-time 20 "$URL" -o "$TMP" 2>/dev/null && [ -s "$TMP" ]; then
   echo "=== image_checker ===" && $PY scripts/image_checker.py "$TMP" --base-url "$URL" --json | head -c 2000 && echo "
 ..."
 else
-  echo "=== Skipped HTML-file scripts (fetch failed): parse_html, readability, validate_schema, image_checker ==="
+  echo "=== Skipped HTML-file scripts (fetch failed): parse_html, meta_lengths_checker, readability, validate_schema, image_checker ==="
 fi
 
 echo ""

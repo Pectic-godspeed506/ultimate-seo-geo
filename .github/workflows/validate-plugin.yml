@@ -108,6 +108,12 @@ jobs:
       - name: Root vs plugin sync + version alignment
         run: python3 scripts/check-plugin-sync.py
 
+      - name: Compile Python scripts + eval fixture regression
+        run: |
+          set -e
+          for f in scripts/*.py; do python3 -m py_compile "$f"; done
+          python3 scripts/score_eval_transcript.py --all-fixtures
+
       - name: Summary
         run: |
           echo ""

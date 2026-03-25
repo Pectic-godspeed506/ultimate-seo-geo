@@ -1,0 +1,7 @@
+Magento → Shopify migration (3k products):
+
+**Pre-migration:** Run a baseline crawl and build a complete redirect map from old URLs to new URLs.
+
+**During:** Implement **301** permanent redirects (avoid **302** for SEO equity). Keep staging off index with robots.txt / noindex where appropriate.
+
+**Post-migration:** Use **Change of Address** in **Google Search Console** (GSC), submit sitemaps, and **monitor** coverage and impressions daily in week one, then weekly through month one. Common mistakes to **avoid**: long **redirect chains**, leaving **staging** discoverable, conflicting canonicals, and accidental **noindex** on production.

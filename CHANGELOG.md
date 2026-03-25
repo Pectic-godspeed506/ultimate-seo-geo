@@ -1,10 +1,23 @@
 # Changelog
 
-## [Unreleased]
+## [1.2.0] - 2026-03-24
 
 ### Added
 
-- `scripts/requirements-check.py` — preflight for `requests` / `beautifulsoup4` (`--json`); `run_individual_checks.sh` runs it first; README, `RELEASE.md`, and `references/audit-script-matrix.md` updated.
+- `scripts/score_eval_transcript.py` — score saved model transcripts against `evals/evals.json` (`--eval-id`, `--all-fixtures`).
+- `scripts/meta_lengths_checker.py` — title, meta description, and H1 length/presence from local HTML or `--url`.
+- `evals/fixtures/eval{1–10}_pass.txt` — golden transcripts; CI runs `score_eval_transcript.py --all-fixtures`.
+- `evals/evals.json` — four new scenarios (7–10): news publisher, scoped technical-only, international, pre-launch strategy.
+- `references/finding-verifier-example.json` + `finding-verifier-context-example.json` — sample input for `finding_verifier.py`.
+
+### Changed
+
+- **SKILL.md** — §0 routing index; “when not to run Mode 1” table; §1 routing notes; §2 lab/PSI evidence rule + industry preset table; §21 script list + evidence integrity + `pip install -r requirements.txt`; version **1.2.0**.
+- **README** — script/eval counts, `score_eval_transcript` / `meta_lengths_checker`, **Updating the Claude Code plugin** (cache refresh).
+- **references/audit-script-matrix.md** — meta lengths row, eval/QA section, `score_eval_transcript`, finding_verifier CLI + examples.
+- **scripts/run_individual_checks.sh** — runs `meta_lengths_checker` when HTML fetch succeeds.
+- **CI** (`.github/workflows/validate-plugin.yml`) — `py_compile` all `scripts/*.py` + eval fixture regression.
+- Marketplace + `plugin.json` descriptions and version **1.2.0**.
 
 ## [1.1.2] - 2026-03-24
 
@@ -50,25 +63,9 @@
 ### Initial Public Release
 
 **Core Capabilities**
-- 3-mode architecture: Audit (scored findings) → Plan (phased roadmap) → Execute (deliverable fixes with verification)
-- SEO Health Score (0–100) across 9 weighted categories
-- GEO optimization for Google AI Overviews, AI Mode, ChatGPT Search, and Perplexity
-- Schema markup generation for all active Schema.org types (deprecation-aware)
-- E-E-A-T assessment aligned with December 2025 universal policy
-- 21 audit modules covering technical SEO, content quality, links, local, international, programmatic, and more
 
-**Scripts & Automation**
-- 20 Python diagnostic scripts including full-site HTML report generator
-- Scripts cover: Core Web Vitals, robots.txt, schema validation, hreflang, internal links, broken links, readability, duplicate content, entity checking, IndexNow, social meta, and more
-
-**Reference Library**
-- 15 reference files (4,300+ lines) covering all SEO and GEO domains
-- Loaded on demand — only the relevant reference file enters context per task
-
-**Testing**
-- 6 eval test cases with 26 assertions (including 1 negative test)
-- Benchmarked: 100% pass rate with skill vs. 87% baseline
-
-### Credits
-- [Bhanunamikaze/Agentic-SEO-Skill](https://github.com/Bhanunamikaze/Agentic-SEO-Skill) — SEO analysis toolkit architecture
-- [AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo) — GEO platform citation data, DataForSEO patterns
+- Full-site SEO audits with SEO Health Score (0–100) and prioritized findings
+- Generative Engine Optimization (GEO) for AI Overviews, ChatGPT, Perplexity
+- Technical SEO, on-page, content/E-E-A-T, schema, links, local, international, programmatic SEO
+- Site migration playbooks and analytics alignment
+- Bundled Python audit scripts and eval scenarios

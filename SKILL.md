@@ -2,7 +2,7 @@
 name: ultimate-seo-geo
 license: MIT
 metadata:
-  version: 1.1.2
+  version: 1.2.0
   author: Myk Pono
   website: https://lab.mykpono.com
   homepage: https://mykpono.com
@@ -35,8 +35,9 @@ description: >
   Universal SEO + GEO skill: scored full-site audits with fixes; technical SEO (CWV/INP,
   crawl, JS rendering); CORE-EEAT (80) + CITE domain (40) scoring; Schema.org JSON-LD;
   entity/KG/Wikidata signals; GEO for AI Overviews, AI Mode, ChatGPT, Perplexity; keywords,
-  links, images, hreflang, programmatic and local SEO, migrations, pruning. Includes 23
-  Python audit scripts. Use when the user mentions SEO, GEO, audit, schema, rankings,
+  links, images, hreflang, programmatic and local SEO, migrations, pruning. Includes 24 SEO diagnostic Python scripts
+  plus requirements-check (deps) and score_eval_transcript (eval harness); check-plugin-sync
+  is CI-only. Use when the user mentions SEO, GEO, audit, schema, rankings,
   traffic drop, AI citations, backlinks, sitemap, crawl, robots, migration, hreflang,
   snippets, content strategy—or visibility or traffic-loss questions. Not for PPC/Ads,
   social management, or generic marketing strategy.
@@ -51,6 +52,28 @@ Every finding comes with a clear fix directive — not just diagnosis.
 ---
 
 ## 0. Before You Start
+
+### Routing index (read only what you need)
+
+| Goal | Start here |
+|------|------------|
+| Full scored audit | § 2, § 21, `references/audit-script-matrix.md` |
+| AI citations / GEO | § 3, `llms_txt_checker.py`, `entity_checker.py` |
+| Schema only | § 5, `validate_schema.py` |
+| Local | § 12, `local_signals_checker.py` |
+| Crawl / index / performance | § 4, matrix scripts (`robots_checker`, `sitemap_checker`, `pagespeed.py` if API works) |
+| Migration | § 20, `redirect_checker.py` |
+| Keywords / roadmap (no URL yet) | § 7, § 16 — **do not** invent a live-site `/100` score |
+
+### When *not* to run Mode 1 (full audit)
+
+| User signal | Action |
+|---------------|--------|
+| **Google Ads / PPC** as the primary ask | Paid-media scope — no organic SEO Health Score or crawl Finding wall unless organic SEO is also requested. |
+| Employer branding only, **pure** press/PR distribution, **email-only** marketing | Narrow guidance; no implied full technical + content audit. |
+| **GA4/GTM setup only** (no organic SEO question) | § 10 measurement checklist — **no** fabricated domain-wide numeric score. |
+| **Social** community management only | Out of scope unless tied to organic discovery (e.g. `sameAs`, entity signals). |
+| **Explicitly scoped** task (e.g. “only robots.txt + sitemap”) | Stay in that scope — no domain-wide E-E-A-T essay or `/100` score unless the user asks. |
 
 This skill operates in three modes. Identify which mode applies before touching anything else.
 
@@ -113,6 +136,8 @@ review the output, confirm it resolves the original finding.
 
 ## 1. Request Detection & Routing
 
+If the request matches **§ 0 “When not to run Mode 1”**, route to a **narrow** answer or decline the SEO-audit template — even if generic “marketing” vocabulary appears.
+
 | Request Type | Trigger Keywords | Go To |
 |---|---|---|
 | **Full Audit** | "audit", "analyze my site", "full check", "site review" | § 2 |
@@ -139,6 +164,8 @@ review the output, confirm it resolves the original finding.
 | **Site Migration** | "moving domains", "new URL structure", "CMS migration", "redirect map" | § 20 |
 | **Myths / Misconceptions** | "does X help SEO?", "is X a ranking factor?" | § 18 |
 | **Script Toolbox** | "run a check", "generate a report", "validate schema", "automated audit" | § 21 |
+| **Paid ads primary** | "Google Ads", "PPC campaign", "ad spend" without organic SEO ask | § 0 — paid scope, not Mode 1 |
+| **Scoped technical only** | "only robots.txt", "just the sitemap", "don’t audit content" | § 0 + § 4 / § 11 — stay in scope |
 
 ---
 
@@ -148,6 +175,8 @@ review the output, confirm it resolves the original finding.
 
 **In a bash-capable environment**: Run `python scripts/generate_report.py https://example.com --output report.html` first — it runs the **bundled analysis pipeline** in `generate_report.py` (robots, security, social, redirects, llms.txt, links, PageSpeed, entities, hreflang, duplicates, sitemap discovery, local signals, IndexNow probe, on-page parse, readability, article SEO, JSON-LD validation, image alt coverage, etc.). Then use `finding_verifier.py` to deduplicate at the end. For any single dimension, run the matching script from **`references/audit-script-matrix.md`** or **§21**.
 
+**Lab / performance data (PSI, CrUX, LCP, CLS, INP):** Do **not** state numeric scores or field metrics unless `scripts/pagespeed.py` ran successfully (or the user pasted PageSpeed Insights / CrUX output). If the script failed, lacks an API key, or the environment blocks googleapis.com, say **performance data unavailable** and give checklist-level guidance (§ 4, `references/technical-checklist.md`) or ask the user to run PSI / WebPageTest manually.
+
 1. **Fetch the site** — homepage + 5–10 representative pages (pillar pages, top posts, key landing pages).
 2. **Detect business type** from page signals:
    - *SaaS/B2B*: pricing page, /features, "free trial"
@@ -156,6 +185,17 @@ review the output, confirm it resolves the original finding.
    - *Publisher/Blog*: article-heavy, bylines, /category structure
    - *Agency/Portfolio*: /case-studies, client logos
    - Load `references/industry-templates.md` for business-type-specific architecture and schema priorities.
+
+**Industry preset (what to prioritize first)**
+
+| Detected type | Emphasize | Run early (when shell + network available) |
+|-----------------|-----------|---------------------------------------------|
+| **SaaS / B2B** | § 7 keywords, § 5 SoftwareApplication / Product, § 4 tech | `generate_report.py`, `validate_schema.py`, `meta_lengths_checker.py` |
+| **E-commerce** | § 11 indexation, § 5 Product + `BreadcrumbList`, § 9 internal links | `generate_report.py`, `duplicate_content.py`, `sitemap_checker.py` |
+| **Local service** | § 12, § 5 `LocalBusiness`, NAP | `local_signals_checker.py`, `robots_checker.py` |
+| **Publisher / blog** | § 6 E-E-A-T, § 13 images, Article / `NewsArticle` | `readability.py`, `article_seo.py`, `duplicate_content.py` |
+| **Agency / portfolio** | § 8 competitors, § 9 authority | `link_profile.py` + full report |
+
 3. **Run all audit modules** in sequence: On-Page SEO · Content/E-E-A-T (§ 6) · Technical (§ 4) · Schema (§ 5) · Core Web Vitals (§ 4) · GEO/AI Search (§ 3) · Links (§ 9) · Images (§ 13) · Crawl & Indexation (§ 11) · Keyword Gaps (§ 7) · Local SEO if applicable (§ 12) · Analytics setup (§ 10).
 4. **Score** — SEO Health Score using weights below.
 5. **Assign confidence level**: High (8+ pages fetched + analytics access) / Medium (4–7 pages, no analytics) / Low (1–3 pages).
@@ -992,7 +1032,7 @@ For the complete step-by-step checklists, common mistakes, and post-migration mo
 
 ## 21. Script Toolbox — Automated Checks
 
-There are **23** Python **audit** scripts (plus `check-plugin-sync.py` for maintainers only). **Every major audit step maps to a script** — see `references/audit-script-matrix.md` for the full step ↔ script table and copy-paste CLI examples.
+There are **24** Python **diagnostic** scripts for URL/HTML checks, plus **`requirements-check.py`** (dependency preflight) and **`score_eval_transcript.py`** (regression scoring for `evals/evals.json`). **`check-plugin-sync.py`** is maintainers/CI only and is **not** copied into the plugin bundle. **Every major audit step maps to a script** — see `references/audit-script-matrix.md`. **Merge duplicate findings** with `finding_verifier.py` using `references/finding-verifier-example.json` as the JSON shape reference (optional `references/finding-verifier-context-example.json` for context).
 
 They are **not** invoked via subagents in this skill file: the default path is **one shell process** — either `generate_report.py` (bundled pipeline, runs the URL + HTML checks below) or targeted `python scripts/... --json` calls. **Optional:** In clients that expose a Task/subagent tool, you may delegate **independent** script runs in parallel **only when** you are **not** already running `generate_report.py` for the same URL (avoid duplicate work). Merge subagent outputs in the main thread before scoring.
 
@@ -1005,10 +1045,12 @@ They are **not** invoked via subagents in this skill file: the default path is *
 > - All other scripts only access the target site directly and should work normally
 > - If any script fails with `ProxyError`, use the manual checklist in the corresponding reference file
 
+**Evidence integrity:** If `pagespeed.py` did not return JSON scores, **do not** invent PSI/CrUX/LCP/CLS/INP numbers in the narrative (same rule as § 2).
+
 ### Setup (one-time)
 
 ```bash
-pip install requests beautifulsoup4 --break-system-packages -q
+pip install -r requirements.txt
 ```
 
 ### Full-Site Report — Start Here
@@ -1044,8 +1086,11 @@ Runs the bundled analysis pipeline (see §2): URL-based scripts, homepage HTML f
 | `article_seo.py` | CMS-aware article SEO — content structure, keywords | § 6 Content |
 | `readability.py` | Flesch-Kincaid grade + sentence stats | § 6 Content |
 | `duplicate_content.py` | Near-duplicate detection | § 6 Content |
+| `meta_lengths_checker.py` | Title / meta description / H1 length & presence | § 2 On-page |
 | `fetch_page.py` | Fetch and save raw HTML | General |
 | `finding_verifier.py` | Deduplicates findings across a full audit | § 2 Full Audit |
+| `requirements-check.py` | Verify `requests` + `beautifulsoup4` | Preflight |
+| `score_eval_transcript.py` | Score a saved reply vs `evals/evals.json` | QA / regression |
 
 ### Targeted Usage
 
@@ -1064,4 +1109,11 @@ python scripts/internal_links.py https://example.com --json
 
 # Check llms.txt
 python scripts/llms_txt_checker.py https://example.com
+
+# Title + meta description lengths
+python scripts/meta_lengths_checker.py --url https://example.com --json
+
+# Regression: score a transcript against an eval id
+python scripts/score_eval_transcript.py --eval-id 1 --text-file my-transcript.txt
+python scripts/score_eval_transcript.py --all-fixtures   # bundled golden fixtures
 ```

@@ -1,0 +1,6 @@
+Per your scope, I reviewed only **robots.txt** and the **XML sitemap** for https://example.com.
+
+- **robots.txt**: **User-agent** * with **Allow** / **Disallow** rules look intentional; no broad accidental **Disallow** of key templates.
+- **Sitemap**: the **sitemap** index references child **XML** maps; spot-check for 404s.
+
+This is a focused crawl directive review—not a full content or **E-E-A-T** audit, and I am not assigning a whole-site numeric score here.

@@ -1,0 +1,16 @@
+SEO Health Score: 72/100
+
+Finding: Time to first byte is elevated on key landing pages
+Evidence: Server response headers show slow origin
+Impact: May hurt Core Web Vitals and crawl efficiency
+Fix: Enable CDN caching and compress HTML
+Confidence: Likely
+
+E-E-A-T / YMYL: This vertical requires clear authorship and medical-adjacent disclaimers where applicable.
+
+Schema: Add JSON-LD Article or appropriate structured data; validate with Rich Results Test.
+
+Action Plan
+| Priority | Phase 1 | Effort | Quick Win |
+|----------|---------|--------|-----------|
+| P0 | Fix TTFB | Medium | Cache headers |

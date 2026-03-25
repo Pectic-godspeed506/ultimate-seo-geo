@@ -93,8 +93,8 @@ We're moving from Magento to Shopify — 3,000 product pages. What do we need fo
 - **llms.txt** — Template generation for the emerging AI content standard
 - **RSL 1.0** — Machine-readable AI licensing (December 2025 standard)
 
-### 23 Python audit scripts
-Includes `sitemap_checker.py`, `local_signals_checker.py`, `image_checker.py`, full `generate_report.py` pipeline, and the rest — see **`references/audit-script-matrix.md`** in the skill tree for the step ↔ script map.
+### Bundled Python tools (v1.2.0)
+**24** URL/HTML diagnostics plus `requirements-check.py`, `score_eval_transcript.py`, and `meta_lengths_checker.py`. Full step ↔ script map: **`references/audit-script-matrix.md`**. Eval regression: `evals/fixtures/` + `score_eval_transcript.py --all-fixtures`.
 
 ---
 

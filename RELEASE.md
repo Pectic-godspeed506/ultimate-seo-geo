@@ -44,7 +44,7 @@ This verifies:
 
 CI fails if root skill/references/scripts/evals disagree with the plugin tree or versions diverge.
 
-**Audit script map:** `references/audit-script-matrix.md` (each automated step ↔ script). **Dependencies:** after `pip install -r requirements.txt`, `python3 scripts/requirements-check.py` should print OK. **Smoke all tools (truncated JSON):** `bash scripts/run_individual_checks.sh https://example.com` (starts with requirements check).
+**Audit script map:** `references/audit-script-matrix.md` (each automated step ↔ script). **Dependencies:** after `pip install -r requirements.txt`, `python3 scripts/requirements-check.py` should print OK. **Eval fixtures:** `python3 scripts/score_eval_transcript.py --all-fixtures` (exit 0). **Smoke all tools (truncated JSON):** `bash scripts/run_individual_checks.sh https://example.com` (starts with requirements check).
 
 ---
 

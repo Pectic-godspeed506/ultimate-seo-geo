@@ -1,0 +1,6 @@
+For sourdough recipe posts with almost no traffic:
+
+- **Keyword** focus: match **search intent** with long-tail **query** variants (hydration %, timing, starter troubleshooting).
+- **E-E-A-T**: your **15 years** of **experience** should show in the **author** bio, process photos, and **first-hand** method notes (**expertise** + **credibility**).
+- **Action**: **add** internal links from hub pages, **optimize** images (compress, descriptive filenames), **update** intros with clear answers, **create** a topical cluster around sourdough maintenance.
+- **Schema**: prefer **Article** (and **Recipe** where eligible). Avoid legacy procedural markup types that Google no longer treats as rich-result eligible; use fields that match current rich-result documentation.

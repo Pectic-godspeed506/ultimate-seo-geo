@@ -205,6 +205,116 @@
           "values": ["Google Ads", "PPC", "paid", "ad campaign", "advertising", "pay-per-click", "ad spend", "cost per click"]
         }
       ]
+    },
+    {
+      "id": 7,
+      "prompt": "We're launching a regional digital newspaper with subscription paywalls and syndicated wire stories. What SEO and structured data should we prioritize before launch?",
+      "expected_output": "Publisher-focused guidance: Article/NewsArticle (or NewsMediaOrganization where appropriate), canonical strategy for paywalled content, freshness signals, avoid thin duplicate syndication; mention crawl/bot considerations if relevant.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "news-schema-or-article",
+          "description": "Mentions Article, NewsArticle, or publisher/organization structured data",
+          "type": "contains_any",
+          "values": ["NewsArticle", "Article", "NewsMediaOrganization", "publisher", "Organization"]
+        },
+        {
+          "id": "structured-data-mentioned",
+          "description": "Mentions structured data or JSON-LD",
+          "type": "contains_any",
+          "values": ["JSON-LD", "structured data", "schema", "Schema.org", "rich result"]
+        },
+        {
+          "id": "paywall-or-canonical",
+          "description": "Addresses paywall, subscription, or canonical duplication risk",
+          "type": "contains_any",
+          "values": ["paywall", "subscription", "canonical", "duplicate", "syndicat", "crawl"]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Please ONLY review robots.txt and the XML sitemap for https://example.com. Do not produce a full-site E-E-A-T audit or a complete SEO Health Score for the whole domain.",
+      "expected_output": "Scoped technical answer: robots rules, sitemap discovery/health, crawl directives — explicitly narrow scope; avoid full Mode-1 wall of findings unless user expands scope.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "robots-addressed",
+          "description": "Discusses robots.txt or crawl directives",
+          "type": "contains_any",
+          "values": ["robots.txt", "robots", "User-agent", "Disallow", "Allow"]
+        },
+        {
+          "id": "sitemap-addressed",
+          "description": "Discusses XML sitemap",
+          "type": "contains_any",
+          "values": ["sitemap", "Sitemap", "XML"]
+        },
+        {
+          "id": "no-full-health-score",
+          "description": "Does not fabricate a numeric X/100 SEO Health Score for the whole site",
+          "type": "not_contains_pattern",
+          "pattern": "\\b([0-9]{1,2}|100)\\s*/\\s*100\\b"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "We run example.com for the US and example.de for Germany with paired English and German product pages. What international SEO mistakes should we avoid?",
+      "expected_output": "Hreflang reciprocity, x-default, URL structure (ccTLD vs subfolder), duplicate content across locales, GSC property setup.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "hreflang-mentioned",
+          "description": "Mentions hreflang or language targeting",
+          "type": "contains_any",
+          "values": ["hreflang", "rel=\"alternate\"", "alternate", "language tag", "locale"]
+        },
+        {
+          "id": "duplicate-or-consolidation",
+          "description": "Warns about duplicate content or consolidation across locales",
+          "type": "contains_any",
+          "values": ["duplicate", "canonical", "consolidat", "same content", "translation"]
+        },
+        {
+          "id": "x-default-or-gsc",
+          "description": "Mentions x-default and/or Search Console international setup",
+          "type": "contains_any",
+          "values": ["x-default", "Search Console", "GSC", "International Targeting", "country targeting"]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "We're planning a B2B SaaS launch in six months but have no public URLs yet. What SEO pillars should we plan before the site exists?",
+      "expected_output": "Strategy-only: IA/keyword map, technical foundations, measurement, content strategy — explicitly avoid a fabricated numeric audit score for a non-existent site.",
+      "files": [],
+      "assertions": [
+        {
+          "id": "pillars-not-fabricated-audit",
+          "description": "Does not assign a numeric X/100 SEO Health Score for a specific live site",
+          "type": "not_contains_pattern",
+          "pattern": "\\b([0-9]{1,2}|100)\\s*/\\s*100\\b"
+        },
+        {
+          "id": "measurement-mentioned",
+          "description": "Mentions measurement or analytics readiness",
+          "type": "contains_any",
+          "values": ["GA4", "Google Analytics", "Search Console", "GSC", "measurement", "KPI", "tracking"]
+        },
+        {
+          "id": "technical-or-ia-mentioned",
+          "description": "Mentions technical foundation or information architecture",
+          "type": "contains_any",
+          "values": ["technical", "information architecture", "IA", "URL structure", "sitemap", "Core Web Vitals", "CWV", "performance"]
+        },
+        {
+          "id": "keyword-or-content-plan",
+          "description": "Mentions keywords, content, or launch sequencing",
+          "type": "contains_any",
+          "values": ["keyword", "content", "launch", "staging", "pillar", "topic", "brief"]
+        }
+      ]
     }
   ]
 }

@@ -101,17 +101,26 @@ def main() -> int:
     ev_plugin = ROOT / "plugins/ultimate-seo-geo/skills/ultimate-seo-geo/evals"
     if not ev_root.is_dir() or not ev_plugin.is_dir():
         sys.exit("evals/ missing at root or under plugin skill path.\nFix: bash setup-plugin.sh")
-    ev_names = sorted(f.name for f in ev_root.iterdir() if f.is_file())
-    ev_plug = sorted(f.name for f in ev_plugin.iterdir() if f.is_file())
-    if ev_names != ev_plug:
+
+    def _eval_rel_paths(base: Path) -> dict[str, Path]:
+        m: dict[str, Path] = {}
+        for p in sorted(base.rglob("*")):
+            if p.is_file():
+                m[p.relative_to(base).as_posix()] = p
+        return m
+
+    ev_map = _eval_rel_paths(ev_root)
+    pl_map = _eval_rel_paths(ev_plugin)
+    if set(ev_map) != set(pl_map):
+        diff = sorted(set(ev_map) ^ set(pl_map))
         sys.exit(
-            "evals/ filename mismatch vs plugin copy.\n"
-            f"  symmetric diff: {sorted(set(ev_names) ^ set(ev_plug))}\n"
+            "evals/ path set mismatch vs plugin copy (recursive).\n"
+            f"  symmetric diff: {diff}\n"
             "Fix: bash setup-plugin.sh"
         )
-    for name in ev_names:
-        if _read(ev_root / name) != _read(ev_plugin / name):
-            sys.exit(f"evals/{name} differs from plugin copy.\nFix: bash setup-plugin.sh")
+    for rel in sorted(ev_map):
+        if _read(ev_map[rel]) != _read(pl_map[rel]):
+            sys.exit(f"evals/{rel} differs from plugin copy.\nFix: bash setup-plugin.sh")
 
     market_path = ROOT / ".claude-plugin/marketplace.json"
     with open(market_path, encoding="utf-8") as f:

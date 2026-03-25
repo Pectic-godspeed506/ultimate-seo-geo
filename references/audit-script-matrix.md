@@ -22,17 +22,19 @@ Each major automated check has a **script** you can run alone (usually with `--j
 | IndexNow (full key validation) | §4 | `indexnow_checker.py` | `python scripts/indexnow_checker.py URL --key KEY --json` |
 | IndexNow (probe, no key) | §4 | `indexnow_checker.py` | `python scripts/indexnow_checker.py URL --probe --json` |
 | On-page extract | §2, §4 | `parse_html.py` | `python scripts/parse_html.py file.html --url URL --json` |
+| Title / meta / H1 lengths | §2 | `meta_lengths_checker.py` | `python scripts/meta_lengths_checker.py --url URL --json` |
 | Readability | §6 | `readability.py` | `python scripts/readability.py file.html --json` |
 | Article / CMS patterns | §6 | `article_seo.py` | `python scripts/article_seo.py URL --json` |
 | JSON-LD validation | §5 | `validate_schema.py` | `python scripts/validate_schema.py file.html --json` |
 | Image alt coverage | §13 | `image_checker.py` | `python scripts/image_checker.py page.html --base-url URL --json` |
-| Finding deduplication | §2 | `finding_verifier.py` | Pipe structured findings JSON (post-audit merge; not URL-scoped) |
+| Finding deduplication | §2 | `finding_verifier.py` | `python scripts/finding_verifier.py --findings-json references/finding-verifier-example.json --json` (see `references/finding-verifier-context-example.json` for optional `--context-json`) |
 
 ## Utilities (supporting tools)
 
 | Script | Role |
 |--------|------|
 | `requirements-check.py` | Preflight: verify `requests` + `beautifulsoup4` (`python scripts/requirements-check.py --json`) |
+| `score_eval_transcript.py` | Score a saved model reply vs `evals/evals.json` (`--eval-id N` or `--all-fixtures`) |
 | `fetch_page.py` | Fetch HTML to disk for manual inspection |
 | `check-plugin-sync.py` | CI / release: verify plugin bundle matches repo root |
 
@@ -50,10 +52,16 @@ LLM + checklist work uses these references; there is **no separate script** by d
 | CITE domain rating | §6 | `references/cite-domain-rating.md` |
 | Entity optimization depth | §3 | `references/entity-optimization.md` |
 
+## Eval / QA
+
+- Spec: `evals/evals.json` (**10** scenarios, **39** assertions including negative PPC).  
+- Golden transcripts: `evals/fixtures/eval*_pass.txt` — run `python scripts/score_eval_transcript.py --all-fixtures` (exit `0` if all pass).
+
 ## Progressive checks
 
 0. **Dependencies:** `python scripts/requirements-check.py` (or `--json`) before URL-based audits.  
 1. **Fast baseline:** `generate_report.py` (one command, all wired checks).  
 2. **Deep dive:** run any row’s script alone for that dimension.  
 3. **Schema after edits:** `validate_schema.py` on saved HTML.  
-4. **IndexNow with key:** use `--key` when you have an IndexNow key (probe mode is keyless).
+4. **IndexNow with key:** use `--key` when you have an IndexNow key (probe mode is keyless).  
+5. **Regression:** after SKILL changes, `score_eval_transcript.py --all-fixtures` on saved replies.

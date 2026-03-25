@@ -1,0 +1,29 @@
+[
+  {
+    "severity": "Critical",
+    "finding": "Homepage <title> is missing",
+    "evidence": "Fetched HTML has empty <title>",
+    "impact": "Poor SERP relevance and CTR",
+    "fix": "Set a unique title ≤60 chars with primary keyword + brand",
+    "confidence": "Confirmed",
+    "source": "subagent-onpage"
+  },
+  {
+    "severity": "Critical",
+    "finding": "Homepage <title> is missing",
+    "evidence": "Duplicate finding from second pass",
+    "impact": "Poor SERP relevance and CTR",
+    "fix": "Set a unique title ≤60 chars with primary keyword + brand",
+    "confidence": "Confirmed",
+    "source": "subagent-technical"
+  },
+  {
+    "severity": "Warning",
+    "finding": "Meta description under 120 characters",
+    "evidence": "meta description length 80",
+    "impact": "Less control over snippet",
+    "fix": "Expand toward 150–160 chars with a clear benefit",
+    "confidence": "Confirmed",
+    "source": "parse_html"
+  }
+]

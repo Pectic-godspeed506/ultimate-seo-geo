@@ -1,0 +1,20 @@
+Quick audit + schema for Sonoran Air (HVAC, Phoenix).
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Sonoran Air",
+  "telephone": "+1-602-555-0100",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "123 Main St",
+    "addressLocality": "Phoenix",
+    "addressRegion": "AZ",
+    "postalCode": "85001",
+    "addressCountry": "US"
+  }
+}
+```
+
+Google Business Profile (GBP) completeness and NAP consistency across citations will help "near me" and local pack visibility. Keep reviews and service area signals aligned with your geo targets.

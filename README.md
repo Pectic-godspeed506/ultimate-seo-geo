@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Claude Skill](https://img.shields.io/badge/Claude-Skill-blueviolet)](https://claude.ai)
-[![Version](https://img.shields.io/badge/version-1.1.2-green.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.2.0-green.svg)](CHANGELOG.md)
 
 The definitive SEO and Generative Engine Optimization skill for Claude. Runs full site audits with scored findings, generates ready-to-deploy fixes, and optimizes content for both Google Search and AI search engines (Google AI Overviews, AI Mode, ChatGPT Search, Perplexity).
 
@@ -72,6 +72,13 @@ Or install directly without adding the marketplace first:
 /plugin install https://github.com/mykpono/ultimate-seo-geo.git
 ```
 
+#### Updating the plugin after a GitHub release
+
+Claude Code caches the marketplace clone locally; it may **not** auto-pull the latest commit.
+
+1. In the cached marketplace repo under `~/.claude/plugins/marketplaces/` (folder name matches your add), run `git pull` on `main`, **or** remove that marketplace folder and re-run `/plugin marketplace add …` then `/plugin install …`.
+2. From a full repo checkout, run `python3 scripts/check-plugin-sync.py` before you push (same as CI).
+
 ### Claude Code — Manual skill install (global)
 
 ```bash
@@ -89,9 +96,9 @@ Copy the folder into your skills directory:
 ```
 ~/.claude/skills/ultimate-seo-geo/
 ├── SKILL.md
-├── references/    (18 .md files)
-├── scripts/       (20 audit scripts + check-plugin-sync.py for CI)
-└── evals/         (test cases)
+├── references/    (guides + audit matrix + finding_verifier examples)
+├── scripts/       (26 bundled .py; check-plugin-sync.py CI-only at repo root)
+└── evals/         (evals.json + fixtures/)
 ```
 
 ---
@@ -153,8 +160,9 @@ ultimate-seo-geo/
 │   ├── readability.py        Flesch-Kincaid scoring
 │   ├── ...and 12 more
 │
-└── evals/                 ← Test cases
-    └── evals.json            6 evals, 26 assertions (incl. negative test)
+└── evals/                 ← 10 scenarios, 39 assertions + golden fixtures
+    ├── evals.json
+    └── fixtures/          ← eval*_pass.txt (used by score_eval_transcript.py)
 ```
 
 **Three-layer progressive disclosure:**
@@ -181,7 +189,7 @@ When someone runs `/plugin marketplace add mykpono/ultimate-seo-geo`, the tool r
 
 ## Scripts
 
-There are **23** SEO audit scripts plus **`requirements-check.py`** (dependency preflight); **`check-plugin-sync.py`** is maintainer-only and not copied into the plugin. All bundled scripts require Python 3.8+ and install dependencies with:
+**Bundled in the plugin:** **24** URL/HTML diagnostic scripts, plus **`requirements-check.py`** (preflight), **`score_eval_transcript.py`** (eval regression), and **`meta_lengths_checker.py`**. **`check-plugin-sync.py`** is repo-only for CI. Python 3.8+; install dependencies with:
 
 ```bash
 pip install -r requirements.txt
@@ -190,6 +198,8 @@ pip install -r requirements.txt
 On **PEP 668**–managed Python (e.g. Homebrew), use a venv first: `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt`, then run scripts with `.venv/bin/python`.
 
 Preflight (optional): `python scripts/requirements-check.py` or `python scripts/requirements-check.py --json` — exits non-zero if `requests` / `beautifulsoup4` are missing.
+
+**Eval regression (optional):** save a model reply to `transcript.txt`, then `python scripts/score_eval_transcript.py --eval-id 1 --text-file transcript.txt`. CI runs `python scripts/score_eval_transcript.py --all-fixtures` against `evals/fixtures/`.
 
 Run the full-site report to start any audit:
 
@@ -201,6 +211,8 @@ python scripts/generate_report.py https://example.com --output seo-report.html
 |---|---|
 | `generate_report.py` | Full-site HTML dashboard — bundled analysis pipeline |
 | `requirements-check.py` | Preflight: `requests` + `beautifulsoup4` installed (`--json`) |
+| `score_eval_transcript.py` | Score replies vs `evals/evals.json` (`--eval-id` or `--all-fixtures`) |
+| `meta_lengths_checker.py` | Title / meta description / H1 lengths (`--url` or local HTML) |
 | `validate_schema.py` | Validates JSON-LD blocks (pure stdlib) |
 | `robots_checker.py` | robots.txt rules + AI crawler allow/block status |
 | `pagespeed.py` | Core Web Vitals via PageSpeed Insights API |
@@ -228,7 +240,7 @@ python scripts/generate_report.py https://example.com --output seo-report.html
 
 ## Eval Results
 
-Benchmarked against baseline (no skill) across 3 test scenarios:
+Benchmarked against baseline (no skill) across multiple scenarios (see `evals/evals.json`; **10** prompts, **39** assertions):
 
 | Metric | With Skill | Without Skill | Delta |
 |---|---|---|---|
@@ -238,7 +250,7 @@ Benchmarked against baseline (no skill) across 3 test scenarios:
 
 The skill adds ~50 seconds and ~19K tokens per task, but achieves 100% on structured output requirements (finding format, correct schema types, health scoring) where the baseline misses.
 
-**Test scenarios:** health publisher full audit (YMYL), local HVAC schema + audit, SaaS schema generation, site migration guidance, general recipe blog advice, negative test (Google Ads — should NOT trigger).
+**Test scenarios include:** YMYL publisher audit, local HVAC + schema, SaaS schema, migration plan, recipe content (no URL), negative PPC, news/paywall, scoped robots+sitemap-only, international hreflang, pre-launch strategy (no live site). **Automated check:** `python scripts/score_eval_transcript.py --all-fixtures`.
 
 ---
 

@@ -1,0 +1,7 @@
+Pre-launch B2B SaaS (no public site yet):
+
+1. **Information architecture** + **keyword** map and **content** **brief** templates before **launch**.
+2. **Technical** checklist: **URL structure**, planned **sitemap**, **Core Web Vitals** budgets, and a **staging** environment policy.
+3. **Measurement**: stand up **GA4**, define **KPI**s, and prepare **Search Console** (**GSC**) properties for production and **staging** verification.
+
+Do not report a fabricated numeric health score until crawlable pages exist—treat this as roadmap work only.

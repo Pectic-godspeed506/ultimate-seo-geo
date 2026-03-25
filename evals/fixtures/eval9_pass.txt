@@ -1,0 +1,6 @@
+For **example.com** (US) and **example.de** (DE) product pairs:
+
+- Implement reciprocal **hreflang** annotations (`rel="alternate"` `hreflang="en"` / `de`) on every paired URL.
+- Set **x-default** to your primary English URL if that is your global fallback.
+- Avoid **duplicate** issues: **translate** body copy, not only meta tags; use **canonical** carefully per locale.
+- Configure each property in **Google Search Console** and verify **International Targeting** / locale reporting.

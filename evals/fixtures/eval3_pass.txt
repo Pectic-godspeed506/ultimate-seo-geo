@@ -1,0 +1,22 @@
+Here is JSON-LD for Docupilot using SoftwareApplication:
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Docupilot",
+  "applicationCategory": "BusinessApplication",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": 4.7,
+    "reviewCount": 890
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": "29",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+
+Validate at schema.org and Google Rich Results Test.
