@@ -2,10 +2,18 @@
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-03-25
+
 ### Changed
 
 - **SKILL.md** — Flat YAML frontmatter (`name`, `license`, `version`, `updated`, `description` only). Author, links, and upstream credits moved to readable markdown tables so previews no longer nest YAML as awkward “tables in cells.”
 - **check-plugin-sync.py** — Reads top-level `version:` in skill frontmatter (still accepts legacy indented `version` under `metadata:`).
+- **README** — Clearer update instructions (cache git-pull one-liner, full reinstall commands); added Cursor IDE and Claude Desktop install methods; replaced `.skill` file reference; added Troubleshooting table covering known cache/skill-loading bugs.
+
+### Fixed
+
+- **plugin.json** — Skills auto-discovery now works correctly (removed invalid `"skills"` field that caused "Plugin not found" errors in some Claude Code versions).
+- **.gitignore** — Added `.claude/` to prevent accidental commits of local Claude Code settings.
 
 ## [1.2.0] - 2026-03-24
 

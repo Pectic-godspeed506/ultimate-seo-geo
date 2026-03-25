@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Claude Skill](https://img.shields.io/badge/Claude-Skill-blueviolet)](https://claude.ai)
-[![Version](https://img.shields.io/badge/version-1.2.0-green.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.2.1-green.svg)](CHANGELOG.md)
 
 The definitive SEO and Generative Engine Optimization skill for Claude. Runs full site audits with scored findings, generates ready-to-deploy fixes, and optimizes content for both Google Search and AI search engines (Google AI Overviews, AI Mode, ChatGPT Search, Perplexity).
 
@@ -74,10 +74,29 @@ Or install directly without adding the marketplace first:
 
 #### Updating the plugin after a GitHub release
 
-Claude Code caches the marketplace clone locally; it may **not** auto-pull the latest commit.
+Claude Code caches the marketplace clone locally — it does **not** auto-pull new commits. Pick one approach:
 
-1. In the cached marketplace repo under `~/.claude/plugins/marketplaces/` (folder name matches your add), run `git pull` on `main`, **or** remove that marketplace folder and re-run `/plugin marketplace add …` then `/plugin install …`.
-2. From a full repo checkout, run `python3 scripts/check-plugin-sync.py` before you push (same as CI).
+**Option A — Update the cache (fastest):**
+
+```bash
+cd ~/.claude/plugins/marketplaces/ultimate-seo-geo && git pull
+```
+
+Then restart your Claude session (or run `/reload-plugins` in Claude Code).
+
+**Option B — Full reinstall:**
+
+```text
+/plugin uninstall ultimate-seo-geo
+/plugin marketplace add mykpono/ultimate-seo-geo
+/plugin install ultimate-seo-geo@ultimate-seo-geo
+```
+
+**For maintainers** — before pushing a release, verify plugin sync:
+
+```bash
+python3 scripts/check-plugin-sync.py
+```
 
 ### Claude Code — Manual skill install (global)
 
@@ -85,9 +104,22 @@ Claude Code caches the marketplace clone locally; it may **not** auto-pull the l
 cp -r ultimate-seo-geo ~/.claude/skills/
 ```
 
-### Claude Desktop / Cowork
+### Cursor IDE
 
-Install the `.skill` file from the [Releases](https://github.com/mykpono/ultimate-seo-geo/releases) page.
+The skill is auto-discovered from `~/.claude/skills/`. To install or update from a local repo checkout:
+
+```bash
+rsync -a --delete --exclude='.git/' --exclude='__pycache__/' --exclude='*.pyc' --exclude='.venv/' \
+  /path/to/ultimate-seo-geo/ ~/.claude/skills/seo/
+```
+
+### Claude Desktop App (claude.ai)
+
+The Claude desktop app does not load skills from `~/.claude/skills/`. Instead:
+
+1. Open a **Project** in claude.ai
+2. Go to **Project Knowledge**
+3. Upload `SKILL.md` as a file, or paste its contents into custom instructions
 
 ### Manual (any agent)
 
@@ -251,6 +283,18 @@ Benchmarked against baseline (no skill) across multiple scenarios (see `evals/ev
 The skill adds ~50 seconds and ~19K tokens per task, but achieves 100% on structured output requirements (finding format, correct schema types, health scoring) where the baseline misses.
 
 **Test scenarios include:** YMYL publisher audit, local HVAC + schema, SaaS schema, migration plan, recipe content (no URL), negative PPC, news/paywall, scoped robots+sitemap-only, international hreflang, pre-launch strategy (no live site). **Automated check:** `python scripts/score_eval_transcript.py --all-fixtures`.
+
+---
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| "This plugin doesn't have any skills or agents" | Marketplace not cloned to local cache | Run `/plugin marketplace add mykpono/ultimate-seo-geo` then `/plugin install ultimate-seo-geo@ultimate-seo-geo`, or manually clone: `git clone https://github.com/mykpono/ultimate-seo-geo.git ~/.claude/plugins/marketplaces/ultimate-seo-geo` |
+| "Could not load skill files" | Stale cache after a GitHub update | `cd ~/.claude/plugins/marketplaces/ultimate-seo-geo && git pull`, then restart session |
+| Plugin enabled but skill not appearing | Known Claude Code bug — `/reload-plugins` sometimes misses new skills ([#35641](https://github.com/anthropics/claude-code/issues/35641)) | Fully restart your Claude session |
+| `zsh: no such file or directory: /plugin` | `/plugin` is a Claude Code slash command, not a shell command | Run `claude` first to start a Claude Code session, then type the `/plugin` commands inside it |
+| Only some skills downloaded | Incomplete cache clone ([#35989](https://github.com/anthropics/claude-code/issues/35989)) | Delete `~/.claude/plugins/marketplaces/ultimate-seo-geo` and re-clone |
 
 ---
 
