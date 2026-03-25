@@ -153,7 +153,7 @@ review the output, confirm it resolves the original finding.
 
 ### Process
 
-**In a bash-capable environment**: Run `python scripts/generate_report.py https://example.com --output report.html` first — runs all 19 analysis scripts and gives structured baseline data. Then use `finding_verifier.py` to deduplicate at the end.
+**In a bash-capable environment**: Run `python scripts/generate_report.py https://example.com --output report.html` first — it runs the **bundled analysis pipeline** in `generate_report.py` (~15 checks per URL: robots, security headers, social meta, redirects, llms.txt, links, PageSpeed, entities, hreflang, duplicates, on-page parse, readability, article SEO, etc.). Then use `finding_verifier.py` to deduplicate at the end. Use **§21** for scripts not wired into that report (e.g. `validate_schema.py`, `indexnow_checker.py`).
 
 1. **Fetch the site** — homepage + 5–10 representative pages (pillar pages, top posts, key landing pages).
 2. **Detect business type** from page signals:
@@ -999,7 +999,7 @@ For the complete step-by-step checklists, common mistakes, and post-migration mo
 
 ## 21. Script Toolbox — Automated Checks
 
-The `scripts/` directory contains 20 Python scripts for precise automated checks.
+The `scripts/` directory contains 20 Python **audit/diagnostic** scripts (plus `check-plugin-sync.py` for maintainers only). They are **not** invoked via subagents in this skill file: the default path is **one shell process** — either `generate_report.py` (bundled pipeline) or targeted `python scripts/...` calls. **Optional:** In clients that expose a Task/subagent tool, you may delegate **independent** script runs in parallel **only when** you are **not** already running `generate_report.py` for the same URL (avoid duplicate work). Merge subagent outputs in the main thread before scoring.
 
 ### Environment Note
 
@@ -1020,7 +1020,7 @@ pip install requests beautifulsoup4 --break-system-packages -q
 python scripts/generate_report.py https://example.com --output seo-report.html
 ```
 
-Runs all 19 analysis scripts, outputs a self-contained interactive HTML dashboard. Use at the start of any Mode 1 full audit.
+Runs the bundled analysis pipeline (see §2), outputs a self-contained interactive HTML dashboard. Use at the start of any Mode 1 full audit.
 
 ### Script Quick Reference
 

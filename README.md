@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Claude Skill](https://img.shields.io/badge/Claude-Skill-blueviolet)](https://claude.ai)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.1.0-green.svg)](CHANGELOG.md)
 
 The definitive SEO and Generative Engine Optimization skill for Claude. Runs full site audits with scored findings, generates ready-to-deploy fixes, and optimizes content for both Google Search and AI search engines (Google AI Overviews, AI Mode, ChatGPT Search, Perplexity).
 
@@ -89,8 +89,8 @@ Copy the folder into your skills directory:
 ```
 ~/.claude/skills/ultimate-seo-geo/
 ├── SKILL.md
-├── references/    (15 files)
-├── scripts/       (20 files)
+├── references/    (18 .md files)
+├── scripts/       (20 audit scripts + check-plugin-sync.py for CI)
 └── evals/         (test cases)
 ```
 
@@ -119,14 +119,17 @@ Copy the folder into your skills directory:
 
 ```
 ultimate-seo-geo/
-├── SKILL.md              ← Core instructions (1,030 lines)
+├── SKILL.md              ← Core instructions (~1,070 lines)
 │                           Mode routing, audit process, output templates
 │
-├── references/            ← Domain knowledge (15 files, 4,300+ lines)
+├── references/            ← Domain knowledge (18 .md files, load on demand)
 │   ├── ai-search-geo.md     GEO signals, platform data, brand strategy
 │   ├── technical-checklist.md  CWV fixes, JS SEO, IndexNow
 │   ├── schema-types.md       All Schema.org types + templates
 │   ├── eeat-framework.md     E-E-A-T scoring, spam categories
+│   ├── core-eeat-framework.md  80-item CORE-EEAT content benchmark
+│   ├── cite-domain-rating.md   40-item CITE domain authority
+│   ├── entity-optimization.md  Entity / Knowledge Graph checklist
 │   ├── content-eeat.md       Content quality, freshness, pruning
 │   ├── site-migration.md     Pre/during/post migration checklists
 │   ├── link-building.md      Backlink strategy, comparison pages
@@ -156,7 +159,7 @@ ultimate-seo-geo/
 
 **Three-layer progressive disclosure:**
 - **Layer 1** — Skill description (~100 words): always in context, triggers the skill
-- **Layer 2** — SKILL.md (1,030 lines): loaded when skill fires, contains all routing and instructions
+- **Layer 2** — SKILL.md (~1,070 lines): loaded when skill fires, contains all routing and instructions
 - **Layer 3** — References + scripts (unlimited): loaded on demand per task
 
 This means a simple schema request loads SKILL.md + `references/schema-types.md` — not the full 5,300+ lines of domain knowledge.
@@ -190,7 +193,7 @@ python scripts/generate_report.py https://example.com --output seo-report.html
 
 | Script | Purpose |
 |---|---|
-| `generate_report.py` | Full-site HTML dashboard — runs all 19 analysis scripts |
+| `generate_report.py` | Full-site HTML dashboard — bundled analysis pipeline |
 | `validate_schema.py` | Validates JSON-LD blocks (pure stdlib) |
 | `robots_checker.py` | robots.txt rules + AI crawler allow/block status |
 | `pagespeed.py` | Core Web Vitals via PageSpeed Insights API |

@@ -74,8 +74,8 @@ ref_dir="plugins/ultimate-seo-geo/skills/ultimate-seo-geo/references"
 if [ -d "$ref_dir" ]; then
   count=$(find "$ref_dir" -maxdepth 1 -type f | wc -l | tr -d ' ')
   echo "✓ $ref_dir/ ($count files)"
-  if [ "$count" -lt 15 ]; then
-    echo "  WARNING: expected 15 reference files, found $count"
+  if [ "$count" -lt 18 ]; then
+    echo "  WARNING: expected 18 reference files, found $count"
   fi
 else
   echo "✗ MISSING: $ref_dir/"

@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0] - 2026-03-24
+
+### Added
+
+- Reference library expanded: `core-eeat-framework.md`, `cite-domain-rating.md`, `entity-optimization.md` (CORE-EEAT, CITE domain authority, entity / Knowledge Graph signals).
+- Credits updated for CORE-EEAT benchmark, CITE Domain Rating, Entity Optimizer, and AI SEO / GEO content optimizer sources.
+- Skill routing extended for CORE-EEAT / CITE scoring, entity optimization, and related triggers.
+
+### Changed
+
+- Documentation alignment: `generate_report.py` wording reflects the bundled pipeline (not a literal “19 scripts” count); §21 clarifies orchestration vs optional parallel subagents.
+
 ## [1.0.0] - 2026-03-23
 
 ### Initial Public Release
