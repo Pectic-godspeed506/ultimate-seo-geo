@@ -246,7 +246,20 @@ git tag vX.Y.Z
 git push origin main --tags
 ```
 
-### 6a. Create a GitHub Release (required for web app updates)
+### 6a. Push update to local Claude terminal install (always do this)
+
+After every GitHub push, sync the plugin into Claude's local install directory:
+
+```bash
+bash setup-plugin.sh && \
+cp -r plugins/ultimate-seo-geo/. \
+  ~/.claude/plugins/marketplaces/ultimate-seo-geo/plugins/ultimate-seo-geo/
+echo "✓ Claude terminal plugin updated — restart claude to reload"
+```
+
+Then restart Claude Code (type `exit`, reopen terminal, run `claude`).
+
+### 6c. Create a GitHub Release (required for web app updates)
 
 Go to `https://github.com/mykpono/ultimate-seo-geo/releases/new`:
 1. Select the existing tag `vX.Y.Z` from the dropdown
@@ -268,23 +281,18 @@ After publishing the GitHub Release, users must remove + re-add the plugin to ge
 3. Start a new chat
 
 ### Claude Code (terminal)
-The `/plugin marketplace add` command registers the marketplace but does **not** clone the repo files. Users must run:
+Run step 6a above after every push (it's the canonical update path).
 
+For a fresh install on a new machine:
 ```bash
-# First time or after losing the local cache:
 git clone https://github.com/mykpono/ultimate-seo-geo.git \
   ~/.claude/plugins/marketplaces/ultimate-seo-geo
-
-# To update an existing install:
-cd ~/.claude/plugins/marketplaces/ultimate-seo-geo && git pull
 ```
 
 Then inside Claude Code:
 ```
-/plugin marketplace remove ultimate-seo-geo
 /plugin marketplace add mykpono/ultimate-seo-geo
 /plugin install ultimate-seo-geo@ultimate-seo-geo
-/reload-plugins
 ```
 
 ### Cursor IDE (local skills)
