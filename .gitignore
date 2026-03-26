@@ -7,6 +7,10 @@ benchmarks/
 # Packaged skill output
 *.skill
 
+# Local project files (drafts, notes, assets — never pushed)
+_local/
+article-*.md
+
 # Claude Code local settings
 .claude/
 

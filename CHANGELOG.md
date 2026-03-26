@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-03-25
+
+### Added
+
+- **Internal vs. Competitive Mode** (§0) — two-mode split enforced before routing. Internal Mode (user's own site) enables full scored audit, all scripts, Execute mode, and /100 Health Score. Competitive Mode (external URL) limits to surface crawl (homepage + up to 20 pages), disables Execute mode, and labels all output "External Observation Only."
+  WHY: Prevents confident /100 scores on sites the model has never fully seen; enforces evidence integrity by architecture, not by rule.
+
+- **Evidence Integrity Table** (§2) — replaces the single CWV-only evidence rule with a six-row table covering LCP/INP/CLS, backlinks, traffic, Health Score, thin content, and schema validation. Each claim now has an explicit data-source precondition. When data is absent the output reads `[metric] not measured — run [script] for actual data`.
+  WHY: The old rule guarded only performance scores. Backlink counts, traffic numbers, and thin content findings were unguarded and could be hallucinated.
+
+- **Execute Mode Risk Gate** (§2 Mode 3) — classifies every Execute output as Safe (output directly) or High-Risk (state change, ask for confirmation before outputting). High-Risk covers robots.txt, canonical tags, redirect maps, noindex, hreflang, and bulk CMS template changes.
+  WHY: One bad robots.txt change can deindex a site. The confirmation step is asymmetric — costs 5 seconds, prevents weeks of recovery.
+
+### Changed
+
+- SKILL.md version → **1.3.0**; updated date → 2026-03-25.
+
 ## [1.2.1] - 2026-03-25
 
 ### Changed

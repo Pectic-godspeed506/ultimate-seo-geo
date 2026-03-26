@@ -7,8 +7,8 @@ description: Universal SEO + GEO skill for scored full-site audits, technical SE
 
 | Attribute | Details |
 | --- | --- |
-| **Version** | 1.2.0 |
-| **Updated** | 2026-03-24 |
+| **Version** | 1.3.0 |
+| **Updated** | 2026-03-25 |
 | **License** | MIT |
 | **Author** | Myk Pono |
 | **Lab** | [lab.mykpono.com](https://lab.mykpono.com) |
@@ -57,6 +57,17 @@ Frameworks and sources this skill builds on:
 | **GA4/GTM setup only** (no organic SEO question) | § 10 measurement checklist — **no** fabricated domain-wide numeric score. |
 | **Social** community management only | Out of scope unless tied to organic discovery (e.g. `sameAs`, entity signals). |
 | **Explicitly scoped** task (e.g. “only robots.txt + sitemap”) | Stay in that scope — no domain-wide E-E-A-T essay or `/100` score unless the user asks. |
+
+### Audit Context: Internal vs. Competitive Mode
+
+Before routing, determine which audit context applies. This controls what outputs are valid.
+
+| Signal | Context | What's Allowed |
+|---|---|---|
+| User says "my site", "our site", "I own", provides GSC/GA4 access, or confirms backend access | **Internal Mode** | Full scored audit, all 27 scripts eligible, Execute mode available, /100 Health Score valid |
+| External URL the user does not own (competitor, prospect, reference site) | **Competitive Mode** | Surface crawl only (homepage + up to 20 pages), no /100 Health Score, Execute mode disabled, all output labeled **"External Observation Only"** |
+
+**When in doubt, ask:** "Is this your site, or are you analyzing a competitor?"
 
 This skill operates in three modes. Identify which mode applies before touching anything else.
 
@@ -158,7 +169,18 @@ If the request matches **§ 0 “When not to run Mode 1”**, route to a **narro
 
 **In a bash-capable environment**: Run `python scripts/generate_report.py https://example.com --output report.html` first — it runs the **bundled analysis pipeline** in `generate_report.py` (robots, security, social, redirects, llms.txt, links, PageSpeed, entities, hreflang, duplicates, sitemap discovery, local signals, IndexNow probe, on-page parse, readability, article SEO, JSON-LD validation, image alt coverage, etc.). Then use `finding_verifier.py` to deduplicate at the end. For any single dimension, run the matching script from **`references/audit-script-matrix.md`** or **§21**.
 
-**Lab / performance data (PSI, CrUX, LCP, CLS, INP):** Do **not** state numeric scores or field metrics unless `scripts/pagespeed.py` ran successfully (or the user pasted PageSpeed Insights / CrUX output). If the script failed, lacks an API key, or the environment blocks googleapis.com, say **performance data unavailable** and give checklist-level guidance (§ 4, `references/technical-checklist.md`) or ask the user to run PSI / WebPageTest manually.
+**Evidence Integrity — do not state the following unless the corresponding data source ran or was provided:**
+
+| Claim | Only state if |
+|---|---|
+| LCP / INP / CLS / performance score | `pagespeed.py` ran successfully, or user pasted PageSpeed Insights / CrUX output |
+| Backlink count or referring domains | `link_profile.py` ran and returned data |
+| Organic traffic or impression numbers | GSC / GA4 access confirmed and data retrieved |
+| Health Score /100 | Internal Mode + minimum 5 scripts ran with data |
+| Thin content finding | `readability.py` + `duplicate_content.py` both ran |
+| Schema errors or validation status | `validate_schema.py` ran against the page |
+
+**When data is absent:** replace the claim with `[metric] not measured — run [script] for actual data` or ask the user to provide it. If `pagespeed.py` failed, lacks an API key, or the environment blocks googleapis.com, say **performance data unavailable** and give checklist-level guidance (§ 4, `references/technical-checklist.md`) or ask the user to run PSI / WebPageTest manually.
 
 1. **Fetch the site** — homepage + 5–10 representative pages (pillar pages, top posts, key landing pages).
 2. **Detect business type** from page signals:
@@ -299,13 +321,22 @@ Columns: Action | Owner | Effort | Expected Outcome | Phase
 
 ### Mode 3 Execute + Verify Loop
 
+**Before producing any Execute output, classify the change:**
+
+| Classification | Change Types | Action |
+|---|---|---|
+| **Safe** | Meta descriptions, title tags, alt text, FAQ/Article/Organization schema, content rewrites, llms.txt, internal links | Output directly |
+| **High-Risk** | robots.txt, canonical tags, redirect maps, noindex directives, hreflang tags, bulk CMS template changes | State the proposed change and ask for explicit confirmation before outputting — one bad change here can deindex the site |
+
 When implementing a specific fix:
 
 ```
-1. State the finding being addressed
-2. Produce the fix artifact (code, rewrite, JSON-LD, redirect map)
-3. Verify: run scripts/validate_schema.py [file] OR review output directly
-4. Confirm: "Fix resolves [Finding] — [evidence of resolution]"
+1. Classify: Safe or High-Risk?
+2. If High-Risk: state the change and confirm with the user before proceeding
+3. State the finding being addressed
+4. Produce the fix artifact (code, rewrite, JSON-LD, redirect map)
+5. Verify: run scripts/validate_schema.py [file] OR review output directly
+6. Confirm: "Fix resolves [Finding] — [evidence of resolution]"
 ```
 
 **Example:**
