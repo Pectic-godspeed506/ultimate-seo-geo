@@ -7,8 +7,8 @@ description: Universal SEO + GEO skill for scored full-site audits, technical SE
 
 | Attribute | Details |
 | --- | --- |
-| **Version** | 1.3.0 |
-| **Updated** | 2026-03-25 |
+| **Version** | 1.4.0 |
+| **Updated** | 2026-03-26 |
 | **License** | MIT |
 | **Author** | Myk Pono |
 | **Lab** | [lab.mykpono.com](https://lab.mykpono.com) |
@@ -398,6 +398,28 @@ Only 11–13.7% of domains are cited by both ChatGPT and AI Overviews — platfo
 
 **Key insight**: 44.2% of AI citations come from the *first 30%* of content. Restructuring alone can 2× citation rate.
 
+### Building Brand Signals — Tactical Playbook
+
+Brand signals (Reddit, YouTube, Wikipedia mentions) account for 20% of the GEO Score. Use when step 5 identifies any missing platform.
+
+**Quora**
+1. Search Quora for questions your content directly answers.
+2. Write a genuine 2–3 paragraph answer — do not copy-paste the article.
+3. Include one link to the relevant page at the end, not the top.
+4. Upvoted Quora answers index in Google and are scraped by Perplexity. Genuine answers accumulate passive impressions for months.
+5. Target 3–5 Quora answers per piece of published content.
+
+**Reddit**
+1. Find the subreddit where the target audience discusses this topic.
+2. Write 2–3 sentences of genuine context explaining why the content is relevant — do not paste the link alone. Context-free links are removed or downvoted. Upvoted Reddit threads are heavily indexed and cited by Perplexity.
+3. Engage with follow-up comments within 24 hours.
+
+**Influencer and Newsletter Outreach**
+1. Build a list of 10–30 relevant influencers per topic cluster.
+2. Email one sentence on why their audience benefits + pre-written tweet or LinkedIn post they can share as-is. Make sharing zero-effort.
+3. Identify 5–10 industry newsletters. Pitch strong content with a one-line summary — newsletter editors need good content; you are doing them a favour.
+4. Each share → brand mention → strengthens entity signals and AI citation rate.
+
 ### Google AI Mode — Specific Optimization
 
 AI Mode (launched May 2025) has no blue links at all — zero visibility if not cited. It follows up with clarifying questions, so content that answers follow-on queries wins. Add a "Related Questions" section (3–5 logical follow-ups) at the end of key pages. Explicit publication + last-updated dates are stronger freshness signals here than in standard search.
@@ -688,7 +710,7 @@ For Knowledge Panel (sameAs schema), Sitelinks Searchbox (SearchAction code), Sp
 ### Step by Step
 
 1. **Identify 3–5 direct competitors** — Search the site's primary keyword and note positions 1–5.
-2. **Fetch competitor homepage + top-ranking pages**.
+2. **Fetch competitor homepage + top-ranking pages**. Also fetch `[competitor-url]/robots.txt` and `[competitor-url]/llms.txt` for GEO stance assessment. For topic coverage: run `sitemap_checker.py [competitor-url]` to confirm sitemap URL and reachability, then fetch the raw sitemap XML directly and read `<loc>` URL path patterns — folder-level segments absent from the audited site are direct content gap candidates.
 3. **Assess across five dimensions** below.
 4. **Identify 3 biggest gaps to close** and 3 biggest advantages to exploit.
 5. **Test shared keywords in AI search** — ChatGPT and Perplexity. Note who gets cited.
@@ -702,6 +724,9 @@ For Knowledge Panel (sameAs schema), Sitelinks Searchbox (SearchAction code), Sp
 | Schema advantages | Add missing schema immediately; reinforce where you have it |
 | AI citation presence | If they're cited and you're not → audit GEO signals (§ 3) |
 | E-E-A-T gaps | Leverage credentials where competitors use anonymous bylines |
+| AI crawler configuration | If competitor blocks OAI-SearchBot or PerplexityBot in robots.txt → immediate GEO first-mover advantage. Run `robots_checker.py [competitor-url]`. Output labeled "External Observation Only." |
+| llms.txt presence | If competitor lacks llms.txt → your llms.txt gives AI systems clearer indexing signal. Run `llms_txt_checker.py [competitor-url]`. Output labeled "External Observation Only." |
+| Topic coverage gap (sitemap) | Fetch competitor's raw sitemap XML; `<loc>` URL path patterns absent from your site → direct content calendar input. Confirm sitemap reachability via `sitemap_checker.py [competitor-url]`, then read raw `<loc>` entries. Output labeled "External Observation Only." |
 
 ### Output Format
 

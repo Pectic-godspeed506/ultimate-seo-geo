@@ -47,6 +47,8 @@ CI fails if root skill/references/scripts/evals disagree with the plugin tree or
 
 **Audit script map:** `references/audit-script-matrix.md` (each automated step ↔ script). **Dependencies:** after `pip install -r requirements.txt`, `python3 scripts/requirements-check.py` should print OK. **Eval fixtures:** `python3 scripts/score_eval_transcript.py --all-fixtures` (exit 0). **Smoke all tools (truncated JSON):** `bash scripts/run_individual_checks.sh https://example.com` (starts with requirements check).
 
+> **Eval growth rule:** Every bug fixed in SKILL.md must have a corresponding new eval fixture (assertion) before the fix merges. No exceptions. Target: suite grows from 10 → 25 scenarios over 6 months, driven by real failures — no dedicated sprint required. See `_local/strategy-directives/monthly-review-template.md` for the review cadence.
+
 ---
 
 ## 4. Pre-release verification (optional, deeper checks)

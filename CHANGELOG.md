@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-03-26
+
+### Added
+
+- **GEO Brand Signal Tactical Playbook** (§3) — new "Building Brand Signals" section placed after the GEO Score Components table, directly below the line that surfaces Brand Signals as 20% of the GEO Score.
+  WHY: The skill already audited whether Reddit, YouTube, and Quora signals were present, but had no fix directive for building them. This closes the gap between "Finding" and "Fix" — without the playbook, a practitioner seeing a brand-signal gap had nowhere to go next.
+
+- **Competitor GEO Stance** (§8 Step 2 + Assessment Table) — Step 2 now instructs fetching `[competitor-url]/robots.txt` and `[competitor-url]/llms.txt` alongside top-ranking pages. Two new rows added to the Competitor Assessment Dimensions table: "AI crawler configuration" and "llms.txt presence."
+  WHY: A competitor blocking OAI-SearchBot or lacking llms.txt is invisible to ChatGPT Search and gives the audited site an immediate GEO first-mover advantage. Previously §8 checked citation presence but not the configuration-level reasons behind it.
+
+- **Competitor Sitemap Gap Analysis** (§8 Step 2 + Assessment Table) — Step 2 extended to run `sitemap_checker.py [competitor-url]` for reachability, then fetch raw sitemap XML and read `<loc>` URL path patterns. New "Topic coverage gap (sitemap)" row added to the Assessment Dimensions table.
+  WHY: Topic clusters present in a competitor's sitemap but absent from the audited site are the most reliable, evidence-backed content calendar input. Previously gap identification was inferred from fetched pages only — sitemap analysis makes it systematic.
+
+### Changed
+
+- SKILL.md version → **1.4.0**; updated date → 2026-03-26.
+
 ## [1.3.0] - 2026-03-25
 
 ### Added

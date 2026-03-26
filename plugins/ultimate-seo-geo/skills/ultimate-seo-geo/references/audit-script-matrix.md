@@ -1,3 +1,5 @@
+<!-- Updated: 2026-03-26 | Review: 2026-06-26 -->
+
 # Audit steps ↔ diagnostic scripts
 
 Each major automated check has a **script** you can run alone (usually with `--json`). The full-site dashboard runs the **bundled pipeline** in `scripts/generate_report.py`, which executes the same tools in one pass.
