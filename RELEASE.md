@@ -244,7 +244,13 @@ In **Claude Code**, use **chat slash commands** (not Terminal/zsh):
 git status
 ```
 
-Commit, push, and tag as needed.
+Commit, push, and tag:
+
+```bash
+git add -A && git commit -m "vX.Y.Z — summary" && git tag vX.Y.Z && git push origin main --tags
+```
+
+Then create a **GitHub Release** for the tag at `https://github.com/mykpono/ultimate-seo-geo/releases/new` — select the existing tag, add release notes, and publish. **This step is required.** The Claude.ai web app marketplace reads from GitHub Releases, not commits or tags alone. Without a published Release, the web app Update button will not fetch the new version.
 
 ---
 
