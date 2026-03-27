@@ -1,14 +1,14 @@
 ---
 name: ultimate-seo-geo
 description: Universal SEO + GEO skill for scored full-site audits, technical SEO, CORE-EEAT and CITE scoring, Schema.org JSON-LD, entity optimization, and GEO for AI Overviews, ChatGPT, and Perplexity. Make sure to use this skill whenever the user mentions SEO, GEO, audit, schema, rankings, traffic drop, AI citations, backlinks, sitemap, crawl, robots, migration, hreflang, content strategy, site speed, Core Web Vitals, structured data, rich results, indexing issues, or anything related to search engine visibility — even if they don't explicitly say "SEO."
-version: 1.5.5
+version: 1.5.6
 ---
 
 # Ultimate SEO + GEO — Universal Search Optimization Skill
 
 | Attribute | Details |
 | --- | --- |
-| **Version** | 1.5.5 |
+| **Version** | 1.5.6 |
 | **Updated** | 2026-03-27 |
 | **License** | MIT |
 | **Author** | Myk Pono |
@@ -37,6 +37,8 @@ Every finding comes with a clear fix directive — not just diagnosis.
 ### Reference Reading Guide
 
 When a section points to a reference file, read only what you need for the current task.
+
+**Progressive Disclosure rule:** Load at most **3 reference files** per response — unless running a Mode 1 full audit with `generate_report.py`, which implicitly covers all dimensions. For single-topic Mode 2 or Mode 3 tasks (e.g., "fix my schema", "write an llms.txt"), the routing table below identifies exactly 1–2 files to load. Loading all 22 reference files for a narrow task wastes context and adds latency with no quality gain. This pattern follows Anthropic's [Skills progressive disclosure architecture](https://github.com/anthropics/claude-cookbooks/tree/main/skills).
 
 | Task | Read | Run |
 |------|------|-----|
@@ -397,6 +399,29 @@ Impact: Low AI Overview and Perplexity citation rate for the site's core query.
 Fix: Move the direct answer to the opening paragraph. Keep detail further down.
 Confidence: Confirmed | Severity: 🟠 High
 ```
+
+### Citation Demonstration (Evaluator-Optimizer Pattern)
+
+When auditing a page's citation potential, always produce a **before/after citation demonstration** — not just a score. Show the user what an AI-quotable passage from their content would look like:
+
+```
+CURRENT (not citable — 340 words, no direct answer in first 30%)
+  "Psilocybin has been the subject of considerable scientific investigation in recent
+  years, with researchers from leading institutions exploring its..."
+
+REWRITTEN (citable — 148 words, direct answer in first sentence, source attributed)
+  "Psilocybin produces psychedelic effects by binding to serotonin 5-HT2A receptors
+  in the brain, temporarily altering perception and cognition (Johns Hopkins Center
+  for Psychedelic Research, 2024). Effects last 4–6 hours at typical doses of
+  10–30 mg. A 2023 JAMA Psychiatry meta-analysis of 11 RCTs found response rates
+  of 57–80% for treatment-resistant depression."
+
+WHY IT'S CITABLE: Self-contained (148 words, within 134–167 target), direct answer
+first, specific numeric stat, dated institutional source — exactly what AI systems
+prefer for citation inclusion.
+```
+
+This concrete demonstration is more actionable than a score alone. Adapted from Anthropic's [Citations cookbook](https://github.com/anthropics/claude-cookbooks/blob/main/misc/using_citations.ipynb) pattern of showing source attribution in structured output.
 
 → See `references/ai-search-geo.md` (full platform data, brand correlation, Wikipedia/Wikidata setup, Passage Indexing, Princeton GEO research techniques, content type citation share, AI monitoring tools, platform source selection factors) | See `references/entity-optimization.md` (47-signal entity checklist, AI Entity Resolution Test, Knowledge Graph guide) | Run `scripts/robots_checker.py` Run `scripts/entity_checker.py` Run `scripts/llms_txt_checker.py` Run `scripts/social_meta.py`
 
@@ -948,6 +973,22 @@ Run through the full monthly maintenance checklist (5 categories: Technical Heal
 
 Global rules — apply across all sections.
 
+### Audit Self-Evaluation Pass (Evaluator-Optimizer)
+
+After generating any Mode 1 audit output — before delivering it — run this internal evaluation pass. The purpose is to catch quality failures before the user sees them. If any criterion fails, revise before responding.
+
+| # | Criterion | Pass Signal | Fail Action |
+|---|---|---|---|
+| 1 | Every Critical and High finding has an **Evidence** field from actual script output or verifiable page observation | Evidence: present on each | Add evidence or downgrade severity to Medium |
+| 2 | No fabricated metrics | PSI/CrUX/LCP/CLS/INP numbers only appear if `pagespeed.py` returned JSON | Strip invented numbers; replace with "could not retrieve — verify at pagespeed.web.dev" |
+| 3 | Health Score is supported by findings distribution | Critical = −15, High = −8, Medium = −3, Low = −1 applied | Recalculate or note discrepancy |
+| 4 | Structured format used on every finding | Finding / Evidence / Impact / Fix / Confidence all present | Add missing fields |
+| 5 | No duplicate findings | Run `finding_verifier.py` if available; manually check if not | Merge duplicates before scoring |
+| 6 | Scope respected | Full audit only if user confirmed they own the site; Competitive Mode labeled "External Observation Only" | Re-label or scope down |
+| 7 | Fix directives are actionable | Each fix names the specific element, file, or page to change | Rewrite vague fixes ("improve content") with exact instructions |
+
+This pattern is adapted from Anthropic's [Evaluator-Optimizer workflow](https://github.com/anthropics/claude-cookbooks/tree/main/patterns/agents) — one pass generates, a second pass evaluates before output reaches the user.
+
 **Deprecated schema** — Google removed rich result support for these types, so recommending them wastes implementation effort and confuses validation: HowTo (Sept 2023), SpecialAnnouncement (July 2025), ClaimReview (June 2025), Dataset (late 2025), VehicleListing (June 2025), Practice Problem (late 2025), EstimatedSalary (June 2025), LearningVideo (June 2025), EnergyConsumptionDetails (replaced by Certification, April 2025), CourseInfo (June 2025).
 
 **INP not FID** — FID removed September 9, 2024. Referencing FID confuses users and dates the audit.
@@ -1011,6 +1052,31 @@ They are **not** invoked via subagents in this skill file: the default path is *
 
 **Run all individual URL checks in sequence (bash):** `bash scripts/run_individual_checks.sh https://example.com` (prints JSON from each tool; for a single HTML dashboard use `generate_report.py` instead).
 
+### Context Management for Long Audit Sessions
+
+Full-site audits across many pages can fill the context window. When this happens:
+
+1. **Compact findings** — Before context fills, summarize completed findings into the compact format: `[Section] Finding | Severity | Fix` — one line per finding. This preserves all actionable information in minimal tokens.
+2. **Checkpoint the score** — Record the running Health Score and findings count before compacting.
+3. **Continue with fresh context** — Resume from the checkpoint; load only the reference file for the next section being audited.
+4. **Final merge** — At the end, merge all compacted finding lines back into the full Finding/Evidence/Impact/Fix/Confidence format for delivery.
+
+This is adapted from Anthropic's [session memory compaction pattern](https://github.com/anthropics/claude-cookbooks/blob/main/misc/session_memory_compaction.ipynb), which uses background compaction + prompt caching to manage long-running agent conversations.
+
+### Orchestrator-Workers: Parallel Script Execution
+
+When the client exposes a Task/subagent tool (e.g., Cursor agents, Claude Code with parallel tool calls), scripts can be delegated as independent workers. The orchestrator (this skill) delegates, waits for all workers to complete, then synthesizes:
+
+```
+Orchestrator (this skill)
+├── Worker A: python scripts/robots_checker.py   → JSON findings
+├── Worker B: python scripts/sitemap_checker.py  → JSON findings
+├── Worker C: python scripts/security_headers.py → JSON findings
+└── Synthesize: merge all JSON → run finding_verifier.py → score
+```
+
+**Hard constraints:** Never delegate `generate_report.py` and individual script workers for the same URL simultaneously — they overlap and produce duplicate findings. Use one or the other. This pattern follows Anthropic's [Orchestrator-Workers pattern](https://github.com/anthropics/claude-cookbooks/blob/main/patterns/agents/orchestrator_workers.ipynb).
+
 ### Environment Note
 
 > Scripts require outbound network access. In sandboxed or proxy-restricted environments:
@@ -1068,3 +1134,4 @@ Frameworks and sources this skill builds on:
 | cite-domain-rating (github.com/aaron-he-zhu) | aaron-he-zhu — CITE 40-item domain authority, weights, diagnosis matrix |
 | Entity Optimizer (github.com/aaron-he-zhu) | aaron-he-zhu — entity checklist, AI entity resolution, Knowledge Graph guide |
 | AI SEO / GEO Content Optimizer (github.com/aaron-he-zhu) | aaron-he-zhu — Princeton GEO data, engine preference mapping, citation-share data |
+| Anthropic claude-cookbooks (github.com/anthropics/claude-cookbooks) | Anthropic — Evaluator-Optimizer pattern (§19 self-review), Progressive Disclosure architecture (§0), Orchestrator-Workers for parallel scripts (§21), Session Memory Compaction (§21), Citations pattern for GEO demonstration (§3) |

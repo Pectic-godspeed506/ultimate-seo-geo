@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+## [1.5.6] - 2026-03-27
+
+### Added
+
+- **Evaluator-Optimizer self-review pass (§19)** — Mandatory 7-criterion internal evaluation table Claude runs after generating any Mode 1 audit output, before delivering it: checks Evidence presence on Critical/High findings, no fabricated metrics, Health Score justification, structured format, no duplicates, scope label, and actionable fix directives. Adapted from Anthropic's Evaluator-Optimizer pattern (`claude-cookbooks/patterns/agents`).
+- **Progressive Disclosure hard rule (§0)** — Explicit "load at most 3 reference files per response" rule with reasoning, linked to Anthropic's Skills progressive disclosure architecture. Prevents unnecessary context bloat on single-topic requests.
+- **Orchestrator-Workers pattern (§21)** — Formal ASCII diagram showing how to delegate independent scripts as worker nodes and synthesize in the main thread. Includes hard constraint: never run `generate_report.py` + individual scripts for the same URL simultaneously.
+- **Context compaction guidance (§21)** — Step-by-step instructions for managing long audit sessions when context fills: compact findings to one-line format, checkpoint score, continue, merge at end. Adapted from Anthropic's session memory compaction pattern.
+- **Citation demonstration pattern (§3 GEO)** — "Before/After" citation rewrite block added to GEO section. Audits now produce a concrete example of what an AI-quotable passage from the user's content would look like, not just a score. Adapted from Anthropic's Citations cookbook.
+- **Attribution row** for `anthropics/claude-cookbooks` added to §21 Attribution table.
+
 ## [1.5.5] - 2026-03-27
 
 ### Added
