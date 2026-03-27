@@ -192,7 +192,7 @@ ultimate-seo-geo/
 │   ├── readability.py        Flesch-Kincaid scoring
 │   ├── ...and 12 more
 │
-└── evals/                 ← 10 scenarios, 39 assertions + golden fixtures
+└── evals/                 ← 12 scenarios, 49 assertions + golden fixtures
     ├── evals.json
     └── fixtures/          ← eval*_pass.txt (used by score_eval_transcript.py)
 ```
@@ -272,7 +272,7 @@ python scripts/generate_report.py https://example.com --output seo-report.html
 
 ## Eval Results
 
-Benchmarked against baseline (no skill) across multiple scenarios (see `evals/evals.json`; **10** prompts, **39** assertions):
+Benchmarked against baseline (no skill) across multiple scenarios (see `evals/evals.json`; **12** prompts, **49** assertions):
 
 | Metric | With Skill | Without Skill | Delta |
 |---|---|---|---|

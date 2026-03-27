@@ -15,6 +15,69 @@ Use this before tagging or publishing a new version. Run everything from the **r
 
 ---
 
+## 1b. Review README.md before every release
+
+Check these sections manually — they contain counts and metrics that drift when evals or features change:
+
+- **Eval Results table** (`## Eval Results`) — update prompt count and assertion count to match `evals/evals.json`:
+  ```bash
+  python3 -c "
+  import json; d=json.load(open('evals/evals.json'))
+  e=d['evals']; a=sum(len(x.get('assertions',[])) for x in e)
+  print(f'Prompts: {len(e)}  Assertions: {a}')
+  "
+  ```
+  Then confirm `README.md` line `**N** prompts, **N** assertions` matches.
+
+- **File tree comment** (`└── evals/ ← N scenarios`) — must match the prompt count above.
+
+- **Script count** (`scripts/` description) — verify the stated `.py` count matches `ls scripts/*.py | wc -l`.
+
+- **Feature bullets / capability claims** — skim for anything that references a number (e.g., "24 scripts", "21 reference files") and confirm it's still accurate.
+
+Run this quick README sanity check:
+```bash
+python3 - << 'EOF'
+import json, os, re
+
+errors = []
+
+# Eval counts
+d = json.load(open("evals/evals.json"))
+ev = d["evals"]
+n_prompts = len(ev)
+n_assert = sum(len(e.get("assertions", [])) for e in ev)
+
+readme = open("README.md", encoding="utf-8").read()
+
+pat = re.search(r'\*\*(\d+)\*\* prompts.*?\*\*(\d+)\*\* assertions', readme)
+if pat:
+    rp, ra = int(pat.group(1)), int(pat.group(2))
+    if rp != n_prompts: errors.append(f"README prompt count {rp} != actual {n_prompts}")
+    if ra != n_assert:  errors.append(f"README assertion count {ra} != actual {n_assert}")
+    if not errors: print(f"✓ Eval counts match: {n_prompts} prompts, {n_assert} assertions")
+else:
+    errors.append("README missing eval counts pattern")
+
+# Script count
+py_scripts = len([f for f in os.listdir("scripts") if f.endswith(".py") and f != "check-plugin-sync.py"])
+for pat_str in [r"(\d+) bundled \.py", r"(\d+).*\.py.*scripts"]:
+    m = re.search(pat_str, readme)
+    if m and int(m.group(1)) != py_scripts:
+        errors.append(f"README script count {m.group(1)} != actual {py_scripts}")
+        break
+else:
+    print(f"✓ Script count looks fine ({py_scripts} .py scripts)")
+
+if errors:
+    for e in errors: print(f"✗ {e}")
+    raise SystemExit(1)
+print("README sanity check passed ✓")
+EOF
+```
+
+---
+
 ## 2. Sync the plugin bundle
 
 Always run after editing root `SKILL.md` or `references/`:
