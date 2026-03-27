@@ -127,6 +127,26 @@ Different AI platforms prioritize different GEO dimensions. Use this matrix to a
 5. **Third-party review sites** — G2, Trustpilot, Capterra, Yelp (3× citation increase for brands with profiles)
 6. **arXiv / research** — for scientific/technical domains
 
+### Tactical Playbooks per Channel
+
+**Quora**
+1. Search Quora for questions your content directly answers.
+2. Write a genuine 2–3 paragraph answer — do not copy-paste the article.
+3. Include one link to the relevant page at the end, not the top.
+4. Upvoted Quora answers index in Google and are scraped by Perplexity. Genuine answers accumulate passive impressions for months.
+5. Target 3–5 Quora answers per piece of published content.
+
+**Reddit**
+1. Find the subreddit where the target audience discusses this topic.
+2. Write 2–3 sentences of genuine context explaining why the content is relevant — do not paste the link alone. Context-free links are removed or downvoted. Upvoted Reddit threads are heavily indexed and cited by Perplexity.
+3. Engage with follow-up comments within 24 hours.
+
+**Influencer and Newsletter Outreach**
+1. Build a list of 10–30 relevant influencers per topic cluster.
+2. Email one sentence on why their audience benefits + pre-written tweet or LinkedIn post they can share as-is. Make sharing zero-effort.
+3. Identify 5–10 industry newsletters. Pitch strong content with a one-line summary — newsletter editors need good content; you are doing them a favour.
+4. Each share → brand mention → strengthens entity signals and AI citation rate.
+
 ### Wikipedia & Wikidata Strategy (5-Step Process)
 
 Wikipedia and Wikidata entities are among the highest-signal sources for AI citations. This 5-step process maximizes impact while respecting notability guidelines.

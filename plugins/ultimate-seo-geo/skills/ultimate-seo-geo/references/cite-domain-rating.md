@@ -8,6 +8,9 @@
 
 ---
 
+
+**Contents:** Updated: March 2026 · Scoring System · Veto Items · Domain-Type Weight Tables · All 40 Items — Complete Reference · Diagnosis Matrix: CITE + CORE-EEAT · Rating Scale · Audit Output Template · CITE Score: XX/100 · Veto Check · Combined Assessment (if CORE-EEAT available) · Top 5 Priority Actions
+
 ## Scoring System
 
 | Grade | Points |

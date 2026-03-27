@@ -5,6 +5,9 @@
 
 ---
 
+
+**Contents:** Updated: March 2026 · What Is Programmatic SEO? · Google Enforcement Context (2026) · Quality Gates (Non-Negotiable) · Data Source Assessment · Template Engine Planning · URL Pattern Strategy · Internal Linking Architecture · Index Management · Safe vs. Risky Programmatic Page Types · Pre-Launch Checklist · Post-Launch Monitoring · 12 Programmatic SEO Playbooks · Scaled Content Abuse — Enforcement Timeline
+
 ## What Is Programmatic SEO?
 
 Programmatic SEO = generating many pages from structured data at scale, targeting a pattern of similar long-tail keywords. Examples:

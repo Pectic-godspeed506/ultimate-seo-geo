@@ -2,6 +2,22 @@
 
 ## [Unreleased]
 
+## [1.5.2] - 2026-03-26
+
+### Changed
+
+- **SKILL.md optimized per Anthropic Skill best practices** — reduced from 1,167 to 1,031 lines (-136 lines, ~2,300 fewer tokens per request).
+  - Removed 7 content blocks duplicated in reference files (On-Page SEO Checklist, audit example, AI Search Landscape table, Brand Signals playbook, AI Crawler table, llms.txt template, Local review benchmarks, Script table + usage blocks). Replaced with 1-2 line pointers to the existing reference files.
+  - On-Page SEO Checklist moved to `references/technical-checklist.md`; audit output example moved to new `references/audit-output-example.md`.
+  - All 18 ambiguous script references now have explicit execution intent verbs ("Run `scripts/...`" or "See `references/...`").
+  - Standardized "Core Web Vitals" / "CWV" terminology — full name on first use per section, abbreviation after.
+
+### Added
+
+- **Table of Contents** added to 13 reference files over 100 lines (previously 0/15 had TOCs). Ensures Claude sees full scope of available content even on partial file reads.
+- New `references/audit-output-example.md` — 3-finding Greenleaf.io excerpt extracted from SKILL.md.
+- Quora, Reddit, and Influencer/Newsletter tactical playbooks added to `references/ai-search-geo.md` → Tactical Playbooks per Channel.
+
 ## [1.5.1] - 2026-03-26
 
 ### Changed

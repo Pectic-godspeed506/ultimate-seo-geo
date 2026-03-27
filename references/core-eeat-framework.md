@@ -8,6 +8,9 @@
 
 ---
 
+
+**Contents:** Updated: March 2026 · Scoring System · Veto Items · Content-Type Weight Tables · All 80 Items — Complete Reference · GEO-First Items · AI Engine Preferences · Audit Workflow · Scores · Veto Check · Top 5 Priority Improvements
+
 ## Scoring System
 
 | Grade | Points |

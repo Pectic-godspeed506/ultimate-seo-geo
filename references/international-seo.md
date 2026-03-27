@@ -5,6 +5,9 @@
 
 ---
 
+
+**Contents:** Updated: March 2026 · When International SEO Applies · Site Structure Options · Hreflang — Complete Implementation Guide · Language & Region Code Reference · Critical Rules & Validation Checklist · Common Issues & Fixes · Content Strategy for International SEO · Geo-Targeting in Google Search Console · Audit Output Format · International SEO Assessment
+
 ## When International SEO Applies
 
 Apply this framework when a site:

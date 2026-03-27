@@ -5,6 +5,9 @@
 
 ---
 
+
+**Contents:** Updated: March 2026 · Why Crawl Management Matters · Crawl Budget Components · Crawl Budget Waste — What to Fix · XML Sitemap Strategy · Canonicalization · Log File Analysis · Indexation Health Checks · International SEO: hreflang · Crawl & Indexation Scoring
+
 ## Why Crawl Management Matters
 
 Googlebot has a finite crawl budget per site — it determines how many pages are crawled and how often. Wasting crawl budget on low-value pages means important pages get crawled less frequently. This is especially critical for:

@@ -8,6 +8,9 @@ Structured framework for building and optimizing brand/person entity presence ac
 
 ---
 
+
+**Contents:** Updated: March 2026 · AI Entity Resolution Test · 47-Signal Entity Checklist · Priority Action Matrix · Entity Building Roadmap · Entity Type Reference · Disambiguation Strategies · Cross-Reference to Other Frameworks
+
 ## AI Entity Resolution Test
 
 Before any optimization, test how AI systems currently perceive the entity. Run these 4 queries across 4 AI platforms.

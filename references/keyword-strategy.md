@@ -5,6 +5,9 @@
 
 ---
 
+
+**Contents:** Updated: March 2026 · Keyword Research Workflow · Content Gap Analysis · Pillar Page Strategy · Keyword Opportunity Table Template · Industry-Specific Keyword Strategies · Content Calendar Framework · Competitor Keyword Gap Analysis
+
 ## Keyword Research Workflow
 
 ### Step 1: Seed Keyword Discovery

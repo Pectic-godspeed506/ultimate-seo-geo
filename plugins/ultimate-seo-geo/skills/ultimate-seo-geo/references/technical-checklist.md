@@ -3,7 +3,21 @@
 # Technical SEO Checklist
 ## Updated: March 2026
 
-**Contents:** Core Web Vitals Thresholds · How to Fix CWV · 9-Category Technical Audit · AI Crawler Configuration · Technical SEO Scoring · Detailed CWV Fix Steps · LCP Subparts · IndexNow · Critical Technical Issues · JavaScript SEO Clarifications
+**Contents:** On-Page SEO Checklist · Core Web Vitals Thresholds · How to Fix CWV · 9-Category Technical Audit · AI Crawler Configuration · Technical SEO Scoring · Detailed CWV Fix Steps · LCP Subparts · IndexNow · Critical Technical Issues · JavaScript SEO Clarifications
+
+---
+
+## On-Page SEO Checklist
+
+| Element | Standard | Fix If Missing |
+|---|---|---|
+| Title tag | Unique, ≤60 chars, primary keyword present | Rewrite: `[Primary Keyword] — [Brand]` |
+| Meta description | Unique, 150–160 chars, no quotes | Write value-first: answer "why should I click?" |
+| H1 | One per page, matches title topic | Add single H1 matching the page's main intent |
+| URL | Lowercase, hyphens, descriptive, ≤100 chars | Redirect old URL → new clean URL + canonical |
+| Canonical | Self-referencing on every indexable page | Add `<link rel="canonical" href="[absolute-url]">` |
+
+**First check for any new site:** `site:yourdomain.com` in Google. Zero results = indexation problem → go to § 4 immediately.
 
 ---
 

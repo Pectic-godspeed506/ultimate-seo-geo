@@ -5,6 +5,9 @@
 
 ---
 
+
+**Contents:** Updated: March 2026 · Why Image SEO Matters · Complete Image Audit Checklist · CLS Prevention (Images) · Image SEO for Google Images · Image SEO for AI Citations · Audit Output Format · Image SEO Score: XX/100 · Priority Fixes
+
 ## Why Image SEO Matters
 
 Images are both a discoverability channel (Google Images, visual search) and a Core Web Vitals factor (CLS, LCP). Poor image optimization is one of the most common causes of:

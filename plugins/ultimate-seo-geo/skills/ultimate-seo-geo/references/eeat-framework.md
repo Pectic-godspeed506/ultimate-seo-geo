@@ -5,6 +5,9 @@
 
 ---
 
+
+**Contents:** Updated per Google Quality Rater Guidelines — September 2025 + December 2025 Core Update · Overview · CRITICAL: December 2025 Core Update · YMYL (Your Money or Your Life) · Experience (Weight: 20%) · Expertise (Weight: 25%) · Authoritativeness (Weight: 25%) · Trustworthiness (Weight: 30%) · September 2025 QRG Updates · Overall Scoring Guide · Improvement Recommendations by Score · Quick E-E-A-T Audit Checklist · E-E-A-T Scoring Framework · Content Quality Minimums · Readability Scoring · 2025 Spam Categories (QRG September 2025)
+
 ## Overview
 
 E-E-A-T = **E**xperience, **E**xpertise, **A**uthoritativeness, **T**rustworthiness

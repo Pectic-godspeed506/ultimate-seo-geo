@@ -7,6 +7,9 @@ Load when § 2 business type detection identifies a specific industry.
 
 ---
 
+
+**Contents:** SaaS / B2B Software · E-commerce · Local Service Business · Publisher / Blog / Media · Cross-Industry Notes
+
 ## SaaS / B2B Software
 
 ### Site Architecture

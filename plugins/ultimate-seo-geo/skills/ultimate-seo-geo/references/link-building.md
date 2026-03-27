@@ -5,6 +5,9 @@
 
 ---
 
+
+**Contents:** Updated: March 2026 · Why Links Still Matter in 2026 · Internal Linking Architecture · Backlink Quality Assessment · Link Acquisition Strategies (Ranked by Effort/Impact) · Anchor Text Strategy · Link Velocity & Momentum · Competitive Link Gap Analysis · Outreach Best Practices · Link Building Scoring · Comparison & Alternatives Pages · Comparison & Alternatives Page Playbook · CommonCrawl Backlink Discovery (Free, No API Key)
+
 ## Why Links Still Matter in 2026
 
 Backlinks remain a top-3 Google ranking signal, but their role is shifting:

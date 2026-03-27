@@ -1,14 +1,14 @@
 ---
 name: ultimate-seo-geo
 description: Universal SEO + GEO skill for scored full-site audits, technical SEO, CORE-EEAT and CITE scoring, Schema.org JSON-LD, entity optimization, and GEO for AI Overviews, ChatGPT, and Perplexity. Use when the user mentions SEO, GEO, audit, schema, rankings, traffic drop, AI citations, backlinks, sitemap, crawl, robots, migration, hreflang, or content strategy.
-version: 1.5.1
+version: 1.5.2
 ---
 
 # Ultimate SEO + GEO — Universal Search Optimization Skill
 
 | Attribute | Details |
 | --- | --- |
-| **Version** | 1.5.1 |
+| **Version** | 1.5.2 |
 | **Updated** | 2026-03-26 |
 | **License** | MIT |
 | **Author** | Myk Pono |
@@ -213,15 +213,7 @@ This table routes by **topic**. For mode selection (Audit vs. Plan vs. Execute),
 | Images | 4% |
 | Local SEO (if applicable) | 3% |
 
-### On-Page SEO Checklist
-
-| Element | Standard | Fix If Missing |
-|---|---|---|
-| Title tag | Unique, ≤60 chars, primary keyword present | Rewrite: `[Primary Keyword] — [Brand]` |
-| Meta description | Unique, 150–160 chars, no quotes | Write value-first: answer "why should I click?" |
-| H1 | One per page, matches title topic | Add single H1 matching the page's main intent |
-| URL | Lowercase, hyphens, descriptive, ≤100 chars | Redirect old URL → new clean URL + canonical |
-| Canonical | Self-referencing on every indexable page | Add `<link rel="canonical" href="[absolute-url]">` |
+For the on-page element checklist (title tags, meta descriptions, H1, URLs, canonicals), see `references/technical-checklist.md`.
 
 **First check for any new site:** `site:yourdomain.com` in Google. Zero results = indexation problem → go to § 4 immediately.
 
@@ -271,37 +263,7 @@ Date: [date] | Business Type: [type] | Audited Pages: [N] | Confidence: High/Med
 ## Full Findings [per-category, each in Finding/Evidence/Impact/Fix/Confidence format]
 ```
 
-### Mode 1 Audit Example (3-finding excerpt)
-
-```
-# SEO Audit Report — greenleaf.io
-Date: 2026-03-15 | Business Type: SaaS | Audited Pages: 8 | Confidence: Medium
-
-## SEO Health Score: 61/100
-positive_signals=14, deficit_signals=9, base=61, Critical −15×0, Warning −5×2 = 51 → adjusted 61
-
-## 🟠 High Priority
-
-Finding: No Organization or SoftwareApplication schema on any page
-Evidence: 0 JSON-LD blocks found across 8 pages; competitors average 3 schema types
-Impact: Missing rich results; 0% AI citation eligibility — schema increases citation ~2.5×
-Fix: Add Organization schema to homepage, SoftwareApplication + AggregateRating to /pricing
-Confidence: Confirmed | Severity: 🟠 High
-
-Finding: LCP 4.8s on homepage — hero image is 1.2MB unoptimized PNG
-Evidence: PageSpeed Insights mobile score 38; LCP element: <img src="/hero-dashboard.png">
-Impact: Poor CWV = deprioritized in mobile rankings; FCP > 0.4s reduces AI citations by 3×
-Fix: Convert to WebP (target <200KB), add fetchpriority="high", preload via <link>
-Confidence: Confirmed | Severity: 🟠 High
-
-## ⚡ Quick Wins
-
-Finding: Title tags use "Home | Greenleaf" pattern — keyword absent
-Evidence: Homepage title "Home | Greenleaf" instead of primary keyword
-Impact: ~15% CTR loss vs. keyword-leading titles at same position
-Fix: Rewrite to "Project Management for Remote Teams | Greenleaf"
-Confidence: Confirmed | Severity: 🟡 Medium
-```
+For a 3-finding excerpt showing the output format, see `references/audit-output-example.md`.
 
 ### Mode 2 Plan Entry Format
 
@@ -358,16 +320,7 @@ GEO = getting content cited by AI engines: Google AI Overviews, AI Mode, ChatGPT
 
 Any "No" = fix before deeper analysis. All "Yes" → proceed to full GEO Score.
 
-### 2026 AI Search Landscape
-
-| Platform | Reach | Traffic Signal |
-|---|---|---|
-| **Google AI Overviews** | 1.5B users/month | 38% citations from top-10 pages; 47% from below position 5 |
-| **Google AI Mode** | 180+ countries (May 2025) | Zero blue links — citation is the ONLY visibility |
-| **ChatGPT Search** | 900M weekly active users | Appears as Direct in GA4 (no referral header) |
-| **Perplexity** | 500M+ queries/month | Trackable `perplexity.ai` referral in GA4 |
-
-Only 11–13.7% of domains are cited by both ChatGPT and AI Overviews — platform-specific optimization matters. For full platform data, brand correlation stats, and Wikipedia/Wikidata setup, see `references/ai-search-geo.md`.
+For 2026 platform reach and traffic signal data, see `references/ai-search-geo.md`.
 
 ### GEO Audit — Step by Step
 
@@ -391,54 +344,11 @@ Only 11–13.7% of domains are cited by both ChatGPT and AI Overviews — platfo
 
 **Key insight**: 44.2% of AI citations come from the *first 30%* of content. Restructuring alone can 2× citation rate.
 
-### Building Brand Signals — Tactical Playbook
+For the Quora, Reddit, influencer, and newsletter outreach playbooks, see `references/ai-search-geo.md` → Tactical Playbooks per Channel.
 
-Brand signals (Reddit, YouTube, Wikipedia mentions) account for 20% of the GEO Score. Use when step 5 identifies any missing platform.
+For Google AI Mode–specific optimization (zero blue links, follow-up queries, Related Questions sections), see `references/ai-search-geo.md` → Platform-Specific Optimization.
 
-**Quora**
-1. Search Quora for questions your content directly answers.
-2. Write a genuine 2–3 paragraph answer — do not copy-paste the article.
-3. Include one link to the relevant page at the end, not the top.
-4. Upvoted Quora answers index in Google and are scraped by Perplexity. Genuine answers accumulate passive impressions for months.
-5. Target 3–5 Quora answers per piece of published content.
-
-**Reddit**
-1. Find the subreddit where the target audience discusses this topic.
-2. Write 2–3 sentences of genuine context explaining why the content is relevant — do not paste the link alone. Context-free links are removed or downvoted. Upvoted Reddit threads are heavily indexed and cited by Perplexity.
-3. Engage with follow-up comments within 24 hours.
-
-**Influencer and Newsletter Outreach**
-1. Build a list of 10–30 relevant influencers per topic cluster.
-2. Email one sentence on why their audience benefits + pre-written tweet or LinkedIn post they can share as-is. Make sharing zero-effort.
-3. Identify 5–10 industry newsletters. Pitch strong content with a one-line summary — newsletter editors need good content; you are doing them a favour.
-4. Each share → brand mention → strengthens entity signals and AI citation rate.
-
-### Google AI Mode — Specific Optimization
-
-AI Mode (launched May 2025) has no blue links at all — zero visibility if not cited. It follows up with clarifying questions, so content that answers follow-on queries wins. Add a "Related Questions" section (3–5 logical follow-ups) at the end of key pages. Explicit publication + last-updated dates are stronger freshness signals here than in standard search.
-
-### AI Crawler Access
-
-| Crawler | Owner | Action |
-|---|---|---|
-| OAI-SearchBot, ChatGPT-User | OpenAI Search | **Always allow** |
-| GPTBot | OpenAI Training | Allow — blocking also removes site from ChatGPT Search |
-| PerplexityBot | Perplexity | **Always allow** |
-| ClaudeBot, anthropic-ai | Anthropic | Allow |
-| Google-Extended | Google Gemini training | Optional block — does NOT affect Google Search or AI Overviews |
-
-### llms.txt Quick Template
-
-```
-# [Site Name]
-> [One-line description]
-
-## Key Pages
-- [Page Title](url): [What it covers]
-
-## Best Content
-- [Article Title](url): [What it answers]
-```
+For the AI crawler allow/block table (OAI-SearchBot, PerplexityBot, ClaudeBot, GPTBot, Google-Extended) and the llms.txt quick template, see `references/ai-search-geo.md`.
 
 ### GEO Finding Example
 
@@ -451,7 +361,7 @@ Fix: Move the direct answer to the opening paragraph. Keep detail further down.
 Confidence: Confirmed | Severity: 🟠 High
 ```
 
-→ `references/ai-search-geo.md` (full platform data, brand correlation, Wikipedia/Wikidata setup, Passage Indexing, Princeton GEO research techniques, content type citation share, AI monitoring tools, platform source selection factors) | `references/entity-optimization.md` (47-signal entity checklist, AI Entity Resolution Test, Knowledge Graph guide) | `scripts/robots_checker.py` `scripts/entity_checker.py` `scripts/llms_txt_checker.py` `scripts/social_meta.py`
+→ See `references/ai-search-geo.md` (full platform data, brand correlation, Wikipedia/Wikidata setup, Passage Indexing, Princeton GEO research techniques, content type citation share, AI monitoring tools, platform source selection factors) | See `references/entity-optimization.md` (47-signal entity checklist, AI Entity Resolution Test, Knowledge Graph guide) | Run `scripts/robots_checker.py` Run `scripts/entity_checker.py` Run `scripts/llms_txt_checker.py` Run `scripts/social_meta.py`
 
 ---
 
@@ -499,7 +409,7 @@ Fix: Update all internal links and any external links you control to point direc
 Expected impact: Faster crawl, full link equity preservation.
 ```
 
-→ `references/technical-checklist.md` (detailed CWV fix steps, LCP subparts, IndexNow setup) | `scripts/pagespeed.py` `scripts/robots_checker.py` `scripts/redirect_checker.py` `scripts/security_headers.py` `scripts/indexnow_checker.py`
+→ See `references/technical-checklist.md` (detailed CWV fix steps, LCP subparts, IndexNow setup) | Run `scripts/pagespeed.py` Run `scripts/robots_checker.py` Run `scripts/redirect_checker.py` Run `scripts/security_headers.py` Run `scripts/indexnow_checker.py`
 
 > **Script note**: `pagespeed.py` calls googleapis.com. In proxy-restricted environments it will fail — fallback: ask user to run pagespeed.web.dev and share results, or use the manual CWV checklist in `references/technical-checklist.md`.
 
@@ -540,7 +450,7 @@ Always use **JSON-LD** (`<script type="application/ld+json">`). Schema improves 
 
 For e-commerce schema additions (ProductGroup, Certification, OfferShippingDetails), recent schema types (2024–2026), and AEO schema (Sitelinks Searchbox, Speakable, Knowledge Panel sameAs), see `references/schema-types.md`.
 
-→ `references/schema-types.md` | `scripts/validate_schema.py`
+→ See `references/schema-types.md` | Run `scripts/validate_schema.py`
 
 ---
 
@@ -573,7 +483,7 @@ For the full **80-item CORE-EEAT content audit** (8 dimensions, Pass/Partial/Fai
 
 For the **40-item CITE domain authority audit** (Citation/Identity/Trust/Eminence, domain-type weights, veto items that cap score at 39, Diagnosis Matrix for CITE × CORE-EEAT strategy), see `references/cite-domain-rating.md`. Use this for domain-level authority assessments.
 
-→ `references/eeat-framework.md` `references/content-eeat.md` `references/core-eeat-framework.md` `references/cite-domain-rating.md` | `scripts/article_seo.py` `scripts/readability.py` `scripts/duplicate_content.py`
+→ See `references/eeat-framework.md` `references/content-eeat.md` `references/core-eeat-framework.md` `references/cite-domain-rating.md` | Run `scripts/article_seo.py` Run `scripts/readability.py` Run `scripts/duplicate_content.py`
 
 ---
 
@@ -600,7 +510,7 @@ For sites older than 2 years, content decay is often higher leverage than creati
 
 For freshness thresholds by content type, see `references/content-eeat.md`.
 
-→ `references/content-eeat.md`
+→ See `references/content-eeat.md`
 
 ---
 
@@ -631,7 +541,7 @@ For freshness thresholds by content type, see `references/content-eeat.md`.
 | **Commercial (MOFU/BOFU)** | "best X", "X vs Y", "X alternatives" | Comparison, roundup — high commercial intent, often faster to rank |
 | **Transactional (BOFU)** | "buy X", "X pricing", "free trial" | Landing page, pricing |
 
-→ `references/keyword-strategy.md`
+→ See `references/keyword-strategy.md`
 
 ---
 
@@ -767,7 +677,7 @@ For "X vs Y" and "Alternatives to X" page content requirements, the 4-type compa
 
 **Don't**: Recommend paid link schemes — violates Google's spam policy.
 
-→ `references/link-building.md` (CommonCrawl backlink API, comparison page requirements) | `scripts/internal_links.py` `scripts/broken_links.py` `scripts/link_profile.py`
+→ See `references/link-building.md` (CommonCrawl backlink API, comparison page requirements) | Run `scripts/internal_links.py` Run `scripts/broken_links.py` Run `scripts/link_profile.py`
 
 ---
 
@@ -786,7 +696,7 @@ For "X vs Y" and "Alternatives to X" page content requirements, the 4-type compa
 |---|---|
 | **Google Search Console** | Indexation, Performance, Core Web Vitals (field data) |
 | **GA4** | Organic sessions, engagement, conversions |
-| **PageSpeed Insights** | CWV field + lab data |
+| **PageSpeed Insights** | Core Web Vitals field + lab data |
 | **Rank tracker** | Weekly position tracking |
 
 ### Traffic Drop Diagnostic
@@ -806,7 +716,7 @@ For "X vs Y" and "Alternatives to X" page content requirements, the 4-type compa
 
 **AI traffic**: Perplexity = `perplexity.ai` referral in GA4. ChatGPT = no referrer, appears as Direct.
 
-→ `references/analytics-reporting.md`
+→ See `references/analytics-reporting.md`
 
 ---
 
@@ -833,7 +743,7 @@ For "X vs Y" and "Alternatives to X" page content requirements, the 4-type compa
 
 **Sitemap health**: submitted/indexed ratio >90% = healthy; <70% = investigate content quality or canonicalization.
 
-→ `references/crawl-indexation.md`
+→ See `references/crawl-indexation.md`
 
 ---
 
@@ -849,15 +759,7 @@ Apply whenever the site is a local business, service area business, or has physi
 4. **Check review profile** — Count, average rating, recency.
 5. **Verify LocalBusiness schema** — name, address, phone, geo coordinates, openingHours.
 
-### Review Benchmarks
-
-| Metric | Healthy | Action |
-|---|---|---|
-| Star rating | ≥ 4.3 | Address negative patterns; request reviews proactively |
-| Review count | ≥ 50 | Create review request at highest satisfaction moment |
-| Review recency | ≤ 30 days | Automate review request post-service |
-
-**Citation priority**: GBP → Apple Maps → Bing Places → Yelp → Facebook → BBB → industry directories
+For review benchmarks (≥ 4.3 stars, ≥ 50 reviews, ≤ 30 days recency) and citation priority order, see `references/local-seo.md`.
 
 ### Location Page Quality Gates
 
@@ -868,7 +770,7 @@ Apply whenever the site is a local business, service area business, or has physi
 
 **Don't**: Recommend fake reviews — GBP suspension risk.
 
-→ `references/local-seo.md`
+→ See `references/local-seo.md`
 
 ---
 
@@ -906,7 +808,7 @@ Apply whenever the site is a local business, service area business, or has physi
 
 **Don't**: Add `loading="lazy"` to the LCP image.
 
-→ `references/image-seo.md`
+→ See `references/image-seo.md`
 
 ---
 
@@ -931,7 +833,7 @@ Apply whenever the site is a local business, service area business, or has physi
 | Chinese requires script qualifier | `zh-Hans` / `zh-Hant` ✅ — bare `zh` ❌ |
 | Japanese code | `ja` ✅ — `jp` is a country code ❌ |
 
-→ `references/international-seo.md` | `scripts/hreflang_checker.py`
+→ See `references/international-seo.md` | Run `scripts/hreflang_checker.py`
 
 ---
 
@@ -956,7 +858,7 @@ Apply whenever the site is a local business, service area business, or has physi
 
 **Don't**: Approve city pages where only the city name changes — March 2024 Core Update target (60–80% traffic declines seen).
 
-→ `references/programmatic-seo.md` (12 playbooks taxonomy, data-asset-to-playbook decision matrix, data defensibility hierarchy, Scaled Content Abuse enforcement timeline with dates, uniqueness calculation formula, progressive rollout strategy)
+→ See `references/programmatic-seo.md` (12 playbooks taxonomy, data-asset-to-playbook decision matrix, data defensibility hierarchy, Scaled Content Abuse enforcement timeline with dates, uniqueness calculation formula, progressive rollout strategy)
 
 ---
 
@@ -993,15 +895,15 @@ Apply whenever the site is a local business, service area business, or has physi
 
 Run through the full monthly maintenance checklist (5 categories: Technical Health, Content & Rankings, GEO/AI Search, Local SEO, Analytics Integrity) in `references/analytics-reporting.md` → "Monthly Maintenance Checklist" section. Key trigger: any page losing impressions for 3+ months → flag for content refresh (§ 6b).
 
-→ `references/analytics-reporting.md`
+→ See `references/analytics-reporting.md`
 
 ---
 
 ## 18. Google's Official Stance — Myths & Misconceptions
 
-14 common SEO myths with Google's official positions are documented in `references/analytics-reporting.md` → "Myths & Misconceptions" section. Load when a user asks "does X help SEO?" or "is X a ranking factor?" Key myths to know without loading: meta keywords tag is ignored, word count has no minimum/maximum, CWV are a tiebreaker not primary factor, E-E-A-T describes quality but is not a direct ranking factor.
+14 common SEO myths with Google's official positions are documented in `references/analytics-reporting.md` → "Myths & Misconceptions" section. Load when a user asks "does X help SEO?" or "is X a ranking factor?" Key myths to know without loading: meta keywords tag is ignored, word count has no minimum/maximum, Core Web Vitals are a tiebreaker not primary factor, E-E-A-T describes quality but is not a direct ranking factor.
 
-→ `references/analytics-reporting.md`
+→ See `references/analytics-reporting.md`
 
 ---
 
@@ -1058,7 +960,7 @@ Site migration = any change to URL structure, domain, protocol, or CMS. High-ris
 
 For the complete step-by-step checklists, common mistakes, and post-migration monitoring schedule, see `references/site-migration.md`.
 
-→ `references/site-migration.md` | `scripts/redirect_checker.py`
+→ See `references/site-migration.md` | Run `scripts/redirect_checker.py`
 
 ---
 
@@ -1095,59 +997,22 @@ Runs the bundled analysis pipeline (see §2): URL-based scripts, homepage HTML f
 
 ### Script Quick Reference
 
-| Script | Purpose | Audit Section |
-|---|---|---|
-| `generate_report.py` | Interactive HTML dashboard — full bundled pipeline | § 2 Full Audit |
-| `pagespeed.py` | Core Web Vitals via PSI API ⚠️ requires external access | § 4 Technical |
-| `robots_checker.py` | robots.txt rules + AI crawler allow/block status | § 3 GEO, § 4 |
-| `security_headers.py` | HSTS, CSP, X-Frame-Options — weighted score | § 4 Technical |
-| `redirect_checker.py` | Full redirect chain — loops and mixed HTTP/HTTPS | § 4, § 20 |
-| `validate_schema.py` | JSON-LD validation (`--json` for tools) | § 5 Schema |
-| `hreflang_checker.py` | All 8 hreflang rules + bidirectional return tags | § 14 International |
-| `llms_txt_checker.py` | llms.txt presence + format validation | § 3 GEO |
-| `indexnow_checker.py` | IndexNow with `--key`; keyless `--probe` for reports | § 4 Technical |
-| `sitemap_checker.py` | Sitemap URLs from robots + first sitemap sanity | § 11 Crawl |
-| `local_signals_checker.py` | LocalBusiness JSON-LD, tel:, address signals | § 12 Local |
-| `image_checker.py` | Alt coverage on saved HTML (`--base-url`) | § 13 Images |
-| `entity_checker.py` | Wikidata, Wikipedia, sameAs — entity signals | § 3 GEO |
-| `broken_links.py` | 4xx/5xx broken links + 3xx redirect counts | § 9 Links |
-| `internal_links.py` | Link graph, orphan pages, anchor text, crawl depth | § 9 Links |
-| `link_profile.py` | Deeper link graph, equity distribution | § 9 Links |
-| `social_meta.py` | Open Graph + Twitter Card validation | § 4 Technical |
-| `parse_html.py` | Extracts titles, H1s, meta, canonical, schema | § 2, § 4 |
-| `article_seo.py` | CMS-aware article SEO — content structure, keywords | § 6 Content |
-| `readability.py` | Flesch-Kincaid grade + sentence stats | § 6 Content |
-| `duplicate_content.py` | Near-duplicate detection | § 6 Content |
-| `meta_lengths_checker.py` | Title / meta description / H1 length & presence | § 2 On-page |
-| `fetch_page.py` | Fetch and save raw HTML | General |
-| `finding_verifier.py` | Deduplicates findings across a full audit | § 2 Full Audit |
-| `requirements-check.py` | Verify `requests` + `beautifulsoup4` | Preflight |
-| `score_eval_transcript.py` | Score a saved reply vs `evals/evals.json` | QA / regression |
+For the complete script-to-section mapping (all 24 scripts with purpose and audit section), see `references/audit-script-matrix.md`.
 
 ### Targeted Usage
 
 ```bash
-# Validate schema after generating it (machine-readable)
+# Validate schema after generating it
 python scripts/validate_schema.py page.html --json
 
 # Check AI crawler access
 python scripts/robots_checker.py https://example.com
 
-# Full redirect chain analysis
-python scripts/redirect_checker.py https://example.com/old-page
-
-# Internal link graph + orphan detection
-python scripts/internal_links.py https://example.com --json
-
 # Check llms.txt
 python scripts/llms_txt_checker.py https://example.com
 
-# Title + meta description lengths
-python scripts/meta_lengths_checker.py --url https://example.com --json
-
-# Regression: score a transcript against an eval id
-python scripts/score_eval_transcript.py --eval-id 1 --text-file my-transcript.txt
-python scripts/score_eval_transcript.py --all-fixtures   # bundled golden fixtures
+# Regression: score a transcript against eval fixtures
+python scripts/score_eval_transcript.py --all-fixtures
 ```
 
 ---

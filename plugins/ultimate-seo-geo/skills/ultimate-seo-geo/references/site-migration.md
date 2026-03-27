@@ -15,6 +15,9 @@ A site migration is any change that risks altering how Google crawls, indexes, o
 
 ---
 
+
+**Contents:** Updated: March 2026 · Pre-Migration: 6 Steps (Do Before Launch) · Migration Day: 5 Steps · Post-Migration: Monitoring Schedule · Common Migration Mistakes · Platform-Specific Notes · Redirect Map Validation Script
+
 ## Pre-Migration: 6 Steps (Do Before Launch)
 
 ### Step 1: Full URL Crawl Baseline
