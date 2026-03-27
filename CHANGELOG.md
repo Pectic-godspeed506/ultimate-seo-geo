@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [1.5.4] - 2026-03-27
+
+### Added
+
+- **Browser caching / Expires header coverage** — `technical-checklist.md` now includes a dedicated "Browser Caching checklist" block under §6 Core Web Vitals (4 pass/fail items), a new row in the Critical Technical Issues table with detect + fix instructions, and a full `### Fixing Missing Browser Cache Headers` section with working Apache `.htaccess`, NGINX, and WordPress plugin fix code (including the safety note on 1-year cache with versioned filenames).
+- **Image-level caching audit** — `image-seo.md` gains a `### Browser Caching for Images` section (3-row audit table, DevTools quick-check, fix pointers) and a `Browser Caching` dimension (5pts) in the Image SEO Score audit template.
+
+### Changed
+
+- `technical-checklist.md` — added missing cache headers to the Common LCP Issues list; tightened `Cache-Control` reference in the LCP fix steps.
+- `image-seo.md` — updated Contents header and Alt Text score weight (30 → 25) to accommodate new Browser Caching dimension while keeping total at 100.
+
 ## [1.5.3] - 2026-03-26
 
 ### Changed
