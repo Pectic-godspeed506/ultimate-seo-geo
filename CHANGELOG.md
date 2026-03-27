@@ -2,6 +2,24 @@
 
 ## [Unreleased]
 
+## [1.5.3] - 2026-03-26
+
+### Changed
+
+- **Skill description made "pushier"** for better triggering — added explicit "Make sure to use this skill whenever..." phrasing and expanded trigger keywords (site speed, Core Web Vitals, structured data, rich results, indexing issues, search engine visibility). Follows Anthropic's skill-creator guidance that Claude tends to "undertrigger" skills.
+- **Mode routing converted from table to decision tree** — ASCII tree format is easier for the model to follow branching logic vs. scanning table rows. Sourced from Anthropic's `webapp-testing` and `claude-api` skill patterns.
+- **Quality Gates (§19) rewritten with reasoning** — every hard rule now explains *why* it exists (e.g., deprecated schema wastes effort, blocking GPTBot loses live search visibility). Follows Anthropic's skill-creator principle: "explain the why" instead of rigid MUSTs.
+- **Featured Snippet advice (§7c) softened with reasoning** — "Never exceed 60 words" → explains Google truncation; "Never defer the answer" → "Lead with the direct answer" with explanation.
+
+### Added
+
+- **Script black-box rule (§21)** — "Run scripts as black boxes. Always try `--help` first. Do not read script source unless `--help` is insufficient." Prevents wasting context tokens on large script files. Pattern from Anthropic's `webapp-testing` skill.
+- **Reference Reading Guide table (§0)** — consolidated task→file→script mapping near the top of SKILL.md. Allows the model to identify which reference file to load without scanning every section. Pattern from Anthropic's `claude-api` skill.
+
+### Meta
+
+- All 12 evals pass (0 regressions). SKILL.md: 1,070 lines (+38 from structural additions, net from 1,032).
+
 ## [1.5.2] - 2026-03-26
 
 ### Changed

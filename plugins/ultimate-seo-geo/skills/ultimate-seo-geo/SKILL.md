@@ -1,15 +1,15 @@
 ---
 name: ultimate-seo-geo
-description: Universal SEO + GEO skill for scored full-site audits, technical SEO, CORE-EEAT and CITE scoring, Schema.org JSON-LD, entity optimization, and GEO for AI Overviews, ChatGPT, and Perplexity. Use when the user mentions SEO, GEO, audit, schema, rankings, traffic drop, AI citations, backlinks, sitemap, crawl, robots, migration, hreflang, or content strategy.
-version: 1.5.2
+description: Universal SEO + GEO skill for scored full-site audits, technical SEO, CORE-EEAT and CITE scoring, Schema.org JSON-LD, entity optimization, and GEO for AI Overviews, ChatGPT, and Perplexity. Make sure to use this skill whenever the user mentions SEO, GEO, audit, schema, rankings, traffic drop, AI citations, backlinks, sitemap, crawl, robots, migration, hreflang, content strategy, site speed, Core Web Vitals, structured data, rich results, indexing issues, or anything related to search engine visibility — even if they don't explicitly say "SEO."
+version: 1.5.3
 ---
 
 # Ultimate SEO + GEO — Universal Search Optimization Skill
 
 | Attribute | Details |
 | --- | --- |
-| **Version** | 1.5.2 |
-| **Updated** | 2026-03-26 |
+| **Version** | 1.5.3 |
+| **Updated** | 2026-03-27 |
 | **License** | MIT |
 | **Author** | Myk Pono |
 | **Lab** | [lab.mykpono.com](https://lab.mykpono.com) |
@@ -33,6 +33,28 @@ Every finding comes with a clear fix directive — not just diagnosis.
 | Crawl / index / performance | § 4, matrix scripts (`robots_checker`, `sitemap_checker`, `pagespeed.py` if API works) |
 | Migration | § 20, `redirect_checker.py` |
 | Keywords / roadmap (no URL yet) | § 7, § 16 — **do not** invent a live-site `/100` score |
+
+### Reference Reading Guide
+
+When a section points to a reference file, read only what you need for the current task.
+
+| Task | Read | Run |
+|------|------|-----|
+| Full audit (any type) | `references/audit-script-matrix.md` | `generate_report.py` |
+| GEO / AI citations | `references/ai-search-geo.md`, `references/entity-optimization.md` | `robots_checker.py`, `entity_checker.py`, `llms_txt_checker.py` |
+| Schema markup | `references/schema-types.md` | `validate_schema.py` |
+| Technical / CWV | `references/technical-checklist.md` | `pagespeed.py`, `robots_checker.py`, `security_headers.py` |
+| Content / E-E-A-T | `references/eeat-framework.md`, `references/core-eeat-framework.md` | `readability.py`, `article_seo.py` |
+| CITE domain audit | `references/cite-domain-rating.md` | `link_profile.py` |
+| Keywords / clusters | `references/keyword-strategy.md` | — |
+| Links | `references/link-building.md` | `internal_links.py`, `broken_links.py`, `link_profile.py` |
+| Local SEO | `references/local-seo.md` | `local_signals_checker.py` |
+| Images | `references/image-seo.md` | `image_checker.py` |
+| International / hreflang | `references/international-seo.md` | `hreflang_checker.py` |
+| Programmatic SEO | `references/programmatic-seo.md` | — |
+| Migration | `references/site-migration.md` | `redirect_checker.py` |
+| Analytics / myths | `references/analytics-reporting.md` | — |
+| Crawl / indexation | `references/crawl-indexation.md` | `sitemap_checker.py`, `duplicate_content.py` |
 
 ### When *not* to run Mode 1 (full audit)
 
@@ -91,15 +113,30 @@ Everything else (analytics access, CMS, business type) is discovered during the 
 
 ### Mode Routing
 
-| Signal in the Request | Mode | Start At |
-|---|---|---|
-| "audit my site", "analyze", "full check", "what's wrong" | 1 → Audit | § 2 |
-| "give me a plan", "roadmap", "what to fix first" | 2 → Plan | § 16 (after § 2 if no audit exists) |
-| "fix this", "generate schema for", "rewrite my titles", "run the scripts" | 3 → Execute | § 21 for scripts; relevant section for task |
-| "audit + fix everything" / no mode stated + URL | 1 → 2 → 3 | § 2, then § 16, then execute top findings |
-| Traffic drop with URL | 1 → focused | § 10 first, then § 6 / § 4 |
-| AI citations question | 1 → focused | § 3 first |
-| Domain/CMS migration | 1 → focused | § 20 |
+```
+User request + URL
+│
+├─ "audit", "analyze", "full check", "what's wrong"
+│   └─ Mode 1 → § 2
+│
+├─ "give me a plan", "roadmap", "what to fix first"
+│   └─ Mode 2 → § 16 (run § 2 first if no audit exists)
+│
+├─ "fix this", "generate schema", "rewrite my titles", "run the scripts"
+│   └─ Mode 3 → § 21 for scripts; relevant section for task
+│
+├─ Traffic drop / rankings lost
+│   └─ Mode 1 focused → § 10 first, then § 6 / § 4
+│
+├─ AI citations / GEO question
+│   └─ Mode 1 focused → § 3 first
+│
+├─ Domain / CMS migration
+│   └─ Mode 1 focused → § 20
+│
+└─ No mode stated + URL / "audit + fix everything"
+    └─ Mode 1 → 2 → 3 (§ 2, then § 16, then execute top findings)
+```
 
 ### What "Done" Looks Like per Mode
 
@@ -581,10 +618,10 @@ AEO covers zero-click SERP features: Featured Snippets, PAA, Knowledge Panel, vo
 1. **Identify candidates** — Pages ranking 2–10 for informational queries (high impressions in GSC).
 2. **Identify the snippet format** — Search the query. Paragraph, list, or table?
 3. **Structure the answer:**
-   - **Paragraph**: 40–60 words immediately after a question-format H2/H3. Never exceed 60 words.
+   - **Paragraph**: 40–60 words immediately after a question-format H2/H3. Google truncates paragraph snippets beyond ~60 words, so staying under preserves the complete answer.
    - **List**: 5–9 items, each < 15 words. Lists >9 items get truncated.
    - **Table**: ≤4 columns, labeled headers.
-4. **Never defer the answer** — "It depends" before the answer loses the snippet to a competitor who answers directly.
+4. **Lead with the direct answer** — "It depends" before the actual answer loses the snippet to a competitor who answers directly. Google selects the most concise, self-contained response.
 
 ### PAA Optimization
 
@@ -911,27 +948,27 @@ Run through the full monthly maintenance checklist (5 categories: Technical Heal
 
 Global rules — apply across all sections.
 
-**Deprecated schema** — never recommend: HowTo (Sept 2023), SpecialAnnouncement (July 2025), ClaimReview (June 2025), Dataset (late 2025), VehicleListing (June 2025), Practice Problem (late 2025), EstimatedSalary (June 2025), LearningVideo (June 2025), EnergyConsumptionDetails (replaced by Certification, April 2025), CourseInfo (June 2025).
+**Deprecated schema** — Google removed rich result support for these types, so recommending them wastes implementation effort and confuses validation: HowTo (Sept 2023), SpecialAnnouncement (July 2025), ClaimReview (June 2025), Dataset (late 2025), VehicleListing (June 2025), Practice Problem (late 2025), EstimatedSalary (June 2025), LearningVideo (June 2025), EnergyConsumptionDetails (replaced by Certification, April 2025), CourseInfo (June 2025).
 
-**INP not FID** — FID removed September 9, 2024.
+**INP not FID** — FID removed September 9, 2024. Referencing FID confuses users and dates the audit.
 
 **Mobile-first is complete** — Mobile Googlebot for ALL sites since July 5, 2024.
 
 **E-E-A-T is universal** — All competitive queries, December 2025.
 
-**AI citation ≠ ranking** — 85% of pages ChatGPT retrieves are never cited.
+**AI citation ≠ ranking** — 85% of pages ChatGPT retrieves are never cited. Being retrieved is necessary but not sufficient.
 
-**Mentions > Backlinks for AI** — 0.664 vs. 0.218 correlation.
+**Mentions > Backlinks for AI** — 0.664 vs. 0.218 correlation. Brand mentions on third-party platforms matter more than link building for AI citation.
 
-**No paid links** — violates Google's spam policy.
+**Paid links risk manual action** — violates Google's spam policy. Recommend earning links through content quality instead.
 
-**No fake reviews** — GBP suspension risk.
+**Fake reviews risk GBP suspension** — Google actively detects fake review patterns. A suspended profile loses all local visibility.
 
-**Programmatic guardrails** — Warn at 100+ pages; hard stop at 500+ or <30% unique content.
+**Programmatic guardrails** — Warn at 100+ pages; hard stop at 500+ or <30% unique content. Google's March 2024 Core Update specifically targets thin scaled content.
 
-**Blocking AI crawlers harms GEO** — Blocking OAI-SearchBot/PerplexityBot removes site from AI search.
+**Blocking AI crawlers harms GEO** — Blocking OAI-SearchBot/PerplexityBot removes the site from AI search results entirely.
 
-**GPTBot ≠ training only** — Blocking it also limits ChatGPT Search citation.
+**GPTBot ≠ training only** — Blocking it also limits ChatGPT Search citation. Users who block GPTBot expecting only training-opt-out lose live search visibility.
 
 ---
 
@@ -965,6 +1002,8 @@ For the complete step-by-step checklists, common mistakes, and post-migration mo
 ---
 
 ## 21. Script Toolbox — Automated Checks
+
+**Run scripts as black boxes.** Always try `python scripts/<name>.py --help` first to see usage and options. Do not read the script source code unless `--help` is insufficient and you need to customize behavior — script files are large and reading them wastes context tokens. They are designed to be invoked directly, not ingested.
 
 There are **24** Python **diagnostic** scripts for URL/HTML checks, plus **`requirements-check.py`** (dependency preflight) and **`score_eval_transcript.py`** (regression scoring for `evals/evals.json`). **`check-plugin-sync.py`** is maintainers/CI only and is **not** copied into the plugin bundle. **Every major audit step maps to a script** — see `references/audit-script-matrix.md`. **Merge duplicate findings** with `finding_verifier.py` using `references/finding-verifier-example.json` as the JSON shape reference (optional `references/finding-verifier-context-example.json` for context).
 
