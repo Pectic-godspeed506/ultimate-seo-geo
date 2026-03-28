@@ -1,6 +1,6 @@
 {
   "name": "ultimate-seo-geo",
-  "description": "SEO + GEO for Claude: scored audits, AI search surfaces, schema, CORE-EEAT & CITE, entities. 24 diagnostic scripts + requirements-check + score_eval_transcript. Modes: Audit \u2192 Plan \u2192 Execute.",
+  "description": "Scored SEO audits, technical health checks, Schema.org JSON-LD, E-E-A-T content scoring, domain authority rating, and GEO for AI Overviews, ChatGPT, and Perplexity. 24 diagnostic scripts. Modes: Audit \u2192 Plan \u2192 Execute.",
   "version": "1.5.6",
   "author": {
     "name": "Myk Pono",

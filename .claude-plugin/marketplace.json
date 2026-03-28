@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "ultimate-seo-geo",
-  "description": "SEO + GEO for Claude \u2014 audits, AI search (GEO), schema, 24 diagnostic scripts + preflight & eval tools.",
+  "description": "Full-site SEO audits with health scores, technical SEO, Schema.org structured data, and Generative Engine Optimization (GEO) for AI search. 24 diagnostic scripts.",
   "owner": {
     "name": "Myk Pono",
     "url": "https://mykpono.com"
@@ -9,7 +9,7 @@
   "plugins": [
     {
       "name": "ultimate-seo-geo",
-      "description": "SEO + GEO for Claude: scored audits, AI Overviews/ChatGPT/Perplexity, schema, CORE-EEAT & CITE, entity signals. 24 diagnostic Python scripts + requirements-check + score_eval_transcript. Modes: Audit \u2192 Plan \u2192 Execute.",
+      "description": "Scored SEO audits, technical health checks, Schema.org JSON-LD, E-E-A-T content scoring, domain authority rating, and GEO for AI Overviews, ChatGPT, and Perplexity. 24 diagnostic scripts. Modes: Audit \u2192 Plan \u2192 Execute.",
       "version": "1.5.6",
       "author": {
         "name": "Myk Pono",
