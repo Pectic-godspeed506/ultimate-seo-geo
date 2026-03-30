@@ -307,15 +307,27 @@ In **Claude Code**, use **chat slash commands** (not Terminal/zsh):
 
 ---
 
-## 6. Ship
+## 6. Ship (commit + push + release — all three required)
 
 ```bash
 git add -A && git commit -m "vX.Y.Z — summary"
-git tag vX.Y.Z
-git push origin main --tags
+git push origin main
 ```
 
-### 6a. Push update to local Claude terminal install (always do this)
+### 6a. Create GitHub Release (REQUIRED — never skip)
+
+The Claude.ai web app Marketplace reads from GitHub Releases, not commits or tags alone. **Without a published Release, the Marketplace will NOT serve the new version.**
+
+```bash
+gh release create vX.Y.Z \
+  --title "vX.Y.Z — summary" \
+  --notes "release notes" \
+  --target main
+```
+
+Then verify: `python3 scripts/check_github_release.py` (must exit 0).
+
+### 6b. Push update to local Claude terminal install (always do this)
 
 After every GitHub push, sync the plugin into Claude's local install directory:
 
@@ -328,42 +340,14 @@ echo "✓ Claude terminal plugin updated — restart claude to reload"
 
 Then restart Claude Code (type `exit`, reopen terminal, run `claude`).
 
-### 6b. Verify GitHub Marketplace Release (required check)
-
-Run this immediately after pushing to confirm the Marketplace is up to date:
+### 6c. Verify release
 
 ```bash
 python3 scripts/check_github_release.py
 ```
 
 - **Exit 0** = GitHub Release is published → Marketplace is live.
-- **Exit 1** = No published Release for this version → **do not skip step 6c**.
-
-This script reads the version from `plugin.json`, queries the GitHub API, and tells you whether the Claude.ai web app will serve the new version. It also prints the exact `gh release create` command to fix a missing release in one step.
-
-### 6c. Create a GitHub Release (required for web app updates)
-
-**Via CLI (recommended — fastest):**
-
-```bash
-gh release create vX.Y.Z \
-  --title "vX.Y.Z — one-line summary" \
-  --notes "$(sed -n '/^## \[X\.Y\.Z\]/,/^## \[/{ /^## \[X\.Y\.Z\]/d; /^## \[/d; p }' CHANGELOG.md)"
-```
-
-Or manually at `https://github.com/mykpono/ultimate-seo-geo/releases/new`:
-1. Select the existing tag `vX.Y.Z` from the dropdown
-2. Set title: `vX.Y.Z — one-line summary`
-3. Add release notes (copy from CHANGELOG)
-4. Click **Publish release**
-
-**Then verify:**
-
-```bash
-python3 scripts/check_github_release.py
-```
-
-**Why this is required:** The Claude.ai web app marketplace reads from GitHub Releases, not commits or tags alone. Without a published Release, the web app Update button will not fetch the new version. CI will warn (not fail) if this step is skipped.
+- **Exit 1** = Release missing → go back to step 6a.
 
 ---
 
@@ -377,7 +361,7 @@ After publishing the GitHub Release, users must remove + re-add the plugin to ge
 3. Start a new chat
 
 ### Claude Code (terminal)
-Run step 6a above after every push (it's the canonical update path).
+Run step 6b above after every push (it's the canonical update path).
 
 For a fresh install on a new machine:
 ```bash
