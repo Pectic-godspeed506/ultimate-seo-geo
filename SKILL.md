@@ -1,14 +1,14 @@
 ---
 name: ultimate-seo-geo
 description: Audits and optimizes websites for search engine visibility (SEO) and AI search citation (GEO), covering technical health, E-E-A-T content scoring, domain authority, structured data, rich results, and entity signals. Use when running SEO audits, diagnosing traffic drops or ranking losses, generating Schema.org JSON-LD, checking Core Web Vitals, crawlability, robots.txt, sitemaps, hreflang, backlinks, planning content strategy or site migrations, fixing indexing issues, or optimizing for AI Overviews, ChatGPT, and Perplexity. NOT for paid ads (PPC/SEM), social media strategy, email marketing, or general web development unrelated to search.
-version: 1.6.2
+version: 1.7.0
 ---
 
 # Ultimate SEO + GEO — Universal Search Optimization Skill
 
 | Attribute | Details |
 | --- | --- |
-| **Version** | 1.6.2 |
+| **Version** | 1.7.0 |
 | **Updated** | 2026-03-30 |
 | **License** | MIT |
 | **Author** | Myk Pono |
@@ -364,7 +364,7 @@ For 2026 platform reach and traffic signal data, see `references/ai-search-geo.m
 ### GEO Audit — Step by Step
 
 1. **Check AI crawler access** — Fetch `/robots.txt`. Confirm OAI-SearchBot, PerplexityBot, ClaudeBot are not Disallowed.
-2. **Check llms.txt** — Fetch `/llms.txt`. Missing → generate from template below. Low-cost hygiene step.
+2. **Check llms.txt** — Fetch `/llms.txt`. Missing → generate from template below. Low-cost hygiene step. Also check for **RSL 1.0 (Really Simple Licensing)** — December 2025 standard backed by Reddit, Yahoo, Medium, Quora, Cloudflare, Akamai, and Creative Commons. Check for a `/rsl.txt` file or RSL `<meta>` tag on key pages. Absence is not a penalty but early adoption signals AI-friendly intent.
 3. **Score citability** — For each key page: does the first 40–60 words answer the target query? Self-contained 134–167 word answer blocks? Question-format headings? Pages already optimized for Featured Snippets (§ 7c) have a structural head-start on AI citation.
 4. **Check JavaScript rendering** — Fetch raw page source. Key content absent from raw HTML = invisible to AI bots.
 5. **Audit brand signals** — Search brand on YouTube, Reddit, Wikipedia. Missing platforms = highest-priority targets. See `references/ai-search-geo.md` for correlation data and Wikipedia/Wikidata setup.
@@ -442,7 +442,7 @@ Measured at 75th percentile (CrUX/PageSpeed Insights). Speed is also a GEO facto
 ### Technical Audit — Step by Step
 
 1. **Run PageSpeed Insights** on homepage + top 3 pages. Record LCP, INP, CLS. For detailed CWV fix steps (LCP subparts, INP long task debugging, CLS prevention patterns), see `references/technical-checklist.md`.
-2. **Check robots.txt** — CSS, JS, and key pages not blocked. AI crawlers not disallowed.
+2. **Check robots.txt** — CSS, JS, and key pages not blocked. AI crawlers not disallowed. Two critical distinctions often misconfigured: (a) `Google-Extended` blocks Gemini training only — it does **not** affect Google Search indexing or AI Overviews (those use Googlebot); (b) `GPTBot` blocks OpenAI training only — it does **not** block ChatGPT Search citations, which uses `ChatGPT-User`. Blocking GPTBot expecting only a training opt-out silently removes the site from ChatGPT live search results if `ChatGPT-User` is also blocked.
 3. **Check HTTPS** — Entire site over HTTPS. Mixed-content assets → force HTTPS via 301.
 4. **Check canonical tags** — Run `scripts/canonical_checker.py URL` for single-page validation or `--crawl` for site-wide. Every indexable page needs `<link rel="canonical" href="[absolute-url]">`. Check for www/non-www mismatch, trailing slash inconsistency, and canonical chains.
 5. **Check redirect chains** — Chain >1 hop → collapse to direct redirect.
@@ -526,13 +526,14 @@ For e-commerce schema additions (ProductGroup, Certification, OfferShippingDetai
 | **E-E-A-T universal** | December 2025 | Applies to ALL competitive queries — not just YMYL |
 | **AI content quality** | September 2025 QRG | AI content acceptable if genuine E-E-A-T; penalized without unique value |
 | **Helpful Content System merged** | March 2024 | Merged into core algorithm — helpfulness weighted continuously |
+| **Google AI Mode** | May 2025 | Available in 180+ countries; delivers **zero blue links** — AI citation is the only visibility mechanism; traditional rankings do not appear |
 
 ### Content Audit — Step by Step
 
 1. **Read the page in full.** Comprehensive coverage? Named author with credentials?
 2. **Score each E-E-A-T factor** — see `references/eeat-framework.md` for the full scoring framework and factor weights.
 3. **Identify the weakest factor** — this is the highest-leverage fix.
-4. **Check word count**: Blog post 1,500+, Service page 800+, Homepage 500+, Product page 300+. These are floors — cover the topic fully.
+4. **Check word count**: Blog post 1,500+, Service page 800+, Homepage 500+, Product page 300+. These are topical coverage floors, not targets — Google has confirmed word count is NOT a direct ranking factor. A focused 500-word page that thoroughly answers the query outranks a padded 2,000-word page. Cover the topic fully, then stop.
 5. **Check for thin content signals**: copied definitions, no original research, no first-hand examples, no author bio.
 6. **Recommend specific additions** — not "add experience signals," but "add a section with real test results showing [specific outcome] from [specific test]."
 
@@ -706,7 +707,12 @@ For Knowledge Panel (sameAs schema), Sitelinks Searchbox (SearchAction code), Sp
 ## Recommended Comparison Pages to Create
 ```
 
-For "X vs Y" and "Alternatives to X" page content requirements, the 4-type comparison page playbook (title formulas, fairness guidelines, CTA placement rules), feature matrix structure, and nominative fair use guidance, see `references/link-building.md` → "Comparison & Alternatives Page Playbook" section.
+**Comparison page title formulas** (use these for new pages targeting competitive intent):
+- X vs Y: `[A] vs [B]: [Key Differentiator] ([Year])`
+- Alternatives: `[N] Best [A] Alternatives in [Year] (Free & Paid)`
+- Roundup: `[N] Best [Category] Tools in [Year] — Compared & Ranked`
+
+For roundup pages, add `ItemList` schema alongside `Article` — it signals a structured list to AI systems and improves citation probability. For "X vs Y" and "Alternatives to X" page content requirements, the 4-type comparison page playbook (fairness guidelines, CTA placement rules), feature matrix structure, and nominative fair use guidance, see `references/link-building.md` → "Comparison & Alternatives Page Playbook" section.
 
 ---
 
@@ -791,7 +797,7 @@ For "X vs Y" and "Alternatives to X" page content requirements, the 4-type compa
 
 1. `site:domain.com` in Google. Large discrepancy = investigation needed.
 2. **GSC Coverage** — "Crawled - currently not indexed" (thin content) and "Submitted URL not indexed." Check "Not found (404)" for pages Google tried to index but got 404.
-3. **Sitemap URL health** — Run `scripts/sitemap_checker.py` with URL sampling. Every sitemap URL must return 200. Flag: 404s, 5xx errors, soft 404s, redirects in sitemap.
+3. **Sitemap URL health** — Run `scripts/sitemap_checker.py` with URL sampling. Every sitemap URL must return 200. Flag: 404s, 5xx errors, soft 404s, redirects in sitemap. Note: `<priority>` and `<changefreq>` tags are ignored by Google and Bing — omit them from new sitemaps; they add size without benefit.
 4. **Search/template URL indexation** — Check sitemap for search result URLs (`?q=`, `?search=`, `{search_term_string}`) and faceted URLs (`?sort=`, `?filter=`). These must never appear in sitemaps. Fix: remove from sitemap, add `<meta name="robots" content="noindex">`, block in robots.txt.
 5. **Soft 404 detection** — Run `scripts/broken_links.py` to detect pages returning HTTP 200 but showing "not found" content. Fix: return real 404/410 or restore genuine content.
 6. **Site-wide broken internal links** — Run `scripts/broken_links.py --crawl` or `scripts/internal_links.py` to find internal pages returning 404/5xx. Each broken internal link wastes crawl budget and breaks link equity.
@@ -926,6 +932,7 @@ For review benchmarks (≥ 4.3 stars, ≥ 50 reviews, ≤ 30 days recency) and c
 | Lazy loading | Below-fold only | Never lazy-load LCP image |
 | Dimensions | `width` and `height` on all `<img>` | Prevents CLS |
 | LCP image | `fetchpriority="high"` | `<img fetchpriority="high" src="hero.webp">` |
+| Non-LCP images | `decoding="async"` | Prevents image decoding from blocking the main thread |
 
 **Progressive enhancement:**
 ```html
@@ -938,6 +945,8 @@ For review benchmarks (≥ 4.3 stars, ≥ 50 reviews, ≤ 30 days recency) and c
 ```
 
 **Don't**: Add `loading="lazy"` to the LCP image.
+
+**JPEG XL** — Chrome reversed its 2022 removal decision in November 2025, implementing via a Rust-based decoder. Not yet in Chrome stable as of March 2026. Offers ~20% lossless savings over JPEG with zero quality loss. Monitor for 2026/2027 adoption; not yet practical for production deployment.
 
 → See `references/image-seo.md`
 
@@ -964,6 +973,30 @@ For review benchmarks (≥ 4.3 stars, ≥ 50 reviews, ≤ 30 days recency) and c
 | Chinese requires script qualifier | `zh-Hans` / `zh-Hant` ✅ — bare `zh` ❌ |
 | Japanese code | `ja` ✅ — `jp` is a country code ❌ |
 
+### Implementation Methods
+
+Choose based on site scale:
+
+| Method | Best For | Pros | Cons |
+|---|---|---|---|
+| **HTML `<link>` tags** | < 50 language variants | Easy to implement, visible in source | Bloats `<head>`, hard to maintain at scale |
+| **HTTP headers** | Non-HTML files (PDFs, documents) | Works for any file type | Complex server config, not visible in HTML |
+| **XML sitemap** | Large sites, cross-domain setups | Scalable, centralized management | Not visible on page, requires sitemap maintenance |
+
+**Sitemap hreflang format** (recommended for large sites):
+```xml
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://example.com/page</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://example.com/page" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://example.com/fr/page" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/page" />
+  </url>
+</urlset>
+```
+Every `<url>` entry must include all language alternates including itself. Cross-domain hreflang requires both domains verified in GSC.
+
 → See `references/international-seo.md` | Run `scripts/hreflang_checker.py`
 
 ---
@@ -988,6 +1021,13 @@ For review benchmarks (≥ 4.3 stars, ≥ 50 reviews, ≤ 30 days recency) and c
 | <40% differentiation | Flag as thin content risk |
 
 **Don't**: Approve city pages where only the city name changes — March 2024 Core Update target (60–80% traffic declines seen).
+
+**Scaled Content Abuse enforcement timeline:**
+- **November 2024**: Site reputation abuse enforcement escalated — publishing programmatic content under a high-authority domain you don't own triggers penalties
+- **June 2025**: Wave of manual actions targeting AI-generated content at scale
+- **August 2025**: SpamBrain update enhanced pattern detection for AI content farms and link schemes
+- **Result**: Google reported 45% reduction in low-quality, unoriginal content in search results post-March 2024
+- **Progressive rollout rule**: Publish in batches of 50–100 pages. Monitor indexing and rankings for 2–4 weeks before expanding. Never publish 500+ programmatic pages simultaneously without explicit quality review.
 
 **Automated audit**: Run `scripts/programmatic_seo_auditor.py URL --depth 2 --max-pages 100 --json` to auto-detect template URL patterns and audit each group for boilerplate ratio, content uniqueness, title/description/H1 duplication, and cross-linking health. The script flags pages below the 30% uniqueness hard stop (scaled content abuse) and 40% warning threshold.
 
@@ -1152,6 +1192,22 @@ Orchestrator (this skill)
 ```
 
 **Hard constraints:** Never delegate `generate_report.py` and individual script workers for the same URL simultaneously — they overlap and produce duplicate findings. Use one or the other. This pattern follows Anthropic's [Orchestrator-Workers pattern](https://github.com/anthropics/claude-cookbooks/blob/main/patterns/agents/orchestrator_workers.ipynb).
+
+### DataForSEO MCP (Optional)
+
+If DataForSEO MCP tools are available, they can enrich audits with live data beyond what the bundled scripts provide:
+
+| Tool | Purpose |
+|---|---|
+| `ai_optimization_chat_gpt_scraper` | Check actual ChatGPT web search results for target queries (real GEO visibility check) |
+| `ai_opt_llm_ment_search` + `ai_opt_llm_ment_top_domains` | LLM mention tracking across AI platforms |
+| `on_page_instant_pages` | Real page analysis — status codes, page timing, broken links, on-page checks |
+| `on_page_lighthouse` | Lighthouse audit — performance, accessibility, SEO scores |
+| `dataforseo_labs_google_competitors_domain` + `domain_intersection` | Real competitive intelligence |
+| `kw_data_google_ads_search_volume` + `dataforseo_labs_bulk_keyword_difficulty` | Keyword volume and difficulty |
+| `serp_organic_live_advanced` | Live SERP positions and SERP feature analysis |
+| `backlinks_summary` | Backlink data with spam scores |
+| `business_data_business_listings_search` | Local business data for Local SEO |
 
 ### Environment Note
 

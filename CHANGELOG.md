@@ -2,6 +2,22 @@
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-03-30
+
+### Added
+
+- **§ 3 GEO — RSL 1.0** — Added check for RSL 1.0 (Really Simple Licensing), the December 2025 standard backed by Reddit, Yahoo, Medium, Quora, Cloudflare, Akamai, and Creative Commons. GEO Audit step 2 now includes `/rsl.txt` and RSL meta tag verification alongside llms.txt.
+- **§ 4 Technical — AI crawler distinctions** — Added explicit guidance on `Google-Extended` (blocks Gemini training only, not Google Search or AI Overviews) and `GPTBot` vs `ChatGPT-User` (blocking GPTBot does not block ChatGPT Search citations). Common misconfiguration that silently removes sites from ChatGPT live search.
+- **§ 6 Content — Word count caveat** — Clarified that word count minimums are topical coverage floors, not targets. Google confirmed word count is not a direct ranking factor.
+- **§ 6 Content — Google AI Mode** — Added to Key Policy Updates table: AI Mode (May 2025, 180+ countries) delivers zero blue links; AI citation is the only visibility mechanism.
+- **§ 8 Competitors — Comparison page title formulas** — Added proven title formulas for X vs Y, alternatives, and roundup pages. Added `ItemList` schema recommendation for roundup pages.
+- **§ 11 Crawl — Sitemap tag note** — Added that `<priority>` and `<changefreq>` tags are ignored by Google and Bing; omit from new sitemaps.
+- **§ 13 Images — `decoding="async"`** — Added `decoding="async"` guidance for non-LCP images to prevent image decoding from blocking the main thread.
+- **§ 13 Images — JPEG XL** — Added note that Chrome reversed its 2022 removal decision in November 2025 (Rust-based decoder); not yet in stable, ~20% lossless savings over JPEG.
+- **§ 14 Hreflang — 3-method comparison** — Added implementation method comparison table (HTML link tags vs HTTP headers vs XML sitemap), sitemap hreflang XML format, and cross-domain setup guidance.
+- **§ 15 Programmatic — Enforcement timeline** — Added Scaled Content Abuse enforcement dates: November 2024 site reputation abuse, June 2025 manual actions wave, August 2025 SpamBrain update, 45% low-quality content reduction statistic, progressive rollout rule (50–100 page batches).
+- **§ 21 Scripts — DataForSEO MCP** — Added optional DataForSEO MCP integration table covering GEO visibility checks, on-page analysis, competitive intelligence, keyword research, and live SERP data.
+
 ## [1.6.2] - 2026-03-30
 
 ### Performance
