@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [1.6.2] - 2026-03-30
+
+### Performance
+
+- **`generate_report.py`: parallel script execution** — All analysis scripts (17–20 depending on HTML fetch) now run concurrently via `ThreadPoolExecutor` (max 8 workers) instead of sequentially. Wall-clock time for a full audit drops from sum-of-all-scripts to max-of-any-script — typically a 3–6× speedup on real sites where each script spends most of its time waiting on network I/O. Profiling showed startup overhead (`requests` + `bs4` imports) was stacking at ~140–180ms per script × 20 scripts = ~3s of dead import time alone.
+- **`entity_checker.py`: parallel Wikidata + Wikipedia lookups** — `check_wikidata()` and `check_wikipedia()` were called serially (each with an 8s timeout). They now run concurrently via `ThreadPoolExecutor(max_workers=2)`, cutting entity check I/O wait time roughly in half.
+- **`score_eval_transcript.py`: pre-compiled regex patterns** — Regex patterns in `evals.json` assertions are now compiled once at load time (`_compile_assertions`) and stored as `_compiled` on each assertion object. `check_assertion` uses the pre-compiled object directly, eliminating per-call compilation overhead. This matters most in long-running eval sessions scoring many transcripts.
+
 ## [1.6.1] - 2026-03-30
 
 ### Fixed

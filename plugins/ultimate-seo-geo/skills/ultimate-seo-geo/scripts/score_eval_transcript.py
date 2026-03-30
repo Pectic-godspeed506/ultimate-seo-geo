@@ -23,9 +23,27 @@ def _root() -> Path:
     return Path(__file__).resolve().parent.parent
 
 
+_RE_FLAGS = re.IGNORECASE | re.DOTALL
+
+
+def _compile_assertions(evals_data: dict) -> dict:
+    """Pre-compile regex patterns in every assertion so re.search is zero-cost at score time."""
+    for ev in evals_data.get("evals", []):
+        for a in ev.get("assertions") or []:
+            at = a.get("type", "")
+            if at in ("contains_pattern", "not_contains_pattern"):
+                pat = a.get("pattern", "")
+                try:
+                    a["_compiled"] = re.compile(pat, _RE_FLAGS)
+                except re.error:
+                    a["_compiled"] = None
+    return evals_data
+
+
 def load_evals(path: Path) -> dict:
     with open(path, encoding="utf-8") as f:
-        return json.load(f)
+        data = json.load(f)
+    return _compile_assertions(data)
 
 
 def check_assertion(assertion: dict, text: str) -> tuple[bool, str]:
@@ -35,8 +53,9 @@ def check_assertion(assertion: dict, text: str) -> tuple[bool, str]:
 
     if at == "contains_pattern":
         pat = assertion.get("pattern", "")
+        compiled = assertion.get("_compiled")
         try:
-            ok = bool(re.search(pat, text, re.IGNORECASE | re.DOTALL))
+            ok = bool(compiled.search(text) if compiled is not None else re.search(pat, text, _RE_FLAGS))
         except re.error as e:
             return False, f"{aid}: invalid regex: {e}"
         return ok, f"{aid}: pattern {pat!r} -> {ok}"
@@ -59,8 +78,9 @@ def check_assertion(assertion: dict, text: str) -> tuple[bool, str]:
 
     if at == "not_contains_pattern":
         pat = assertion.get("pattern", "")
+        compiled = assertion.get("_compiled")
         try:
-            ok = re.search(pat, text, re.IGNORECASE | re.DOTALL) is None
+            ok = (compiled.search(text) if compiled is not None else re.search(pat, text, _RE_FLAGS)) is None
         except re.error as e:
             return False, f"{aid}: invalid regex: {e}"
         return ok, f"{aid}: not pattern {pat!r} -> {ok}"

@@ -19,10 +19,15 @@ import subprocess
 import sys
 import tempfile
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from urllib.parse import urlparse
 
 import urllib.request
+
+# Maximum number of analysis scripts to run in parallel.
+# Bounded to avoid overwhelming the target server with simultaneous crawls.
+_MAX_PARALLEL_SCRIPTS = 8
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -482,25 +487,25 @@ def collect_data(url: str) -> dict:
         analyses.append(("readability", "readability.py", [html_path]))
         analyses.append(("article", "article_seo.py", [url]))
 
-    for name, script, args in analyses:
-        print(f"  ⏳ Running {script}...")
+    # Merge HTML-file-based checks into the same parallel batch.
+    # html_path is already written to disk at this point, so all tasks are
+    # ready to run concurrently.
+    if html_path and os.path.exists(html_path):
+        analyses.append(("schema_validation", "validate_schema.py", [html_path]))
+        analyses.append(("image_seo", "image_checker.py", [html_path, "--base-url", url]))
+
+    def _run_one(item: tuple) -> tuple:
+        name, script, args = item
         start = time.time()
         result = run_script(script, args)
         elapsed = round(time.time() - start, 1)
-        data["sections"][name] = result
-        status = "⚠️ error" if "error" in result and result.get("error") else "✅"
-        print(f"  {status} {script} ({elapsed}s)")
+        return name, script, result, elapsed
 
-    # HTML-file-based checks (before temp file removal)
-    if html_path and os.path.exists(html_path):
-        for name, script, args in (
-            ("schema_validation", "validate_schema.py", [html_path]),
-            ("image_seo", "image_checker.py", [html_path, "--base-url", url]),
-        ):
-            print(f"  ⏳ Running {script}...")
-            start = time.time()
-            result = run_script(script, args)
-            elapsed = round(time.time() - start, 1)
+    print(f"  ⏳ Running {len(analyses)} checks in parallel (max {_MAX_PARALLEL_SCRIPTS} workers)...")
+    with ThreadPoolExecutor(max_workers=_MAX_PARALLEL_SCRIPTS) as pool:
+        futures = {pool.submit(_run_one, item): item for item in analyses}
+        for fut in as_completed(futures):
+            name, script, result, elapsed = fut.result()
             data["sections"][name] = result
             status = "⚠️ error" if "error" in result and result.get("error") else "✅"
             print(f"  {status} {script} ({elapsed}s)")

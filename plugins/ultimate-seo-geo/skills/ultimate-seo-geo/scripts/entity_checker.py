@@ -18,6 +18,7 @@ import re
 import sys
 import urllib.request
 import urllib.parse
+from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import urlparse
 
 try:
@@ -318,9 +319,12 @@ def run_entity_check(url: str, entity_name: str = "", kg_api_key: str = "") -> d
 
     sameas_analysis = analyze_sameas(all_same_as)
 
-    # External lookups
-    wikidata = check_wikidata(entity_name)
-    wikipedia = check_wikipedia(entity_name)
+    # External lookups — run concurrently; both are independent I/O-bound calls.
+    with ThreadPoolExecutor(max_workers=2) as _pool:
+        _wd = _pool.submit(check_wikidata, entity_name)
+        _wp = _pool.submit(check_wikipedia, entity_name)
+    wikidata = _wd.result()
+    wikipedia = _wp.result()
 
     # NAP consistency
     nap_issues = check_nap_consistency(soup, entities)
