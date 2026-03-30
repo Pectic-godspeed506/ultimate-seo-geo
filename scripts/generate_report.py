@@ -722,12 +722,16 @@ def calculate_overall_score(data: dict) -> dict:
     else:
         scores["canonical"] = 50
 
-    # Local signals
     loc = data["sections"].get("local_signals", {})
     if loc and not loc.get("error"):
-        scores["local_signals"] = int(loc.get("score", 0))
+        if loc.get("likely_local_business"):
+            scores["local_signals"] = int(loc.get("score") or 0)
+        else:
+            scores["local_signals"] = None
+            weights["local_signals"] = 0
     else:
-        scores["local_signals"] = 0
+        scores["local_signals"] = None
+        weights["local_signals"] = 0
 
     # IndexNow probe (no API key)
     inx = data["sections"].get("indexnow_probe", {})

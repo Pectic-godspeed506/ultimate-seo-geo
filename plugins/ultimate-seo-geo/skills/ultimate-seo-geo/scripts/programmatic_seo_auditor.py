@@ -97,7 +97,11 @@ def _extract_meta(html: str, base_url: str) -> dict:
         full = urljoin(base_url, href)
         parsed = urlparse(full)
         if parsed.netloc == base_domain and parsed.scheme in ("http", "https"):
-            clean = f"{parsed.scheme}://{parsed.netloc}{parsed.path}".rstrip("/")
+            path = parsed.path
+            if path in ("", "/"):
+                clean = f"{parsed.scheme}://{parsed.netloc}"
+            else:
+                clean = f"{parsed.scheme}://{parsed.netloc}{path}".rstrip("/")
             links.append(clean)
 
     return {

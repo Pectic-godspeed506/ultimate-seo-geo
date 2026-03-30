@@ -40,12 +40,17 @@ HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; SEOSkill-Canonical/1.0)"}
 
 
 def _normalize_url(url: str) -> str:
-    """Normalize URL for comparison (lowercase scheme/host, strip fragment)."""
+    """Normalize URL for comparison (lowercase scheme/host, strip fragment, normalize trailing slash)."""
     parsed = urlparse(url)
+    path = parsed.path
+    if path in ("", "/"):
+        path = "/"
+    elif path.endswith("/"):
+        path = path.rstrip("/")
     return urlunparse((
         parsed.scheme.lower(),
         parsed.netloc.lower(),
-        parsed.path,
+        path,
         parsed.params,
         parsed.query,
         "",  # strip fragment

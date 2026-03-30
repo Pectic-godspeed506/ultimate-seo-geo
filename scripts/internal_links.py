@@ -51,9 +51,10 @@ def extract_internal_links(html: str, page_url: str, domain: str) -> list:
         if parsed.netloc != domain:
             continue
 
-        # Normalize: remove fragments, trailing slashes
         normalized = f"{parsed.scheme}://{parsed.netloc}{parsed.path}"
-        if normalized.endswith("/") and len(parsed.path) > 1:
+        if parsed.path in ("", "/"):
+            normalized = f"{parsed.scheme}://{parsed.netloc}"
+        elif normalized.endswith("/"):
             normalized = normalized.rstrip("/")
 
         if normalized in seen:
@@ -257,9 +258,9 @@ def crawl_site(start_url: str, max_depth: int = 2, max_pages: int = 50,
             "incoming_links": incoming,
         }
 
-    # Orphan candidates (pages with 0 or 1 incoming links, excluding start)
+    start_normalized = start_url.rstrip("/")
     for url, sources in pages_linking_to.items():
-        if url != start_url and len(sources) <= 1:
+        if url.rstrip("/") != start_normalized and len(sources) <= 1:
             result["orphan_candidates"].append({
                 "url": url,
                 "incoming_links": len(sources),

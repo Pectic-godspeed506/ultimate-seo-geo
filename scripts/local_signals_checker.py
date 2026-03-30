@@ -45,6 +45,7 @@ def check_local_signals(url: str) -> dict:
 
     lb = bool(re.search(r'"@type"\s*:\s*"LocalBusiness"', html, re.I))
     org = bool(re.search(r'"@type"\s*:\s*"Organization"', html, re.I))
+    website = bool(re.search(r'"@type"\s*:\s*"WebSite"', html, re.I))
     tel = len(re.findall(r'href=["\']tel:', html, re.I))
     mail = len(re.findall(r'href=["\']mailto:', html, re.I))
     street = bool(
@@ -56,48 +57,63 @@ def check_local_signals(url: str) -> dict:
     )
     maps = "google.com/maps" in html.lower() or "maps.app.goo.gl" in html.lower()
 
+    has_local_indicators = bool(tel or street or maps)
+    likely_local = has_local_indicators or lb
+
     score = 40
     if lb:
         score += 35
         recs.append("LocalBusiness JSON-LD detected — validate NAP consistency in references/local-seo.md.")
-    else:
+    elif has_local_indicators:
         issues.append(
             {
                 "severity": "high",
-                "finding": "No LocalBusiness JSON-LD detected on this page.",
+                "finding": "Local signals detected (phone, address, map) but no LocalBusiness JSON-LD.",
                 "fix": "Add LocalBusiness schema with name, address, telephone, openingHours, areaServed.",
             }
+        )
+    else:
+        recs.append(
+            "No local business signals detected. This site appears to be a "
+            "publisher, SaaS, or non-local business — LocalBusiness schema "
+            "is not applicable. No action needed."
         )
     if org and not lb:
         score += 10
     if tel > 0:
         score += 10
     else:
-        issues.append(
-            {
-                "severity": "medium",
-                "finding": "No tel: links found.",
-                "fix": "Add clickable phone (tel:) in header/footer.",
-            }
-        )
+        if has_local_indicators:
+            issues.append(
+                {
+                    "severity": "medium",
+                    "finding": "No tel: links found.",
+                    "fix": "Add clickable phone (tel:) in header/footer.",
+                }
+            )
     if street:
         score += 5
     if maps:
         score += 5
 
-    if not lb and (tel or street):
+    if not lb and has_local_indicators:
         recs.append("Strong partial local signals — add LocalBusiness schema to match.")
+
+    if not likely_local:
+        score = None
 
     return {
         "url": url,
         "http_status": status,
+        "likely_local_business": likely_local,
         "localbusiness_jsonld": lb,
         "organization_jsonld": org,
+        "has_local_indicators": has_local_indicators,
         "tel_links": tel,
         "mailto_links": mail,
         "structured_address_signals": street,
         "map_embed_or_link": maps,
-        "score": min(100, score),
+        "score": min(100, score) if score is not None else None,
         "issues": issues[:12],
         "recommendations": recs,
     }

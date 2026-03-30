@@ -78,9 +78,10 @@ def extract_internal_links(html: str, base_url: str) -> list:
         full = urljoin(base_url, href)
         parsed = urlparse(full)
         if parsed.netloc == base_domain and parsed.scheme in ("http", "https"):
-            clean = f"{parsed.scheme}://{parsed.netloc}{parsed.path}"
-            if clean.endswith("/"):
-                clean = clean[:-1]
+            if parsed.path in ("", "/"):
+                clean = f"{parsed.scheme}://{parsed.netloc}"
+            else:
+                clean = f"{parsed.scheme}://{parsed.netloc}{parsed.path}".rstrip("/")
             links.append(clean)
     return list(set(links))
 
@@ -269,7 +270,12 @@ def detect_duplicates(pages: dict, similarity_threshold: float = 0.85) -> dict:
 
         def _normalize(u):
             p = urlparse(u)
-            return f"{p.scheme}://{p.netloc.lower()}{p.path}".rstrip("/")
+            path = p.path
+            if path in ("", "/"):
+                path = "/"
+            elif path.endswith("/"):
+                path = path.rstrip("/")
+            return f"{p.scheme}://{p.netloc.lower()}{path}"
 
         if canon_a and canon_b:
             norm_a = _normalize(canon_a)
@@ -301,7 +307,12 @@ def detect_duplicates(pages: dict, similarity_threshold: float = 0.85) -> dict:
         canon = data.get("canonical")
         if canon:
             p = urlparse(canon)
-            norm_canon = f"{p.scheme}://{p.netloc.lower()}{p.path}".rstrip("/")
+            path = p.path
+            if path in ("", "/"):
+                path = "/"
+            elif path.endswith("/"):
+                path = path.rstrip("/")
+            norm_canon = f"{p.scheme}://{p.netloc.lower()}{path}"
             canonical_groups[norm_canon].append(url)
 
     for canon_url, page_urls in canonical_groups.items():

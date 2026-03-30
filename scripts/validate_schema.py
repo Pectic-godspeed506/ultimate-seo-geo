@@ -37,7 +37,12 @@ def validate_jsonld(content: str) -> List[str]:
             for item in data:
                 errors.extend(_validate_schema_object(item, i))
         elif isinstance(data, dict):
-            errors.extend(_validate_schema_object(data, i))
+            if "@graph" in data and isinstance(data["@graph"], list):
+                for item in data["@graph"]:
+                    if isinstance(item, dict):
+                        errors.extend(_validate_schema_object(item, i))
+            else:
+                errors.extend(_validate_schema_object(data, i))
 
     return errors
 
@@ -53,8 +58,7 @@ def _validate_schema_object(obj: dict, block_num: int) -> List[str]:
     elif obj["@context"] not in ("https://schema.org", "http://schema.org"):
         errors.append(f"{prefix}: @context should be 'https://schema.org'")
 
-    # Check @type
-    if "@type" not in obj:
+    if "@type" not in obj and "@graph" not in obj:
         errors.append(f"{prefix}: Missing @type")
 
     # Check for placeholder text
