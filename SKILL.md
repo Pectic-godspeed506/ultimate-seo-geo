@@ -488,7 +488,7 @@ Always use **JSON-LD** (`<script type="application/ld+json">`). Schema improves 
 2. **Validate** — Test at search.google.com/test/rich-results. Fix errors before adding new schema.
 3. **Identify missing schema** — Compare to Essential Schema table below.
 4. **Generate missing schema** — Use JSON-LD templates in `references/schema-types.md`.
-5. **Check deprecated types** — See § 19. Remove deprecated schema immediately.
+5. **Check retired types** — See § 19. Remove truly retired schema (SpecialAnnouncement, ClaimReview, etc.). Do NOT remove HowTo — rich results removed but schema still valid for Bing and AI systems.
 6. **Add FAQPage to key pages** — Google restricts FAQ rich results to gov/healthcare, but FAQPage is still extracted by ChatGPT, Perplexity, and AI Overviews.
 
 ### Priority Schema by Site Type
@@ -505,7 +505,7 @@ Always use **JSON-LD** (`<script type="application/ld+json">`). Schema improves 
 ### Validation Checklist
 
 1. `@context` = `"https://schema.org"` (https, not http)
-2. `@type` is valid and not deprecated (§ 19)
+2. `@type` is valid and not retired (§ 19)
 3. All required properties present
 4. All URLs are absolute (not relative)
 5. Dates in ISO 8601 (`YYYY-MM-DD`)
@@ -1057,10 +1057,15 @@ After generating any Mode 1 audit output — before delivering it — run this i
 | 5 | No duplicate findings | Run `finding_verifier.py` if available; manually check if not | Merge duplicates before scoring |
 | 6 | Scope respected | Full audit only if user confirmed they own the site; Competitive Mode labeled "External Observation Only" | Re-label or scope down |
 | 7 | Fix directives are actionable | Each fix names the specific element, file, or page to change | Rewrite vague fixes ("improve content") with exact instructions |
+| 8 | No YMYL-sensitive schema without verified credentials | Never recommend MedicalWebPage, MedicalCondition, LegalService, FinancialProduct, or similar authority-claiming schema unless the site has verified professional credentials (licensed practitioners, published medical reviewers). Suggesting these without credentials risks manual action for misleading structured data. | Remove the recommendation; suggest safer alternatives (Article, WebPage, FAQPage) |
+| 9 | No low-value mass changes | Never recommend touching 10+ pages for changes with zero ranking impact (e.g., removing `keywords` meta tags, cosmetic HTML cleanup). Wastes effort and introduces deployment risk. | Remove or downgrade to informational note |
+| 10 | No recommending removal of valid schema | Never recommend removing structured data just because one search engine stopped showing rich results for it (e.g., HowTo). Only recommend removing truly retired types no longer processed at all. | Change "remove" to "keep — no rich results but still valid" |
 
 This pattern is adapted from Anthropic's [Evaluator-Optimizer workflow](https://github.com/anthropics/claude-cookbooks/tree/main/patterns/agents) — one pass generates, a second pass evaluates before output reaches the user.
 
-**Deprecated schema** — Google removed rich result support for these types, so recommending them wastes implementation effort and confuses validation: HowTo (Sept 2023), SpecialAnnouncement (July 2025), ClaimReview (June 2025), Dataset (late 2025), VehicleListing (June 2025), Practice Problem (late 2025), EstimatedSalary (June 2025), LearningVideo (June 2025), EnergyConsumptionDetails (replaced by Certification, April 2025), CourseInfo (June 2025).
+**Retired schema (safe to remove)** — Google no longer processes these types at all: SpecialAnnouncement (July 2025), ClaimReview (June 2025), Dataset (late 2025), VehicleListing (June 2025), Practice Problem (late 2025), EstimatedSalary (June 2025), LearningVideo (June 2025), EnergyConsumptionDetails (replaced by Certification, April 2025), CourseInfo (June 2025).
+
+**Rich results removed but schema still valid (do NOT recommend removal)** — HowTo (Sept 2023): Google no longer shows HowTo rich results, but the schema is still valid structured data. It helps Bing (which still renders HowTo rich results), AI systems that parse structured data for citations, and general content understanding. Never recommend removing valid schema just because one search engine stopped displaying rich results for it.
 
 **INP not FID** — FID removed September 9, 2024. Referencing FID confuses users and dates the audit.
 

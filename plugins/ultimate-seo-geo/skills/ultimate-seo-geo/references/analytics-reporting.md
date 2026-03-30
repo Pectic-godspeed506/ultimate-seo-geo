@@ -303,7 +303,7 @@ ChatGPT Search does NOT pass referrer headers — traffic appears as **Direct** 
 
 | Myth | Google's Official Position |
 |---|---|
-| **Meta keywords tag helps SEO** | "Google does not use the keywords meta tag." Ignore it. |
+| **Meta keywords tag helps SEO** | "Google does not use the keywords meta tag." Ignore it — harmless to leave in place. **Do NOT recommend removing across many pages** (zero ranking impact, wastes effort, introduces deployment risk). |
 | **Keyword stuffing improves rankings** | Actively penalised as spam. Natural writing wins. |
 | **Keywords in domain name help ranking** | "Hardly any effect." Brand > keywords. |
 | **TLD matters (.com vs .io)** | Google doesn't care — except ccTLDs for geo-targeting. |

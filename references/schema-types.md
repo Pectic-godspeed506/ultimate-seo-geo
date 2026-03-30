@@ -57,11 +57,21 @@ Always use **JSON-LD** (`<script type="application/ld+json">`). Google's documen
 
 ---
 
-## DEPRECATED — Never recommend
+## NO RICH RESULTS — Keep if present, don't add for Google rich results
+
+These types no longer generate Google rich results but are still valid Schema.org markup. **Do NOT recommend removing them** — they still help Bing, AI systems, and content understanding.
+
+| Type | Status | Since | Keep? | Notes |
+|---|---|---|---|---|
+| **HowTo** | Google rich results removed | September 2023 | **Yes — keep** | Bing still renders HowTo rich results; AI systems parse it for citations; valid structured data |
+| **Sitelinks Search Box** | Removed from Search UI | Jan 2026 | Optional | WebSite SearchAction no longer shows in results but causes no harm |
+
+## RETIRED — Safe to remove (no longer processed)
+
+These types are truly retired — search engines no longer process them at all. Safe to remove, but low priority (they cause no harm if left in place).
 
 | Type | Status | Removed | Notes |
 |---|---|---|---|
-| **HowTo** | Rich results fully removed | September 2023 | Google stopped showing how-to rich results entirely |
 | **SpecialAnnouncement** | Deprecated | July 31, 2025 | COVID-era, no longer processed |
 | **ClaimReview** | Retired from rich results | June 2025 | Fact-check markup no longer generates rich results |
 | **EstimatedSalary** | Retired from rich results | June 2025 | Removed |
@@ -70,7 +80,21 @@ Always use **JSON-LD** (`<script type="application/ld+json">`). Google's documen
 | **CourseInfo** | Merged into Course | June 2025 | Use Course instead |
 | **Practice Problem** | Retired from rich results | Late 2025 | |
 | **Dataset** | Dataset Search discontinued | Late 2025 | |
-| **Sitelinks Search Box** | Removed from Search UI | Jan 2026 | WebSite SearchAction no longer shows in results |
+
+## YMYL-SENSITIVE — Require verified credentials before recommending
+
+**Never recommend these schema types unless the site has verified professional credentials.** Suggesting authority-claiming schema to sites without credentials risks Google manual action for misleading structured data.
+
+| Type | Requires | Risk if Misused |
+|---|---|---|
+| **MedicalWebPage** | Licensed medical practitioners or published medical reviewers | Manual action for misleading health claims |
+| **MedicalCondition** | Medical authority (clinic, hospital, licensed provider) | YMYL scrutiny; may hurt instead of help |
+| **MedicalOrganization** | Licensed medical organization | Misleading authority claim |
+| **LegalService** | Licensed legal practitioners | Misleading professional credentials |
+| **FinancialProduct** | Licensed financial institution | YMYL financial authority claim |
+| **Physician** | Licensed medical practitioner | False credential representation |
+
+> **Safe alternatives for health/legal/finance content**: Use `Article`, `WebPage`, `FAQPage`, or `WebSite` with strong E-E-A-T signals in content (author bio with credentials, citations to authoritative sources, medical/legal disclaimers). These provide structured data value without claiming professional authority the site may not have.
 
 ---
 

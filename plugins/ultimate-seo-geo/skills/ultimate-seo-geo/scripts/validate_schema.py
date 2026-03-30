@@ -75,11 +75,12 @@ def _validate_schema_object(obj: dict, block_num: int) -> List[str]:
         if p.lower() in text.lower():
             errors.append(f"{prefix}: Contains placeholder text: {p}")
 
-    # Check for deprecated types
     schema_type = obj.get("@type", "")
-    deprecated = {
-        "HowTo": "deprecated September 2023",
-        "SpecialAnnouncement": "deprecated July 31, 2025",
+
+    # Truly retired types — Google no longer processes these at all.
+    # Safe to remove (but not urgent).
+    retired = {
+        "SpecialAnnouncement": "retired July 31, 2025 — Google no longer processes this type",
         "CourseInfo": "retired June 2025",
         "EstimatedSalary": "retired June 2025",
         "LearningVideo": "retired June 2025",
@@ -88,8 +89,17 @@ def _validate_schema_object(obj: dict, block_num: int) -> List[str]:
         "PracticeProblem": "retired late 2025 — rich results discontinued",
         "Dataset": "retired late 2025 — rich results discontinued",
     }
-    if schema_type in deprecated:
-        errors.append(f"{prefix}: @type '{schema_type}' is {deprecated[schema_type]}")
+    if schema_type in retired:
+        errors.append(f"{prefix}: @type '{schema_type}' is {retired[schema_type]}")
+
+    # Rich-results-removed types — Google no longer shows rich results, but the
+    # schema is still valid structured data. Keep it: helps Bing, AI systems,
+    # and content understanding. Do NOT recommend removal.
+    no_rich_results = {
+        "HowTo": "Google removed HowTo rich results (Sept 2023) but schema is still valid — keep for Bing, AI systems, and content understanding",
+    }
+    if schema_type in no_rich_results:
+        errors.append(f"[info] {prefix}: {no_rich_results[schema_type]}")
 
     # Check for restricted types used incorrectly
     restricted = {"FAQPage": "restricted to government and healthcare sites only (Aug 2023)"}
@@ -100,8 +110,10 @@ def _validate_schema_object(obj: dict, block_num: int) -> List[str]:
 
 
 def _is_critical(msg: str) -> bool:
+    if msg.startswith("[info]"):
+        return False
     low = msg.lower()
-    return any(k in low for k in ("placeholder", "deprecated", "retired"))
+    return any(k in low for k in ("placeholder", "retired"))
 
 
 def main():

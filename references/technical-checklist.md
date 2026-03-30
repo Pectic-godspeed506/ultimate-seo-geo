@@ -205,7 +205,8 @@ Each metric has distinct causes and fixes. Diagnose first, then apply the most i
 See `schema-types.md` for full type reference. Technical checks:
 - [ ] All JSON-LD in `<script type="application/ld+json">` tags
 - [ ] Structured data in server-rendered HTML (not JS-injected) for time-sensitive types
-- [ ] No deprecated types (HowTo, SpecialAnnouncement, etc.)
+- [ ] No retired types (SpecialAnnouncement, ClaimReview, VehicleListing, etc.)
+- [ ] HowTo schema: keep if present (no rich results in Google, but valid for Bing and AI systems — do NOT remove)
 - [ ] Validate with Google Rich Results Test
 
 ### 8. JavaScript SEO (December 2025 Google guidance)
