@@ -37,13 +37,23 @@ copy_unless_same "$SCRIPT_DIR/.github/workflows/validate-plugin.yml"            
 
 echo "  Config files copied ✓"
 
-# ── 3. Copy SKILL.md from repo root into plugin skill directory ─────────────
+# ── 3. Copy SKILL.md + AGENTS.md + GEMINI.md into plugin skill directory ─────
 if [ -f "SKILL.md" ]; then
   cp SKILL.md plugins/ultimate-seo-geo/skills/ultimate-seo-geo/SKILL.md
   echo "  SKILL.md copied ✓"
 else
   echo "  ERROR: SKILL.md not found at repo root. Are you running this from the repo root?"
   exit 1
+fi
+
+if [ -f "AGENTS.md" ]; then
+  cp AGENTS.md plugins/ultimate-seo-geo/skills/ultimate-seo-geo/AGENTS.md
+  echo "  AGENTS.md copied ✓"
+fi
+
+if [ -f "GEMINI.md" ]; then
+  cp GEMINI.md plugins/ultimate-seo-geo/skills/ultimate-seo-geo/GEMINI.md
+  echo "  GEMINI.md copied ✓"
 fi
 
 # ── 4. Copy references/ into plugin skill directory ─────────────────────────
@@ -113,6 +123,8 @@ echo "New files added:"
 echo "  .claude-plugin/marketplace.json"
 echo "  plugins/ultimate-seo-geo/.claude-plugin/plugin.json"
 echo "  plugins/ultimate-seo-geo/skills/ultimate-seo-geo/SKILL.md"
+echo "  plugins/ultimate-seo-geo/skills/ultimate-seo-geo/AGENTS.md"
+echo "  plugins/ultimate-seo-geo/skills/ultimate-seo-geo/GEMINI.md"
 echo "  plugins/ultimate-seo-geo/skills/ultimate-seo-geo/references/"
 echo "  plugins/ultimate-seo-geo/skills/ultimate-seo-geo/scripts/"
 echo "  plugins/ultimate-seo-geo/skills/ultimate-seo-geo/evals/"

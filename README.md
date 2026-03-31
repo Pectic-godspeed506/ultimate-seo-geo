@@ -1,10 +1,12 @@
 # Ultimate SEO + GEO Skill
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Claude Skill](https://img.shields.io/badge/Claude-Skill-blueviolet)](https://claude.ai)
+[![AGENTS.md](https://img.shields.io/badge/AGENTS.md-compatible-blue)](https://agents.md)
 [![Version](https://img.shields.io/badge/version-1.7.2-green.svg)](CHANGELOG.md)
 
-The definitive SEO and Generative Engine Optimization skill for Claude. Runs full site audits with scored findings, generates ready-to-deploy fixes, and optimizes content for both Google Search and AI search engines (Google AI Overviews, AI Mode, ChatGPT Search, Perplexity).
+The definitive SEO and Generative Engine Optimization skill for AI coding agents. Runs full site audits with scored findings, generates ready-to-deploy fixes, and optimizes content for both Google Search and AI search engines (Google AI Overviews, AI Mode, ChatGPT Search, Perplexity).
+
+Works with **any AGENTS.md-compatible tool**: Claude Code, Cursor, OpenAI Codex, Gemini CLI, GitHub Copilot, Windsurf, Cline, Aider, Devin, and more.
 
 **Author:** [Myk Pono](https://mykpono.com) · [Lab](https://lab.mykpono.com) · [LinkedIn](https://www.linkedin.com/in/mykolaponomarenko/)
 
@@ -53,11 +55,40 @@ Most requests run all three in sequence. Skip to Mode 2 if you already have audi
 
 ---
 
+## Platform Compatibility
+
+| Platform | How It Loads Instructions | Script Execution | Setup |
+|---|---|---|---|
+| **OpenAI Codex** | `AGENTS.md` auto-loaded (32 KiB limit) | Full (shell access) | Clone repo, start coding |
+| **Google Gemini CLI** | `GEMINI.md` → imports `AGENTS.md` | Full (shell access) | Clone repo, start coding |
+| **Claude Code** | Plugin marketplace + `SKILL.md` | Full (shell access) | `/plugin install` (see below) |
+| **Cursor IDE** | `AGENTS.md` + `.cursor/rules/` + skill auto-discovery | Full (shell access) | Clone repo or install skill |
+| **GitHub Copilot** | `AGENTS.md` + `.github/copilot-instructions.md` | Full (agent mode) | Clone repo, start coding |
+| **Windsurf** | `AGENTS.md` auto-loaded | Full (shell access) | Clone repo, start coding |
+| **Cline** | `AGENTS.md` auto-loaded | Full (shell access) | Clone repo, start coding |
+| **Aider / Devin / Goose / Amp** | `AGENTS.md` auto-loaded | Full (shell access) | Clone repo, start coding |
+| **ChatGPT Custom GPT** | Uploaded instructions + knowledge files | Limited (no scripts) | See `chatgpt/README.md` |
+| **Claude Desktop (claude.ai)** | Upload `SKILL.md` to Project Knowledge | No shell access | Manual upload |
+
+`AGENTS.md` is the [cross-tool standard](https://agents.md) (Linux Foundation, 20+ tools). One file covers all AGENTS.md-compatible platforms.
+
 ## Installation
 
-### Claude Code — Plugin Marketplace (recommended)
+### Any AGENTS.md-Compatible Tool (Codex, Gemini CLI, Copilot, Windsurf, Cline, Aider, etc.)
 
-**Use [Claude Code](https://code.claude.com/)** (the terminal-based Claude product). The lines below are **slash commands** you type in the **Claude Code chat**, not in macOS Terminal or zsh. If you paste them into a shell, you will see `zsh: no such file or directory: /plugin` because `/plugin` is not a file on disk.
+Clone the repo into your project or working directory. The tool auto-discovers `AGENTS.md`:
+
+```bash
+git clone https://github.com/mykpono/ultimate-seo-geo.git
+cd ultimate-seo-geo
+pip install -r requirements.txt
+```
+
+That's it. Open the folder in your tool and start asking for SEO audits.
+
+### Claude Code — Plugin Marketplace
+
+**Use [Claude Code](https://code.claude.com/)** (the terminal-based Claude product). The lines below are **slash commands** you type in the **Claude Code chat**, not in macOS Terminal or zsh.
 
 In Claude Code, run:
 
@@ -106,12 +137,16 @@ cp -r ultimate-seo-geo ~/.claude/skills/
 
 ### Cursor IDE
 
-The skill is auto-discovered from `~/.claude/skills/`. To install or update from a local repo checkout:
+Cursor reads `AGENTS.md` automatically from the repo root. For the full skill experience with progressive disclosure, install to the skills directory:
 
 ```bash
 rsync -a --delete --exclude='.git/' --exclude='__pycache__/' --exclude='*.pyc' --exclude='.venv/' \
   /path/to/ultimate-seo-geo/ ~/.claude/skills/seo/
 ```
+
+### ChatGPT Custom GPT
+
+ChatGPT Custom GPTs cannot read repo files — they need uploaded knowledge files. See [`chatgpt/README.md`](chatgpt/README.md) for step-by-step setup.
 
 ### Claude Desktop App (claude.ai)
 
@@ -120,18 +155,6 @@ The Claude desktop app does not load skills from `~/.claude/skills/`. Instead:
 1. Open a **Project** in claude.ai
 2. Go to **Project Knowledge**
 3. Upload `SKILL.md` as a file, or paste its contents into custom instructions
-
-### Manual (any agent)
-
-Copy the folder into your skills directory:
-
-```
-~/.claude/skills/ultimate-seo-geo/
-├── SKILL.md
-├── references/    (guides + audit matrix + finding_verifier examples)
-├── scripts/       (audit scripts + utilities; 3 CI-only excluded from plugin)
-└── evals/         (evals.json + fixtures/)
-```
 
 ---
 
@@ -158,10 +181,21 @@ Copy the folder into your skills directory:
 
 ```
 ultimate-seo-geo/
-├── SKILL.md              ← Core instructions (~1,070 lines)
-│                           Mode routing, audit process, output templates
+├── AGENTS.md             ← Universal entrypoint (24KB, under 32KB Codex limit)
+│                           Auto-loaded by Codex, Gemini, Copilot, Windsurf, Cline, etc.
+├── GEMINI.md             ← Gemini CLI entrypoint (imports AGENTS.md)
+├── SKILL.md              ← Full instructions (~1,280 lines, 81KB)
+│                           Mode routing, audit process, output templates, examples
 │
-├── references/            ← Domain knowledge (18 .md files, load on demand)
+├── .github/
+│   └── copilot-instructions.md  ← GitHub Copilot supplementary context
+│
+├── chatgpt/              ← ChatGPT Custom GPT bundle
+│   ├── instructions.txt     Condensed instructions (under 8K chars)
+│   ├── README.md            Setup guide
+│   └── copy-knowledge-files.sh  Copies files for upload
+│
+├── references/            ← Domain knowledge (20 .md files, load on demand)
 │   ├── ai-search-geo.md     GEO signals, platform data, brand strategy
 │   ├── technical-checklist.md  CWV fixes, JS SEO, IndexNow
 │   ├── schema-types.md       All Schema.org types + templates
@@ -169,40 +203,24 @@ ultimate-seo-geo/
 │   ├── core-eeat-framework.md  80-item CORE-EEAT content benchmark
 │   ├── cite-domain-rating.md   40-item CITE domain authority
 │   ├── entity-optimization.md  Entity / Knowledge Graph checklist
-│   ├── content-eeat.md       Content quality, freshness, pruning
-│   ├── site-migration.md     Pre/during/post migration checklists
-│   ├── link-building.md      Backlink strategy, comparison pages
-│   ├── local-seo.md          GBP, NAP, review strategy
-│   ├── analytics-reporting.md  GA4/GSC, traffic diagnostics, myths
-│   ├── keyword-strategy.md   Keyword research, intent mapping
-│   ├── industry-templates.md  Per-industry architecture + schema
-│   ├── international-seo.md  Hreflang, geo-targeting
-│   ├── programmatic-seo.md   Pages at scale, quality gates
-│   ├── crawl-indexation.md   Sitemaps, canonicals, crawl budget
-│   └── image-seo.md          Alt text, WebP, responsive images
+│   ├── ...and 13 more
 │
-├── scripts/               ← 25 bundled Python scripts (+ check-plugin-sync.py and 2 CI-only at repo root)
+├── scripts/               ← 25 bundled Python scripts
 │   ├── generate_report.py    Full-site HTML dashboard (runs all scripts)
 │   ├── validate_schema.py    JSON-LD validation
 │   ├── robots_checker.py     AI crawler access check
-│   ├── pagespeed.py          Core Web Vitals via PageSpeed API
-│   ├── hreflang_checker.py   All 8 hreflang rules
-│   ├── internal_links.py     Link graph, orphan detection
-│   ├── broken_links.py       4xx/5xx detection
-│   ├── readability.py        Flesch-Kincaid scoring
-│   ├── ...and 12 more
+│   ├── ...and 22 more
 │
-└── evals/                 ← 14 scenarios, 57 assertions + golden fixtures
+└── evals/                 ← 14 scenarios, 60 assertions + golden fixtures
     ├── evals.json
-    └── fixtures/          ← eval*_pass.txt (used by score_eval_transcript.py)
+    └── fixtures/
 ```
 
-**Three-layer progressive disclosure:**
-- **Layer 1** — Skill description (~100 words): always in context, triggers the skill
-- **Layer 2** — SKILL.md (~1,070 lines): loaded when skill fires, contains all routing and instructions
-- **Layer 3** — References + scripts (unlimited): loaded on demand per task
+**Two-layer progressive disclosure for cross-platform support:**
+- **Layer 1** — `AGENTS.md` (24KB): auto-loaded by all AGENTS.md-compatible tools. Contains routing, condensed procedures, script reference, and quality gates.
+- **Layer 2** — `SKILL.md` (81KB) + `references/` + `scripts/`: loaded on demand when deeper detail or execution is needed.
 
-This means a simple schema request loads SKILL.md + `references/schema-types.md` — not the full 5,300+ lines of domain knowledge.
+For Claude Code and Cursor, `SKILL.md` is loaded natively as a skill. For all other platforms, `AGENTS.md` provides enough context to route and execute, with pointers to load `SKILL.md` sections when full detail is needed.
 
 **Claude Code plugin install:** `bash setup-plugin.sh` mirrors `SKILL.md`, `references/`, `scripts/` (audit scripts only), and `evals/` into `plugins/.../skills/ultimate-seo-geo/` so `python scripts/...` paths work after marketplace install.
 
