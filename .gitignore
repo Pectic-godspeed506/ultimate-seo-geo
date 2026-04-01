@@ -27,3 +27,6 @@ __pycache__/
 *.pyo
 .venv/
 venv/
+
+# Cursor rules that contain personal machine paths
+.cursor/rules/filesystem-access.mdc
