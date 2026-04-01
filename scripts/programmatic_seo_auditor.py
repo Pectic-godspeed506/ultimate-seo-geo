@@ -29,7 +29,7 @@ except ImportError:
     print("Error: beautifulsoup4 required. Install with: pip install beautifulsoup4")
     sys.exit(1)
 
-USER_AGENT = "Mozilla/5.0 (compatible; SEOSkill-pSEOAudit/1.0)"
+USER_AGENT = "Mozilla/5.0 (compatible; UltimateSEO-pSEOAudit/1.8)"
 HEADERS = {"User-Agent": USER_AGENT}
 
 THIN_WORD_COUNT = 300

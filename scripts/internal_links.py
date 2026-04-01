@@ -30,7 +30,7 @@ except ImportError:
     sys.exit(1)
 
 
-HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; SEOSkill/1.0)"}
+HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; UltimateSEO/1.8)"}
 
 
 def extract_internal_links(html: str, page_url: str, domain: str) -> list:

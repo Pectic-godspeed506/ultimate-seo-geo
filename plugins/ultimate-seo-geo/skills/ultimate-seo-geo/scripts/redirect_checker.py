@@ -22,7 +22,7 @@ except ImportError:
     sys.exit(1)
 
 
-HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; SEOSkill/1.0)"}
+HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; UltimateSEO/1.8)"}
 
 
 def check_redirects(url: str, max_redirects: int = 10, timeout: int = 10) -> dict:

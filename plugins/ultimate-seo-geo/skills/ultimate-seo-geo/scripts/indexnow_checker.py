@@ -34,7 +34,7 @@ except ImportError:
     BeautifulSoup = None
 
 
-USER_AGENT = "Mozilla/5.0 (compatible; SEOSkill-IndexNow/1.0)"
+USER_AGENT = "Mozilla/5.0 (compatible; UltimateSEO-IndexNow/1.8)"
 
 INDEXNOW_ENDPOINTS = {
     "bing": "https://www.bing.com/indexnow",

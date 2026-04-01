@@ -1,0 +1,20 @@
+{
+  "name": "firecrawl",
+  "version": "1.0.0",
+  "description": "Full-site crawling with JavaScript rendering via Firecrawl",
+  "requires": {
+    "env": ["FIRECRAWL_API_KEY"]
+  },
+  "mcp": {
+    "package": "firecrawl-mcp",
+    "runtime": "npx"
+  },
+  "enhances": [
+    "crawl_adapter.py",
+    "fetch_page.py",
+    "generate_report.py",
+    "site_mapper.py"
+  ],
+  "free_tier": "500 credits/month",
+  "homepage": "https://www.firecrawl.dev/"
+}

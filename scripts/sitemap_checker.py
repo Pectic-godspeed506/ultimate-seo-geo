@@ -29,7 +29,7 @@ except ImportError:
     print(json.dumps({"error": "requests required: pip install requests"}))
     sys.exit(1)
 
-USER_AGENT = "Mozilla/5.0 (compatible; SEOSkill-Sitemap/1.0)"
+USER_AGENT = "Mozilla/5.0 (compatible; UltimateSEO-Sitemap/1.8)"
 
 SEARCH_URL_PATTERNS = re.compile(
     r"[?&](q|query|search|s|search_term_string|keyword|term)=", re.I

@@ -21,7 +21,7 @@ except ImportError:
     print(json.dumps({"error": "requests required"}))
     sys.exit(1)
 
-USER_AGENT = "Mozilla/5.0 (compatible; SEOSkill-Local/1.0)"
+USER_AGENT = "Mozilla/5.0 (compatible; UltimateSEO-Local/1.8)"
 
 
 def check_local_signals(url: str) -> dict:

@@ -67,7 +67,7 @@ def fetch_robots_txt(url: str, timeout: int = 15) -> dict:
 
     try:
         resp = requests.get(robots_url, timeout=timeout, headers={
-            "User-Agent": "Mozilla/5.0 (compatible; SEOSkill/1.0)"
+            "User-Agent": "Mozilla/5.0 (compatible; UltimateSEO/1.8)"
         })
         result["status"] = resp.status_code
 

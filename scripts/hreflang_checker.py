@@ -94,7 +94,7 @@ COMMON_REGION_MISTAKES = {
     "EU": None,   # European Union is not a country
 }
 
-USER_AGENT = "Mozilla/5.0 (compatible; SEOSkill-hreflang/1.0)"
+USER_AGENT = "Mozilla/5.0 (compatible; UltimateSEO-hreflang/1.8)"
 
 
 # ---------------------------------------------------------------------------

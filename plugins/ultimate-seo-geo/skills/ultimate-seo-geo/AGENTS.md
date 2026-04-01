@@ -1,16 +1,18 @@
-# Ultimate SEO + GEO — Universal Search Optimization Skill
+# Ultimate SEO + GEO — LLM-Agnostic SEO Agent
 
 | Attribute | Details |
 | --- | --- |
-| **Version** | 1.7.2 |
-| **Updated** | 2026-03-31 |
+| **Version** | 1.8.0 |
+| **Updated** | 2026-04-01 |
 | **License** | MIT |
 | **Author** | Myk Pono |
-| **Homepage** | [mykpono.com](https://mykpono.com) |
+| **Homepage** | [lab.mykpono.com](https://lab.mykpono.com) |
+| **Platforms** | Claude Code, Cursor, Copilot, Gemini CLI, Codex, Windsurf, Cline, Aider, Devin |
 
-The definitive SEO and Generative Engine Optimization skill. Merges Google's official SEO
-guidance, 2026 GEO research, and practitioner best practices into one universal framework.
-Every finding comes with a clear fix directive — not just diagnosis.
+The definitive SEO and Generative Engine Optimization agent. LLM-agnostic — works on any
+platform that reads `AGENTS.md`. Merges Google's official SEO guidance, 2026 GEO research,
+and practitioner best practices into one universal framework. Every finding comes with a
+clear fix directive — not just diagnosis.
 
 **Full instructions:** For detailed step-by-step procedures, scoring frameworks, and examples beyond what this file covers, read `SKILL.md`. For domain-specific reference data, read the relevant file from `references/`. Load at most 3 reference files per response.
 
@@ -26,6 +28,7 @@ Every finding comes with a clear fix directive — not just diagnosis.
 | Technical / CWV | `references/technical-checklist.md` | `pagespeed.py`, `robots_checker.py`, `security_headers.py` |
 | Content / E-E-A-T | `references/eeat-framework.md`, `references/core-eeat-framework.md` | `readability.py`, `article_seo.py` |
 | CITE domain audit | `references/cite-domain-rating.md` | `link_profile.py` |
+| Backlinks | `references/backlink-quality.md` | `backlink_analyzer.py` |
 | Keywords / clusters | `references/keyword-strategy.md` | — |
 | Links | `references/link-building.md` | `internal_links.py`, `broken_links.py`, `link_profile.py` |
 | Local SEO | `references/local-seo.md` | `local_signals_checker.py` |
@@ -35,6 +38,8 @@ Every finding comes with a clear fix directive — not just diagnosis.
 | Migration | `references/site-migration.md` | `redirect_checker.py` |
 | Analytics / myths | `references/analytics-reporting.md` | — |
 | Crawl / indexation | `references/crawl-indexation.md` | `sitemap_checker.py`, `duplicate_content.py`, `canonical_checker.py` |
+| URL discovery | — | `site_mapper.py` |
+| Extensions | `extensions/README.md` | Extension install scripts |
 
 ### When NOT to Run a Full Audit
 
@@ -470,7 +475,7 @@ bash scripts/run_individual_checks.sh https://example.com
 
 | Script | Purpose |
 |---|---|
-| `generate_report.py` | Full-site HTML dashboard (runs all scripts) |
+| `generate_report.py` | Full-site HTML/XLSX dashboard (runs all scripts) |
 | `validate_schema.py` | JSON-LD validation |
 | `robots_checker.py` | robots.txt + AI crawler access |
 | `pagespeed.py` | Core Web Vitals via PageSpeed API |
@@ -487,6 +492,7 @@ bash scripts/run_individual_checks.sh https://example.com
 | `duplicate_content.py` | Near-duplicate detection |
 | `article_seo.py` | Article structure + keyword analysis |
 | `link_profile.py` | Link equity distribution |
+| `backlink_analyzer.py` | 7-section backlink audit (CSV/API data) |
 | `finding_verifier.py` | Deduplicates findings across audit |
 | `sitemap_checker.py` | Sitemap discovery + sanity check |
 | `local_signals_checker.py` | LocalBusiness / tel / address signals |
@@ -495,10 +501,45 @@ bash scripts/run_individual_checks.sh https://example.com
 | `meta_lengths_checker.py` | Title / meta description / H1 lengths |
 | `programmatic_seo_auditor.py` | Quality gates for pages at scale |
 | `fetch_page.py` | Fetch and save raw HTML (utility) |
+| `crawl_adapter.py` | Pluggable crawl backend (requests/firecrawl/playwright) |
+| `site_mapper.py` | URL discovery via sitemap + crawl |
 
 ### Environment Note
 
 Scripts require outbound network access. `pagespeed.py` calls googleapis.com — if it fails, say "performance data unavailable" and use the manual checklist in `references/technical-checklist.md`.
+
+### Excel Export
+
+```bash
+python scripts/generate_report.py https://example.com --format xlsx --output report.xlsx
+python scripts/generate_report.py https://example.com --format all --output report
+```
+
+Requires `openpyxl` (optional): `pip install openpyxl>=3.1.0`
+
+### Extensions (Optional)
+
+Extensions add external data sources. Core scripts work without them.
+
+| Extension | What It Adds | Install |
+|-----------|-------------|---------|
+| Firecrawl | JS-rendered crawling | `bash extensions/firecrawl/install-generic.sh` |
+| DataForSEO | Live SERP, keywords, backlinks | `bash extensions/dataforseo/install-generic.sh` |
+
+See `extensions/README.md` for platform-specific install adapters (Claude Code, Cursor).
+
+### Subagent Definitions
+
+For parallel audit execution, subagent capability files live in `agents/`. Each platform interprets these natively — Cursor uses its Task tool, Claude Code uses its Agent tool, others read as context.
+
+| Agent | Scope |
+|-------|-------|
+| `seo-technical` | Crawlability, security, CWV, redirects |
+| `seo-content` | E-E-A-T, readability, duplicates |
+| `seo-schema` | JSON-LD validation |
+| `seo-geo` | AI search visibility, llms.txt, entities |
+| `seo-performance` | Core Web Vitals, page speed |
+| `seo-links` | Internal links, broken links, backlinks |
 
 ### Context Management for Long Sessions
 

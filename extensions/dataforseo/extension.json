@@ -1,0 +1,17 @@
+{
+  "name": "dataforseo",
+  "version": "1.0.0",
+  "description": "Live SERP data, keyword research, backlink profiles, and AI visibility tracking",
+  "requires": {
+    "env": ["DATAFORSEO_LOGIN", "DATAFORSEO_PASSWORD"]
+  },
+  "mcp": {
+    "package": "dataforseo-mcp-server",
+    "runtime": "npx"
+  },
+  "enhances": [
+    "backlink_analyzer.py",
+    "generate_report.py"
+  ],
+  "homepage": "https://dataforseo.com/"
+}

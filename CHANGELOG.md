@@ -2,6 +2,27 @@
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-04-01
+
+### Added
+
+- **`scripts/backlink_analyzer.py`** — 7-section backlink analysis with CSV/API data adapter. Profile overview, anchor text distribution, referring domain quality, toxic link detection (22 patterns, 2 risk tiers), top pages, competitor gap analysis, and velocity placeholder. Backlink Health Score (0-100) with weighted composite. Supports `--source csv|gsc|sample`.
+- **`scripts/crawl_adapter.py`** — Pluggable crawl backend abstraction. Supports `requests` (default, stdlib), `firecrawl` (optional, via API key), and `playwright` (optional, local install). Auto-detection selects best available backend. Used by other scripts via import.
+- **`scripts/site_mapper.py`** — Fast URL discovery via sitemap parsing + BFS internal link crawl. Supports `--max-pages`, `--depth`, `--include-status`. Uses `crawl_adapter.py` for all fetching.
+- **`references/backlink-quality.md`** — 30 toxic link patterns, anchor text benchmarks, health score formula, disavow file format, competitor gap analysis methodology.
+- **`generate_report.py --format xlsx|all`** — Excel export with openpyxl. Sheets: Summary, Issues, Links, Technical. Navy header styling, frozen headers, auto-filter, auto-column-width. `--format all` generates HTML + XLSX together.
+- **`extensions/` directory** — Platform-neutral extension architecture. Each extension has `extension.json` manifest + install adapters for Claude Code, Cursor, and generic (env vars). Two extensions: Firecrawl (JS-rendered crawling) and DataForSEO (live SERP/backlink data).
+- **`agents/` directory** — 6 subagent capability definitions (seo-technical, seo-content, seo-schema, seo-geo, seo-performance, seo-links). Platform-neutral markdown format — each platform interprets natively.
+- **LLM-agnostic agent identity** — AGENTS.md, SKILL.md, README.md updated to reflect multi-platform support. Platforms row added to header tables. Descriptions reframed from "skill" to "agent."
+
+### Changed
+
+- **User-Agent strings** — All 20 scripts updated from `SEOSkill/*` and `ClaudeSEO/*` to `UltimateSEO/*` with project homepage URL.
+- **AGENTS.md routing index** — Added backlinks, URL discovery, and extensions rows.
+- **AGENTS.md script table** — Added `backlink_analyzer.py`, `crawl_adapter.py`, `site_mapper.py`. Updated `generate_report.py` description to mention XLSX.
+- **AGENTS.md section 21** — Added Excel export usage, extensions table, and subagent definitions table.
+- **`requirements.txt`** — Added `openpyxl>=3.1.0` as commented optional dependency.
+
 ## [1.7.2] - 2026-03-31
 
 ### Changed

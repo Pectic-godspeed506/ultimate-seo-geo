@@ -107,7 +107,7 @@ def main() -> None:
             r = requests.get(
                 args.url,
                 timeout=15,
-                headers={"User-Agent": "Mozilla/5.0 (compatible; SEOSkill-Image/1.0)"},
+                headers={"User-Agent": "Mozilla/5.0 (compatible; UltimateSEO-Image/1.8)"},
             )
             html = r.text
             base = base or args.url

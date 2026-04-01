@@ -332,7 +332,7 @@ def main():
         try:
             req = urllib.request.Request(
                 args.url,
-                headers={"User-Agent": "Mozilla/5.0 (compatible; SEOBot/1.0)"},
+                headers={"User-Agent": "Mozilla/5.0 (compatible; UltimateSEO/1.8)"},
             )
             with urllib.request.urlopen(req, timeout=20) as resp:
                 content = resp.read().decode("utf-8", errors="ignore")

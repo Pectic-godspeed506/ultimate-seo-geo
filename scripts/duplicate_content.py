@@ -27,7 +27,7 @@ except ImportError:
     sys.exit(1)
 
 
-USER_AGENT = "Mozilla/5.0 (compatible; SEOSkill-DupCheck/1.0)"
+USER_AGENT = "Mozilla/5.0 (compatible; UltimateSEO-DupCheck/1.8)"
 
 # Quality gates from resources/references/quality-gates.md
 THIN_CONTENT_THRESHOLDS = {

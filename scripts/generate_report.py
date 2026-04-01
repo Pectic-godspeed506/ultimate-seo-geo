@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """
-Generate an interactive HTML SEO report.
+Generate an interactive SEO report (HTML, XLSX, or both).
 
 Runs all analysis scripts and aggregates results into a single,
 self-contained interactive HTML file with a premium dashboard UI.
+Optionally exports to Excel (.xlsx) for offline sharing.
 
 Usage:
     python generate_report.py https://example.com
     python generate_report.py https://example.com --output my-report.html
+    python generate_report.py https://example.com --format xlsx --output report.xlsx
+    python generate_report.py https://example.com --format all --output report
 """
 
 import argparse
@@ -56,7 +59,7 @@ def run_script(script_name: str, args: list, timeout: int = 120) -> dict:
 def fetch_page(url: str) -> str:
     """Fetch page HTML to a temp file, return path."""
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; SEOBot/1.0)"})
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; UltimateSEO/1.8)"})
         with urllib.request.urlopen(req, timeout=15) as resp:
             html = resp.read().decode("utf-8", errors="replace")
         tmp = tempfile.NamedTemporaryFile(suffix=".html", delete=False, mode="w", encoding="utf-8")
@@ -1820,39 +1823,212 @@ document.getElementById('chevron-issues').classList.add('open');
     return html
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Generate interactive SEO HTML report")
-    parser.add_argument("url", help="Website URL to analyze")
-    parser.add_argument("--output", "-o", help="Output filename (default: seo-report-<domain>.html)")
+def export_xlsx(data: dict, scores: dict, output_path: str) -> str:
+    """Export report data to an Excel workbook. Returns the output path."""
+    try:
+        from openpyxl import Workbook
+        from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+    except ImportError:
+        print("⚠️  openpyxl not installed. Install with: pip install openpyxl>=3.1.0",
+              file=sys.stderr)
+        return ""
 
-    args = parser.parse_args()
+    wb = Workbook()
+    header_font = Font(name="Calibri", bold=True, color="FFFFFF", size=11)
+    header_fill = PatternFill(start_color="1E3A5F", end_color="1E3A5F", fill_type="solid")
+    header_alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+    thin_border = Border(
+        bottom=Side(style="thin", color="D0D5DD"),
+    )
 
-    # Collect all data
-    data = collect_data(args.url)
+    def _write_header(ws, headers: list):
+        for col, h in enumerate(headers, 1):
+            cell = ws.cell(row=1, column=col, value=h)
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.alignment = header_alignment
+        ws.freeze_panes = "A2"
+        ws.auto_filter.ref = ws.dimensions
 
-    # Calculate scores
-    scores = calculate_overall_score(data)
+    def _auto_width(ws):
+        for col in ws.columns:
+            max_len = 0
+            col_letter = col[0].column_letter
+            for cell in col:
+                val = str(cell.value or "")
+                max_len = max(max_len, min(len(val), 60))
+            ws.column_dimensions[col_letter].width = max(max_len + 4, 12)
 
-    # Generate HTML
-    html = generate_html(data, scores)
+    # --- Sheet 1: Summary ---
+    ws = wb.active
+    ws.title = "Summary"
+    _write_header(ws, ["Metric", "Value"])
+    summary_rows = [
+        ("URL", data.get("url", "")),
+        ("Domain", data.get("domain", "")),
+        ("Report Date", data.get("timestamp", "")),
+        ("Overall Score", f"{scores['overall']}/100"),
+        ("Platform Detected", data.get("environment", {}).get("primary", "Unknown")),
+        ("Runtime", data.get("environment", {}).get("runtime", "Unknown")),
+        ("", ""),
+        ("— Category Scores —", ""),
+    ]
+    category_labels = {
+        "security": "Security Headers", "social": "Social Meta",
+        "robots": "Robots & Crawlers", "broken_links": "Broken Links",
+        "internal_links": "Internal Links", "redirects": "Redirects",
+        "llms_txt": "AI Search (llms.txt)", "pagespeed": "Performance (CWV)",
+        "onpage": "On-Page SEO", "readability": "Readability",
+        "entity": "Entity SEO", "link_profile": "Link Profile",
+        "hreflang": "Hreflang", "duplicate_content": "Content Uniqueness",
+        "schema_validation": "JSON-LD", "image_seo": "Image SEO",
+        "sitemap": "Sitemaps", "canonical": "Canonical Tags",
+        "local_signals": "Local Signals", "indexnow_probe": "IndexNow",
+    }
+    for key, label in category_labels.items():
+        val = scores["categories"].get(key, 0)
+        weight = scores["weights"].get(key, 0)
+        summary_rows.append((label, f"{val}/100 (weight: {weight}%)"))
 
-    # Determine output path
-    if args.output:
-        output_path = args.output
-    else:
-        domain = urlparse(args.url).netloc.replace(".", "_")
-        output_path = f"seo-report-{domain}.html"
+    for r, (metric, value) in enumerate(summary_rows, 2):
+        ws.cell(row=r, column=1, value=metric).border = thin_border
+        ws.cell(row=r, column=2, value=str(value)).border = thin_border
+    _auto_width(ws)
 
+    # --- Sheet 2: Issues ---
+    ws2 = wb.create_sheet("Issues")
+    _write_header(ws2, ["Severity", "Section", "Finding", "Fix"])
+    row = 2
+    for section_name, section_data in data["sections"].items():
+        for issue in section_data.get("issues", []):
+            if isinstance(issue, dict):
+                ws2.cell(row=row, column=1, value=issue.get("severity", "info").upper()).border = thin_border
+                ws2.cell(row=row, column=2, value=section_name).border = thin_border
+                ws2.cell(row=row, column=3, value=issue.get("finding", "")).border = thin_border
+                ws2.cell(row=row, column=4, value=issue.get("fix", "")).border = thin_border
+                row += 1
+            elif isinstance(issue, str):
+                ws2.cell(row=row, column=1, value="INFO").border = thin_border
+                ws2.cell(row=row, column=2, value=section_name).border = thin_border
+                ws2.cell(row=row, column=3, value=issue).border = thin_border
+                row += 1
+    for fix_item in data.get("environment_fixes", []):
+        ws2.cell(row=row, column=1, value=fix_item.get("severity", "info").upper()).border = thin_border
+        ws2.cell(row=row, column=2, value="environment").border = thin_border
+        ws2.cell(row=row, column=3, value=fix_item.get("title", "")).border = thin_border
+        ws2.cell(row=row, column=4, value=fix_item.get("fix", "")).border = thin_border
+        row += 1
+    _auto_width(ws2)
+
+    # --- Sheet 3: Links ---
+    ws3 = wb.create_sheet("Links")
+    _write_header(ws3, ["Type", "Status", "URL", "Anchor Text", "Internal?"])
+    row = 2
+    bl = data["sections"].get("broken_links", {})
+    for link in bl.get("broken", []):
+        ws3.cell(row=row, column=1, value="Broken").border = thin_border
+        ws3.cell(row=row, column=2, value=str(link.get("status", link.get("error", "?")))).border = thin_border
+        ws3.cell(row=row, column=3, value=link.get("url", "")).border = thin_border
+        ws3.cell(row=row, column=4, value=link.get("anchor_text", "")).border = thin_border
+        ws3.cell(row=row, column=5, value="Yes" if link.get("is_internal") else "No").border = thin_border
+        row += 1
+    il = data["sections"].get("internal_links", {})
+    for orphan in il.get("orphan_candidates", []):
+        ws3.cell(row=row, column=1, value="Orphan").border = thin_border
+        ws3.cell(row=row, column=2, value="—").border = thin_border
+        ws3.cell(row=row, column=3, value=orphan.get("url", "")).border = thin_border
+        ws3.cell(row=row, column=4, value="—").border = thin_border
+        ws3.cell(row=row, column=5, value=str(orphan.get("incoming_links", 0))).border = thin_border
+        row += 1
+    _auto_width(ws3)
+
+    # --- Sheet 4: Technical ---
+    ws4 = wb.create_sheet("Technical")
+    _write_header(ws4, ["Check", "Status", "Detail"])
+    row = 2
+    sec = data["sections"].get("security", {})
+    for header, value in sec.get("headers_present", {}).items():
+        ws4.cell(row=row, column=1, value=header).border = thin_border
+        ws4.cell(row=row, column=2, value="Present").border = thin_border
+        ws4.cell(row=row, column=3, value=str(value)[:200]).border = thin_border
+        row += 1
+    for header, desc in sec.get("headers_missing", {}).items():
+        ws4.cell(row=row, column=1, value=header).border = thin_border
+        ws4.cell(row=row, column=2, value="Missing").border = thin_border
+        ws4.cell(row=row, column=3, value=desc).border = thin_border
+        row += 1
+    rob = data["sections"].get("robots", {})
+    for crawler, status in rob.get("ai_crawler_status", {}).items():
+        ws4.cell(row=row, column=1, value=f"AI Crawler: {crawler}").border = thin_border
+        ws4.cell(row=row, column=2, value="Blocked" if "blocked" in status else "Managed" if "not managed" not in status else "Unmanaged").border = thin_border
+        ws4.cell(row=row, column=3, value=status).border = thin_border
+        row += 1
+    psi = data["sections"].get("pagespeed", {})
+    if psi and not psi.get("error"):
+        for metric in ["LCP", "INP", "CLS", "TBT", "FCP", "SI"]:
+            val = psi.get("field_data", psi.get("lab_data", {})).get(metric)
+            if val is not None:
+                ws4.cell(row=row, column=1, value=f"CWV: {metric}").border = thin_border
+                ws4.cell(row=row, column=2, value="Measured").border = thin_border
+                ws4.cell(row=row, column=3, value=str(val)).border = thin_border
+                row += 1
+    _auto_width(ws4)
+
+    if not output_path.endswith(".xlsx"):
+        output_path += ".xlsx"
     output_dir = os.path.dirname(output_path)
     if output_dir:
         os.makedirs(output_dir, exist_ok=True)
+    wb.save(output_path)
+    return output_path
 
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(html)
 
-    print(f"\n✅ Report saved to: {os.path.abspath(output_path)}")
+def main():
+    parser = argparse.ArgumentParser(description="Generate interactive SEO report (HTML/XLSX)")
+    parser.add_argument("url", help="Website URL to analyze")
+    parser.add_argument("--output", "-o", help="Output filename (default: seo-report-<domain>.<ext>)")
+    parser.add_argument(
+        "--format", "-f", dest="fmt", default="html",
+        choices=["html", "xlsx", "all"],
+        help="Output format: html (default), xlsx (Excel), all (both HTML + XLSX)",
+    )
+
+    args = parser.parse_args()
+    domain = urlparse(args.url).netloc.replace(".", "_")
+
+    data = collect_data(args.url)
+    scores = calculate_overall_score(data)
+
+    formats = ["html", "xlsx"] if args.fmt == "all" else [args.fmt]
+
+    for fmt in formats:
+        if fmt == "html":
+            html = generate_html(data, scores)
+            if args.output and args.fmt != "all":
+                out = args.output
+            elif args.output and args.fmt == "all":
+                out = f"{args.output}.html"
+            else:
+                out = f"seo-report-{domain}.html"
+            out_dir = os.path.dirname(out)
+            if out_dir:
+                os.makedirs(out_dir, exist_ok=True)
+            with open(out, "w", encoding="utf-8") as f:
+                f.write(html)
+            print(f"\n✅ HTML report saved to: {os.path.abspath(out)}")
+
+        elif fmt == "xlsx":
+            if args.output and args.fmt != "all":
+                out = args.output
+            elif args.output and args.fmt == "all":
+                out = f"{args.output}.xlsx"
+            else:
+                out = f"seo-report-{domain}.xlsx"
+            result = export_xlsx(data, scores, out)
+            if result:
+                print(f"✅ Excel report saved to: {os.path.abspath(result)}")
+
     print(f"   Overall Score: {scores['overall']}/100")
-    print(f"   Open in browser to view the interactive report")
 
 
 if __name__ == "__main__":

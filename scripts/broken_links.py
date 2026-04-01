@@ -33,7 +33,7 @@ except ImportError:
     sys.exit(1)
 
 
-HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; SEOSkill/1.0)"}
+HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; UltimateSEO/1.8)"}
 
 SOFT_404_TITLE_SIGNALS = [
     "page not found", "404", "not found", "no longer available",

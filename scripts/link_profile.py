@@ -32,7 +32,7 @@ except ImportError:
     sys.exit(1)
 
 
-USER_AGENT = "Mozilla/5.0 (compatible; SEOSkill-LinkProfile/1.0)"
+USER_AGENT = "Mozilla/5.0 (compatible; UltimateSEO-LinkProfile/1.8)"
 
 
 # ---------------------------------------------------------------------------

@@ -28,7 +28,7 @@ except ImportError:
     sys.exit(1)
 
 
-USER_AGENT = "Mozilla/5.0 (compatible; SEOSkill-Entity/1.0)"
+USER_AGENT = "Mozilla/5.0 (compatible; UltimateSEO-Entity/1.8)"
 
 # Authoritative sameAs targets (ranked by KG signal strength)
 SAMEAS_PLATFORMS = {

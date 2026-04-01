@@ -92,7 +92,7 @@ def check_security_headers(url: str, timeout: int = 15) -> dict:
 
     try:
         resp = requests.get(url, timeout=timeout, headers={
-            "User-Agent": "Mozilla/5.0 (compatible; SEOSkill/1.0)"
+            "User-Agent": "Mozilla/5.0 (compatible; UltimateSEO/1.8)"
         }, allow_redirects=True)
 
         # Check HTTPS

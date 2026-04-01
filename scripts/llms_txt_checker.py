@@ -64,7 +64,7 @@ def check_llms_txt(url: str, timeout: int = 15) -> dict:
         "error": None,
     }
 
-    headers = {"User-Agent": "Mozilla/5.0 (compatible; SEOSkill/1.0)"}
+    headers = {"User-Agent": "Mozilla/5.0 (compatible; UltimateSEO/1.8)"}
 
     # Check llms.txt
     try:
