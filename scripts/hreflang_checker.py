@@ -3,7 +3,7 @@
 Hreflang Validator
 
 Validates hreflang implementations against all 8 checks defined in
-resources/skills/seo-hreflang.md:
+references/international-seo.md:
 
   1. Self-referencing tags
   2. Bidirectional return tags

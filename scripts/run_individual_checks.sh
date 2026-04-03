@@ -42,6 +42,12 @@ echo "=== indexnow_checker (probe) ===" && $PY scripts/indexnow_checker.py "$URL
 ..."
 echo "=== article_seo ===" && $PY scripts/article_seo.py "$URL" --json | head -c 2000 && echo "
 ..."
+echo "=== canonical_checker ===" && $PY scripts/canonical_checker.py "$URL" --json | head -c 2000 && echo "
+..."
+echo "=== site_mapper ===" && $PY scripts/site_mapper.py "$URL" --max-pages 50 --json | head -c 2000 && echo "
+..."
+echo "=== programmatic_seo_auditor ===" && $PY scripts/programmatic_seo_auditor.py "$URL" --depth 1 --max-pages 50 --json | head -c 2000 && echo "
+..."
 
 TMP=$(mktemp -t seoauditXXXX.html)
 trap 'rm -f "$TMP"' EXIT

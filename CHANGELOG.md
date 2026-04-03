@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [1.8.2] - 2026-04-03
+
+### Fixed
+
+- **`scripts/robots_checker.py`** — Added `OAI-SearchBot` (ChatGPT Search indexing crawler) to `AI_CRAWLERS` list with inline comment distinguishing it from `GPTBot` (training-only). Every GEO audit that checks robots.txt now correctly detects whether ChatGPT Search can index the site. Previously, a site blocking `OAI-SearchBot` would pass the AI crawler check undetected.
+- **`scripts/pagespeed.py`** — Critical: the entire response-processing block (performance score, CrUX field data, opportunities, diagnostics — ~100 lines) was inside the `for` retry loop body *after* the `break` statement, making it completely unreachable. The script fetched the PSI API successfully but always returned empty metrics `{}`. Fixed by initializing `data = None` before the loop and moving extraction to function scope after the loop. CrUX distribution buckets (% good / needs-improvement / poor per metric) and a `"source": "field"/"lab"` tag are now also surfaced in the output.
+- **`scripts/hreflang_checker.py`** — Stale internal path in docstring (`resources/skills/seo-hreflang.md` → `references/international-seo.md`).
+- **`scripts/image_checker.py`** — Expanded from alt-text-only to full image SEO check: added `fetchpriority="high"` detection on first/LCP image (critical severity if missing on lazy-loaded hero), `srcset`/`sizes` coverage, `width`/`height` dimension attributes (CLS prevention), and WebP format detection. Also fixed missing-alt finding not being emitted (counter populated but `issues.append` dropped in prior refactor).
+- **`scripts/run_individual_checks.sh`** — Added `canonical_checker.py`, `site_mapper.py`, and `programmatic_seo_auditor.py` which existed but were missing from the runner.
+- **`references/audit-script-matrix.md`** — Added `site_mapper.py`, `crawl_adapter.py`, and `backlink_analyzer.py` to the Utilities table; all three are user-facing tools mentioned in AGENTS.md but absent from the matrix.
+- **`scripts/backlink_analyzer.py`** — Documented CSV column mapping in docstring (field name variants for Ahrefs/Moz/Semrush exports were handled by `normalize_backlinks` but never documented).
+- **`AGENTS.md`** — Version synced to match `SKILL.md` (was 1.8.0 while SKILL.md was already 1.8.1).
+
 ## [1.8.1] - 2026-04-01
 
 ### Added

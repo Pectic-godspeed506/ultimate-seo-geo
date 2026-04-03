@@ -21,15 +21,16 @@ except ImportError:
 
 # AI crawlers to check for explicit management
 AI_CRAWLERS = [
-    "GPTBot",
-    "ChatGPT-User",
+    "OAI-SearchBot",    # ChatGPT Search indexing — distinct from GPTBot (training)
+    "GPTBot",           # OpenAI training crawler
+    "ChatGPT-User",     # ChatGPT browsing/plugins
     "ClaudeBot",
+    "anthropic-ai",
     "PerplexityBot",
-    "Google-Extended",
+    "Google-Extended",  # Gemini training only — does NOT affect Google Search or AI Overviews
     "Applebot-Extended",
     "Bytespider",
     "CCBot",
-    "anthropic-ai",
     "FacebookBot",
     "Amazonbot",
 ]

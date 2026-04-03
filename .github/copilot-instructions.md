@@ -1,7 +1,7 @@
 # Ultimate SEO + GEO — Copilot Instructions
 
 This repository is a comprehensive SEO and Generative Engine Optimization (GEO) skill with
-27 diagnostic Python scripts, scored audit frameworks, and AI search citation optimization.
+31 diagnostic Python scripts, scored audit frameworks, and AI search citation optimization.
 
 ## How to Use
 
@@ -24,7 +24,7 @@ python scripts/generate_report.py https://example.com --output report.html
 
 ## Reference Files
 
-Domain knowledge is in `references/` (20 markdown files). Load only what you need per task.
+Domain knowledge is in `references/` (23 markdown files). Load only what you need per task.
 See the Routing Index in `AGENTS.md` § 0 for the task-to-file mapping.
 
 ## Important Rules

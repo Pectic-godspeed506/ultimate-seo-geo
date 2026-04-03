@@ -12,6 +12,18 @@ Usage:
     python backlink_analyzer.py --source csv --input backlinks.csv
     python backlink_analyzer.py --source csv --input backlinks.csv --competitor-url https://rival.com --competitor-input rival_links.csv
     python backlink_analyzer.py --source sample --target-url https://mysite.com
+
+CSV column mapping (column names are normalized to lowercase with underscores):
+    source_url / referring_url   — URL of the linking page (required)
+    target_url / target          — URL of the page being linked to
+    anchor_text / anchor         — Link anchor text
+    follow / link_type           — "dofollow"/"follow"/"yes"/"1" = followed; anything else = nofollow
+    domain_rating / dr / da      — Numeric domain authority score (0–100)
+    tld                          — Top-level domain (auto-detected from source_url if absent)
+
+Ahrefs export: uses "Referring page URL", "Anchor", "DR" — rename or export as CSV and
+the normalizer maps common variants automatically. Run with --source sample first to
+see expected output format before providing real data.
 """
 
 import argparse

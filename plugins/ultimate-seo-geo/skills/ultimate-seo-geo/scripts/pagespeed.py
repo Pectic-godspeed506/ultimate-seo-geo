@@ -74,6 +74,7 @@ def get_pagespeed(url: str, strategy: str = "mobile", api_key: str = None) -> di
     if api_key:
         params["key"] = api_key
 
+    data = None
     max_retries = 3
     for attempt in range(max_retries):
         try:
@@ -94,7 +95,7 @@ def get_pagespeed(url: str, strategy: str = "mobile", api_key: str = None) -> di
                 return result
 
             data = resp.json()
-            break  # Success
+            break  # Success — process data after the loop
 
         except requests.exceptions.Timeout:
             if attempt < max_retries - 1:
@@ -110,99 +111,112 @@ def get_pagespeed(url: str, strategy: str = "mobile", api_key: str = None) -> di
             result["error"] = f"Failed to parse API response: {e}"
             return result
 
-        # Extract performance score
-        lighthouse = data.get("lighthouseResult", {})
-        categories = lighthouse.get("categories", {})
-        perf = categories.get("performance", {})
-        result["performance_score"] = int((perf.get("score", 0) or 0) * 100)
+    if data is None:
+        if not result["error"]:
+            result["error"] = "All retries exhausted without a successful response."
+        return result
 
-        # Extract CrUX field data (real user metrics)
-        loading = data.get("loadingExperience", {})
-        crux_metrics = loading.get("metrics", {})
+    # Extract performance score
+    lighthouse = data.get("lighthouseResult", {})
+    categories = lighthouse.get("categories", {})
+    perf = categories.get("performance", {})
+    result["performance_score"] = int((perf.get("score", 0) or 0) * 100)
 
-        if crux_metrics:
-            result["field_data_available"] = True
-            for api_name, label in PSI_METRIC_MAP.items():
-                metric_data = crux_metrics.get(api_name)
-                if metric_data:
-                    percentile = metric_data.get("percentile")
-                    category = metric_data.get("category", "").lower()
+    # Extract CrUX field data (real user metrics from Chrome UX Report)
+    loading = data.get("loadingExperience", {})
+    crux_metrics = loading.get("metrics", {})
 
-                    thresholds = CWV_THRESHOLDS.get(label, {})
-                    result["metrics"][label] = {
-                        "value": percentile,
-                        "unit": thresholds.get("unit", ""),
-                        "label": thresholds.get("label", label),
-                        "rating": category,  # FAST, AVERAGE, SLOW
+    if crux_metrics:
+        result["field_data_available"] = True
+        for api_name, label in PSI_METRIC_MAP.items():
+            metric_data = crux_metrics.get(api_name)
+            if metric_data:
+                percentile = metric_data.get("percentile")
+                category = metric_data.get("category", "").lower()
+                distributions = metric_data.get("distributions", [])
+
+                thresholds = CWV_THRESHOLDS.get(label, {})
+                entry = {
+                    "value": percentile,
+                    "unit": thresholds.get("unit", ""),
+                    "label": thresholds.get("label", label),
+                    "rating": category,
+                    "source": "field",
+                }
+                # Include distribution buckets (good / needs-improvement / poor %)
+                if len(distributions) == 3:
+                    entry["distribution"] = {
+                        "good": round(distributions[0].get("proportion", 0) * 100, 1),
+                        "needs_improvement": round(distributions[1].get("proportion", 0) * 100, 1),
+                        "poor": round(distributions[2].get("proportion", 0) * 100, 1),
                     }
+                result["metrics"][label] = entry
 
-        # Fall back to Lighthouse lab data if no field data
-        if not result["field_data_available"]:
-            audits = lighthouse.get("audits", {})
-            lab_map = {
-                "largest-contentful-paint": "LCP",
-                "interaction-to-next-paint": "INP",
-                "cumulative-layout-shift": "CLS",
-                "first-contentful-paint": "FCP",
-                "server-response-time": "TTFB",
-            }
-            for audit_id, label in lab_map.items():
-                audit = audits.get(audit_id, {})
-                if audit and audit.get("numericValue") is not None:
-                    value = audit["numericValue"]
-                    thresholds = CWV_THRESHOLDS.get(label, {})
-
-                    # Determine rating
-                    good = thresholds.get("good", float("inf"))
-                    poor = thresholds.get("poor", float("inf"))
-                    if value <= good:
-                        rating = "good"
-                    elif value <= poor:
-                        rating = "needs-improvement"
-                    else:
-                        rating = "poor"
-
-                    # CLS is reported as a score, not ms
-                    if label == "CLS":
-                        value = round(value, 3)
-                    else:
-                        value = round(value)
-
-                    result["metrics"][label] = {
-                        "value": value,
-                        "unit": thresholds.get("unit", ""),
-                        "label": thresholds.get("label", label),
-                        "rating": rating,
-                    }
-
-        # Extract opportunities
+    # Fall back to Lighthouse lab data if no field data
+    if not result["field_data_available"]:
         audits = lighthouse.get("audits", {})
-        for audit_id, audit in audits.items():
-            if audit.get("details", {}).get("type") == "opportunity":
-                savings = audit.get("details", {}).get("overallSavingsMs")
-                if savings and savings > 100:
-                    result["opportunities"].append({
-                        "title": audit.get("title", audit_id),
-                        "savings_ms": round(savings),
-                        "description": audit.get("description", "")[:200],
-                    })
+        lab_map = {
+            "largest-contentful-paint": "LCP",
+            "interaction-to-next-paint": "INP",
+            "cumulative-layout-shift": "CLS",
+            "first-contentful-paint": "FCP",
+            "server-response-time": "TTFB",
+        }
+        for audit_id, label in lab_map.items():
+            audit = audits.get(audit_id, {})
+            if audit and audit.get("numericValue") is not None:
+                value = audit["numericValue"]
+                thresholds = CWV_THRESHOLDS.get(label, {})
 
-        # Sort opportunities by savings
-        result["opportunities"].sort(key=lambda x: x["savings_ms"], reverse=True)
+                good = thresholds.get("good", float("inf"))
+                poor = thresholds.get("poor", float("inf"))
+                if value <= good:
+                    rating = "good"
+                elif value <= poor:
+                    rating = "needs-improvement"
+                else:
+                    rating = "poor"
 
-        # Extract key diagnostics
-        diagnostic_ids = [
-            "dom-size", "total-byte-weight", "render-blocking-resources",
-            "uses-responsive-images", "uses-webp-images", "font-display",
-        ]
-        for diag_id in diagnostic_ids:
-            diag = audits.get(diag_id, {})
-            if diag and diag.get("score") is not None and diag["score"] < 1:
-                result["diagnostics"].append({
-                    "title": diag.get("title", diag_id),
-                    "score": round(diag["score"] * 100),
-                    "display": diag.get("displayValue", ""),
+                if label == "CLS":
+                    value = round(value, 3)
+                else:
+                    value = round(value)
+
+                result["metrics"][label] = {
+                    "value": value,
+                    "unit": thresholds.get("unit", ""),
+                    "label": thresholds.get("label", label),
+                    "rating": rating,
+                    "source": "lab",
+                }
+
+    # Extract opportunities
+    audits = lighthouse.get("audits", {})
+    for audit_id, audit in audits.items():
+        if audit.get("details", {}).get("type") == "opportunity":
+            savings = audit.get("details", {}).get("overallSavingsMs")
+            if savings and savings > 100:
+                result["opportunities"].append({
+                    "title": audit.get("title", audit_id),
+                    "savings_ms": round(savings),
+                    "description": audit.get("description", "")[:200],
                 })
+
+    result["opportunities"].sort(key=lambda x: x["savings_ms"], reverse=True)
+
+    # Extract key diagnostics
+    diagnostic_ids = [
+        "dom-size", "total-byte-weight", "render-blocking-resources",
+        "uses-responsive-images", "uses-webp-images", "font-display",
+    ]
+    for diag_id in diagnostic_ids:
+        diag = audits.get(diag_id, {})
+        if diag and diag.get("score") is not None and diag["score"] < 1:
+            result["diagnostics"].append({
+                "title": diag.get("title", diag_id),
+                "score": round(diag["score"] * 100),
+                "display": diag.get("displayValue", ""),
+            })
 
     return result
 
