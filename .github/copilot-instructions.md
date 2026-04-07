@@ -5,9 +5,8 @@ This repository is a comprehensive SEO and Generative Engine Optimization (GEO) 
 
 ## How to Use
 
-All instructions are in `AGENTS.md` (compact, auto-loaded) and `SKILL.md` (full detail).
-GitHub Copilot reads `AGENTS.md` automatically. If you need full step-by-step procedures,
-scoring frameworks, or examples, read the relevant section from `SKILL.md`.
+All instructions are in `AGENTS.md` (compact, auto-loaded), `SKILL.md` (routing shell + guardrails), and `references/procedures/*.md` (step-by-step procedures by section).
+GitHub Copilot reads `AGENTS.md` automatically. For full procedures, read the matching file under `references/procedures/` (see `references/procedures/README.md`).
 
 ## Key Capabilities
 

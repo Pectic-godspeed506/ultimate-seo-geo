@@ -2,9 +2,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](../../LICENSE)
 [![Claude Skill](https://img.shields.io/badge/Claude-Skill-blueviolet)](https://claude.ai)
-[![Version](https://img.shields.io/badge/version-1.8.2-green.svg)](../../CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.8.4-green.svg)](../../CHANGELOG.md)
 
-> The definitive SEO + GEO skill for Claude. Full site audits, AI search optimization, schema generation, E-E-A-T assessment, and 20 diagnostic scripts.
+> The definitive SEO + GEO skill for Claude. Full site audits, AI search optimization, schema generation, E-E-A-T assessment, and **31** bundled diagnostic Python scripts.
 
 **Author:** [Myk Pono](https://mykpono.com) · [Lab](https://lab.mykpono.com) · [GitHub](https://github.com/mykpono/ultimate-seo-geo)
 
@@ -46,7 +46,11 @@ Give it a URL and it returns a scored audit, prioritized action plan, and execut
 
 Most requests run all three in sequence automatically.
 
-The bundled skill folder includes **`scripts/`** (audit tools) and **`evals/`** so instructions like `python scripts/generate_report.py …` work after a Claude Code plugin install—not only on a full repo checkout.
+The bundled skill folder includes **`scripts/`** (audit tools), **`references/`**, **`agents/`** (parallel audit worker scopes), and **`evals/`** so instructions like `python scripts/generate_report.py …` work after a Claude Code plugin install—not only on a full repo checkout.
+
+- **Parallel audits:** `agents/PARALLEL-AUDIT.md` defines independent script groups for Task/subagent tools; merge with `finding_verifier.py` (see `agents/README.md`).
+- **Optional MCP:** Firecrawl and DataForSEO — **`references/optional-extensions-mcp.md`** (install from a full repo clone or GitHub paths).
+- **Reports:** `generate_report.py` writes **HTML** (default), **XLSX** with `openpyxl`, **PDF** with optional **WeasyPrint**, or **HTML + XLSX** with `--format all`. Without WeasyPrint, open the HTML report and use **Print → Save as PDF**.
 
 ---
 
@@ -93,8 +97,8 @@ We're moving from Magento to Shopify — 3,000 product pages. What do we need fo
 - **llms.txt** — Template generation for the emerging AI content standard
 - **RSL 1.0** — Machine-readable AI licensing (December 2025 standard)
 
-### Bundled Python tools (v1.2.0)
-**24** URL/HTML diagnostics plus `requirements-check.py`, `score_eval_transcript.py`, and `meta_lengths_checker.py`. Full step ↔ script map: **`references/audit-script-matrix.md`**. Eval regression: `evals/fixtures/` + `score_eval_transcript.py --all-fixtures`.
+### Bundled Python tools
+**31** audit `.py` scripts in `scripts/` (maintainer-only checkers are not bundled). Full step ↔ script map: **`references/audit-script-matrix.md`**. Eval regression: `evals/fixtures/` + `score_eval_transcript.py --all-fixtures`.
 
 ---
 

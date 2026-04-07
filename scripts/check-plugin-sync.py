@@ -67,6 +67,31 @@ def main() -> int:
                 f"references/{name} differs from plugin copy.\nFix: bash setup-plugin.sh"
             )
 
+    # agents/: parallel audit worker scopes (PARALLEL-AUDIT.md, README.md)
+    ag_root = ROOT / "agents"
+    ag_plugin = ROOT / "plugins/ultimate-seo-geo/skills/ultimate-seo-geo/agents"
+    if not ag_root.is_dir() or not ag_plugin.is_dir():
+        sys.exit("agents/ missing at root or under plugin skill path.\nFix: bash setup-plugin.sh")
+
+    def _agent_md_paths(base: Path) -> dict[str, Path]:
+        m: dict[str, Path] = {}
+        for p in sorted(base.glob("*.md")):
+            m[p.name] = p
+        return m
+
+    ag_map = _agent_md_paths(ag_root)
+    pl_ag = _agent_md_paths(ag_plugin)
+    if set(ag_map) != set(pl_ag):
+        diff = sorted(set(ag_map) ^ set(pl_ag))
+        sys.exit(
+            "agents/*.md set mismatch vs plugin copy.\n"
+            f"  symmetric diff: {diff}\n"
+            "Fix: bash setup-plugin.sh"
+        )
+    for name in sorted(ag_map):
+        if _read(ag_map[name]) != _read(pl_ag[name]):
+            sys.exit(f"agents/{name} differs from plugin copy.\nFix: bash setup-plugin.sh")
+
     # Audit scripts: same .py set as repo scripts/ minus maintainer tooling.
     scr_root = ROOT / "scripts"
     scr_plugin = ROOT / "plugins/ultimate-seo-geo/skills/ultimate-seo-geo/scripts"

@@ -1,22 +1,26 @@
 #!/usr/bin/env python3
 """
-Generate an interactive SEO report (HTML, XLSX, or both).
+Generate an interactive SEO report (HTML, XLSX, PDF, or combined).
 
 Runs all analysis scripts and aggregates results into a single,
 self-contained interactive HTML file with a premium dashboard UI.
-Optionally exports to Excel (.xlsx) for offline sharing.
+Optionally exports to Excel (.xlsx) or PDF for offline sharing.
 
 Usage:
     python generate_report.py https://example.com
     python generate_report.py https://example.com --output my-report.html
     python generate_report.py https://example.com --format xlsx --output report.xlsx
+    python generate_report.py https://example.com --format pdf --output report.pdf
     python generate_report.py https://example.com --format all --output report
+
+PDF requires optional WeasyPrint (see requirements.txt). Without it, use HTML + browser Print → Save as PDF.
 """
 
 import argparse
 import html as html_lib
 import json
 import os
+from typing import Optional
 import re
 import subprocess
 import sys
@@ -1983,14 +1987,45 @@ def export_xlsx(data: dict, scores: dict, output_path: str) -> str:
     return output_path
 
 
+def export_pdf(html: str, output_path: str) -> Optional[str]:
+    """Render HTML report to PDF using WeasyPrint (optional dependency)."""
+    try:
+        from weasyprint import HTML
+    except ImportError:
+        print(
+            "\n❌ PDF export requires WeasyPrint:\n"
+            "     pip install weasyprint\n"
+            "   System libraries: https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#installation\n"
+            "   Or use --format html and Print → Save as PDF in your browser.\n",
+            file=sys.stderr,
+        )
+        return None
+
+    if not output_path.endswith(".pdf"):
+        output_path += ".pdf"
+    output_dir = os.path.dirname(output_path)
+    if output_dir:
+        os.makedirs(output_dir, exist_ok=True)
+    try:
+        HTML(string=html, base_url=os.getcwd()).write_pdf(output_path)
+    except Exception as e:
+        print(
+            f"\n❌ WeasyPrint could not build PDF ({e}).\n"
+            "   Try --format html and use the browser Print dialog → Save as PDF.\n",
+            file=sys.stderr,
+        )
+        return None
+    return output_path
+
+
 def main():
-    parser = argparse.ArgumentParser(description="Generate interactive SEO report (HTML/XLSX)")
+    parser = argparse.ArgumentParser(description="Generate interactive SEO report (HTML/XLSX/PDF)")
     parser.add_argument("url", help="Website URL to analyze")
     parser.add_argument("--output", "-o", help="Output filename (default: seo-report-<domain>.<ext>)")
     parser.add_argument(
         "--format", "-f", dest="fmt", default="html",
-        choices=["html", "xlsx", "all"],
-        help="Output format: html (default), xlsx (Excel), all (both HTML + XLSX)",
+        choices=["html", "xlsx", "pdf", "all"],
+        help="Output format: html (default), xlsx (Excel), pdf (WeasyPrint), all (HTML + XLSX)",
     )
 
     args = parser.parse_args()
@@ -2001,9 +2036,10 @@ def main():
 
     formats = ["html", "xlsx"] if args.fmt == "all" else [args.fmt]
 
+    html_cache = None
     for fmt in formats:
         if fmt == "html":
-            html = generate_html(data, scores)
+            html_cache = generate_html(data, scores)
             if args.output and args.fmt != "all":
                 out = args.output
             elif args.output and args.fmt == "all":
@@ -2014,7 +2050,7 @@ def main():
             if out_dir:
                 os.makedirs(out_dir, exist_ok=True)
             with open(out, "w", encoding="utf-8") as f:
-                f.write(html)
+                f.write(html_cache)
             print(f"\n✅ HTML report saved to: {os.path.abspath(out)}")
 
         elif fmt == "xlsx":
@@ -2027,6 +2063,17 @@ def main():
             result = export_xlsx(data, scores, out)
             if result:
                 print(f"✅ Excel report saved to: {os.path.abspath(result)}")
+
+        elif fmt == "pdf":
+            if html_cache is None:
+                html_cache = generate_html(data, scores)
+            if args.output:
+                out = args.output
+            else:
+                out = f"seo-report-{domain}.pdf"
+            result = export_pdf(html_cache, out)
+            if result:
+                print(f"✅ PDF report saved to: {os.path.abspath(result)}")
 
     print(f"   Overall Score: {scores['overall']}/100")
 

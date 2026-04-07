@@ -25,7 +25,8 @@ Create a Custom GPT that runs SEO + GEO audits using the Ultimate SEO + GEO skil
 Upload the following files from this repository as **Knowledge** files:
 
 **Required (core instructions):**
-- `../SKILL.md` — Full skill instructions with all procedures and examples
+- `../SKILL.md` — Routing shell (§0, guardrails, index to procedures)
+- All files under `../references/procedures/` — step-by-step §1–§21 (run `bash chatgpt/copy-knowledge-files.sh` to copy into `chatgpt/knowledge/procedures/`)
 
 **Recommended (domain knowledge — upload based on your focus):**
 - `../references/ai-search-geo.md` — GEO signals, AI platform data, brand strategy
@@ -76,13 +77,13 @@ Claude Code, Cursor, or Codex:
 
 | Feature | Custom GPT | Full Skill (Claude Code / Codex / Cursor) |
 |---|---|---|
-| Instruction set | Condensed (8K chars) | Full SKILL.md (81KB) |
-| Python audit scripts | Not available | 25 scripts available |
+| Instruction set | Condensed (8K chars) | SKILL.md shell + `references/procedures/` + topical refs |
+| Python audit scripts | Not available | 31 scripts available |
 | Progressive reference loading | Via knowledge file retrieval | Direct file reads |
 | Mode 3 Execute | Limited (no script verification) | Full execute + verify loop |
 | HTML report generation | Not available | `generate_report.py` |
 
-For the full experience with all 25 diagnostic scripts, use the skill with a code-capable
+For the full experience with all 31 diagnostic scripts, use the skill with a code-capable
 agent (Claude Code, Cursor, OpenAI Codex, Gemini CLI, etc.).
 
 ## Updating

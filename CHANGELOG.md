@@ -2,6 +2,31 @@
 
 ## [Unreleased]
 
+## [1.8.4] - 2026-04-06
+
+### Added
+
+- **`references/optional-extensions-mcp.md`** — Optional Firecrawl / DataForSEO MCP setup for plugin installs that do not include the monorepo `extensions/` tree; `AGENTS.md` Extensions row now points here.
+- **`scripts/generate_report.py --format pdf`** — PDF export via optional **WeasyPrint** (`pip install weasyprint`; OS libraries may be required). Documented in `references/procedures/21-script-toolbox.md` and `AGENTS.md` with HTML + browser print-to-PDF fallback.
+- **Plugin bundle: `agents/`** — `setup-plugin.sh` now copies `agents/*.md` into `plugins/.../skills/.../agents/` so `agents/PARALLEL-AUDIT.md` resolves in Claude Code installs. **`scripts/check-plugin-sync.py`** validates root vs plugin `agents/` parity.
+- **`requirements.txt`** — Comment block for optional `weasyprint`.
+
+### Changed
+
+- **`extensions/README.md`** — Points to `references/optional-extensions-mcp.md` for the skill/plugin copy.
+- **`.github/workflows/validate-plugin.yml`** — Triggers on `agents/**` changes.
+- **Marketplace / `plugin.json`** — Descriptions and keywords (`mcp`, `pdf`, `parallel-agents`) updated for the gaps above.
+
+## [1.8.3] - 2026-04-03
+
+### Changed
+
+- **`SKILL.md`** — Refactored into a **routing shell** (~230 lines): §0, global guardrails, and an index to `references/procedures/*.md`. Detailed procedures for former §1–§21 moved verbatim into `references/procedures/` (22 files + `README.md`) for progressive disclosure and lower default context size when the host loads the skill.
+- **`AGENTS.md`**, **`GEMINI.md`**, **`.github/copilot-instructions.md`** — Pointers updated to `references/procedures/` instead of monolithic `SKILL.md` sections.
+- **`agents/`** — Replaced six per-agent markdown files with **`agents/PARALLEL-AUDIT.md`** + shorter **`agents/README.md`**.
+- **`chatgpt/copy-knowledge-files.sh`** — Also copies `references/procedures/*.md` into `chatgpt/knowledge/procedures/` for Custom GPT uploads.
+- **Version** — `1.8.3` in `SKILL.md`, `AGENTS.md`, `plugin.json`, and marketplace catalog.
+
 ## [1.8.2] - 2026-04-03
 
 ### Fixed

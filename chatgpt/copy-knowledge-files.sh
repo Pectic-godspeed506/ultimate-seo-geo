@@ -11,6 +11,11 @@ rm -f "$DEST"/*.md "$DEST"/*.json 2>/dev/null || true
 
 cp SKILL.md "$DEST/"
 
+mkdir -p "$DEST/procedures"
+for f in references/procedures/*.md; do
+  [ -f "$f" ] && cp "$f" "$DEST/procedures/"
+done
+
 for f in references/*.md references/*.json; do
   [ -f "$f" ] && cp "$f" "$DEST/"
 done

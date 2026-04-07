@@ -1,5 +1,7 @@
 # Extensions
 
+**Skill / plugin bundle:** the copy shipped with Claude Code lives in **`references/optional-extensions-mcp.md`** (install notes when `extensions/` is not on disk). This file remains the canonical detail for monorepo checkouts.
+
 Optional add-ons that integrate external data sources into the Ultimate SEO + GEO agent.
 
 Extensions are **platform-neutral** — each includes adapters for multiple AI coding platforms.

@@ -1,4 +1,4 @@
-<!-- Audit output examples — referenced from SKILL.md § 2 and § 3 -->
+<!-- Audit output examples — referenced from references/procedures/02-full-site-audit.md and 03-geo-ai-search.md -->
 
 # Audit Output Examples
 

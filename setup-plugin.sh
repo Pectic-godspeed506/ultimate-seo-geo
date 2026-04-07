@@ -66,6 +66,21 @@ else
   exit 1
 fi
 
+# ── 4b. Copy agents/ (parallel audit worker scopes) into skill bundle ─────
+if [ -d "agents" ]; then
+  mkdir -p plugins/ultimate-seo-geo/skills/ultimate-seo-geo/agents
+  rm -f plugins/ultimate-seo-geo/skills/ultimate-seo-geo/agents/*.md 2>/dev/null || true
+  for f in agents/*.md; do
+    [ -f "$f" ] || continue
+    cp "$f" plugins/ultimate-seo-geo/skills/ultimate-seo-geo/agents/
+  done
+  AG_N=$(ls agents/*.md 2>/dev/null | wc -l | tr -d ' ')
+  echo "  agents/ copied ($AG_N .md files) ✓"
+else
+  echo "  ERROR: agents/ directory not found at repo root."
+  exit 1
+fi
+
 # ── 5. Copy audit scripts + evals (exclude maintainer-only scripts) ─────────
 # check-plugin-sync.py    — CI/repo health tool, not useful to plugin users
 # check_github_release.py — requires gh CLI + network; maintainer deployment tool
@@ -126,6 +141,7 @@ echo "  plugins/ultimate-seo-geo/skills/ultimate-seo-geo/SKILL.md"
 echo "  plugins/ultimate-seo-geo/skills/ultimate-seo-geo/AGENTS.md"
 echo "  plugins/ultimate-seo-geo/skills/ultimate-seo-geo/GEMINI.md"
 echo "  plugins/ultimate-seo-geo/skills/ultimate-seo-geo/references/"
+echo "  plugins/ultimate-seo-geo/skills/ultimate-seo-geo/agents/"
 echo "  plugins/ultimate-seo-geo/skills/ultimate-seo-geo/scripts/"
 echo "  plugins/ultimate-seo-geo/skills/ultimate-seo-geo/evals/"
 echo "  plugins/ultimate-seo-geo/README.md"

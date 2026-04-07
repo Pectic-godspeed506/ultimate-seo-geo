@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![AGENTS.md](https://img.shields.io/badge/AGENTS.md-compatible-blue)](https://agents.md)
-[![Version](https://img.shields.io/badge/version-1.8.2-green.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.8.4-green.svg)](CHANGELOG.md)
 [![LLM-Agnostic](https://img.shields.io/badge/LLM--Agnostic-7%2B%20platforms-purple.svg)](#platform-compatibility)
 
 The definitive SEO and Generative Engine Optimization agent for AI coding tools. LLM-agnostic — works on any platform that reads `AGENTS.md`. Runs full site audits with scored findings, generates ready-to-deploy fixes, and optimizes content for both Google Search and AI search engines (Google AI Overviews, AI Mode, ChatGPT Search, Perplexity). Exports HTML and Excel reports.
@@ -185,8 +185,7 @@ ultimate-seo-geo/
 ├── AGENTS.md             ← Universal entrypoint (24KB, under 32KB Codex limit)
 │                           Auto-loaded by Codex, Gemini, Copilot, Windsurf, Cline, etc.
 ├── GEMINI.md             ← Gemini CLI entrypoint (imports AGENTS.md)
-├── SKILL.md              ← Full instructions (~1,280 lines, 81KB)
-│                           Mode routing, audit process, output templates, examples
+├── SKILL.md              ← Routing shell (~230 lines): §0, guardrails, procedure index
 │
 ├── .github/
 │   └── copilot-instructions.md  ← GitHub Copilot supplementary context
@@ -194,9 +193,10 @@ ultimate-seo-geo/
 ├── chatgpt/              ← ChatGPT Custom GPT bundle
 │   ├── instructions.txt     Condensed instructions (under 8K chars)
 │   ├── README.md            Setup guide
-│   └── copy-knowledge-files.sh  Copies files for upload
+│   └── copy-knowledge-files.sh  Copies SKILL + references/ + references/procedures/
 │
-├── references/            ← Domain knowledge (20 .md files, load on demand)
+├── references/            ← Domain knowledge + procedures (load on demand)
+│   ├── procedures/        ← Step-by-step §1–§21 (split from former monolithic SKILL.md)
 │   ├── ai-search-geo.md     GEO signals, platform data, brand strategy
 │   ├── technical-checklist.md  CWV fixes, JS SEO, IndexNow
 │   ├── schema-types.md       All Schema.org types + templates
@@ -204,7 +204,7 @@ ultimate-seo-geo/
 │   ├── core-eeat-framework.md  80-item CORE-EEAT content benchmark
 │   ├── cite-domain-rating.md   40-item CITE domain authority
 │   ├── entity-optimization.md  Entity / Knowledge Graph checklist
-│   ├── ...and 13 more
+│   ├── ...and 14 more topical files
 │
 ├── scripts/               ← 31 bundled Python scripts
 │   ├── generate_report.py    Full-site HTML dashboard (runs all scripts)
@@ -217,11 +217,11 @@ ultimate-seo-geo/
     └── fixtures/
 ```
 
-**Two-layer progressive disclosure for cross-platform support:**
-- **Layer 1** — `AGENTS.md` (24KB): auto-loaded by all AGENTS.md-compatible tools. Contains routing, condensed procedures, script reference, and quality gates.
-- **Layer 2** — `SKILL.md` (81KB) + `references/` + `scripts/`: loaded on demand when deeper detail or execution is needed.
+**Progressive disclosure for cross-platform support:**
+- **Layer 1** — `AGENTS.md` (~27KB): auto-loaded by AGENTS.md-compatible tools. Routing, condensed procedures, script reference, quality gates.
+- **Layer 2** — `SKILL.md` (routing shell) + `references/procedures/*.md` (detailed steps per §) + topical `references/*.md` + `scripts/`: load only what the task needs.
 
-For Claude Code and Cursor, `SKILL.md` is loaded natively as a skill. For all other platforms, `AGENTS.md` provides enough context to route and execute, with pointers to load `SKILL.md` sections when full detail is needed.
+For Claude Code and Cursor, `SKILL.md` is loaded natively as a skill (small shell); hosts pull `references/procedures/` when a section’s detail is required. Other platforms use `AGENTS.md` plus explicit reads of procedure files as needed.
 
 **Claude Code plugin install:** `bash setup-plugin.sh` mirrors `SKILL.md`, `AGENTS.md`, `GEMINI.md`, `references/`, `scripts/` (audit scripts only), and `evals/` into `plugins/.../skills/ultimate-seo-geo/` so `python scripts/...` paths work after marketplace install.
 

@@ -2,8 +2,8 @@
 
 | Attribute | Details |
 | --- | --- |
-| **Version** | 1.8.2 |
-| **Updated** | 2026-04-01 |
+| **Version** | 1.8.4 |
+| **Updated** | 2026-04-06 |
 | **License** | MIT |
 | **Author** | Myk Pono |
 | **Homepage** | [lab.mykpono.com](https://lab.mykpono.com) |
@@ -14,7 +14,7 @@ platform that reads `AGENTS.md`. Merges Google's official SEO guidance, 2026 GEO
 and practitioner best practices into one universal framework. Every finding comes with a
 clear fix directive — not just diagnosis.
 
-**Full instructions:** For detailed step-by-step procedures, scoring frameworks, and examples beyond what this file covers, read `SKILL.md`. For domain-specific reference data, read the relevant file from `references/`. Load at most 3 reference files per response.
+**Full instructions:** `SKILL.md` is the **routing shell** (§0 + global guardrails + procedure index). Detailed procedures for each § are in `references/procedures/*.md` — read only the file for the section you need. For domain-specific reference data, read the relevant file from `references/` (outside `procedures/`). Load at most **3 files** from `references/` per response (procedure files count toward that limit).
 
 ## 0. Before You Start
 
@@ -39,7 +39,7 @@ clear fix directive — not just diagnosis.
 | Analytics / myths | `references/analytics-reporting.md` | — |
 | Crawl / indexation | `references/crawl-indexation.md` | `sitemap_checker.py`, `duplicate_content.py`, `canonical_checker.py` |
 | URL discovery | — | `site_mapper.py` |
-| Extensions | `extensions/README.md` | Extension install scripts |
+| Extensions | `references/optional-extensions-mcp.md` | Optional MCP (DataForSEO, Firecrawl); monorepo: `extensions/README.md` |
 
 ### When NOT to Run a Full Audit
 
@@ -250,7 +250,7 @@ GEO = getting content cited by AI engines: Google AI Overviews, AI Mode, ChatGPT
 
 **Key insight:** 44.2% of AI citations come from the first 30% of content.
 
-For full GEO audit steps, citation demonstration pattern, entity optimization, and platform-specific playbooks → read `SKILL.md` § 3 and `references/ai-search-geo.md`.
+For full GEO audit steps, citation demonstration pattern, entity optimization, and platform-specific playbooks → read `references/procedures/03-geo-ai-search.md` and `references/ai-search-geo.md`.
 
 Scripts: `robots_checker.py`, `entity_checker.py`, `llms_txt_checker.py`, `social_meta.py`
 
@@ -279,7 +279,7 @@ Scripts: `robots_checker.py`, `entity_checker.py`, `llms_txt_checker.py`, `socia
 9. JavaScript rendering — key content absent from raw HTML = invisible to AI bots.
 10. Open Graph + Twitter Card — `og:title`, `og:description`, `og:image`.
 
-For full technical audit steps and CWV fix patterns → read `SKILL.md` § 4 and `references/technical-checklist.md`.
+For full technical audit steps and CWV fix patterns → read `references/procedures/04-technical-seo.md` and `references/technical-checklist.md`.
 
 Scripts: `pagespeed.py`, `robots_checker.py`, `redirect_checker.py`, `security_headers.py`, `broken_links.py`, `sitemap_checker.py`
 
@@ -300,7 +300,7 @@ Always use JSON-LD. Schema improves AI citation likelihood ~2.5×.
 
 **Caveat:** `web_fetch`/`curl` cannot detect JS-injected schema (Yoast, RankMath). Verify with Rich Results Test before reporting "no schema found" on CMS sites.
 
-For schema templates, validation checklist, retired types, and AEO schema → read `SKILL.md` § 5 and `references/schema-types.md`.
+For schema templates, validation checklist, retired types, and AEO schema → read `references/procedures/05-schema-structured-data.md` and `references/schema-types.md`.
 
 Script: `validate_schema.py`
 
@@ -314,7 +314,7 @@ E-E-A-T is universal for all competitive queries (December 2025). AI content acc
 
 Key checks (content/marketing pages only): Named author with credentials? First-hand experience signals? Word count floors (blog 1,500+, service 800+, homepage 500+) — but thoroughness matters more than count. Thin content signals: copied definitions, no original research, no author bio.
 
-For the full E-E-A-T scoring framework, CORE-EEAT 80-item benchmark, and CITE domain rating → read `SKILL.md` § 6 and `references/eeat-framework.md`, `references/core-eeat-framework.md`, `references/cite-domain-rating.md`.
+For the full E-E-A-T scoring framework, CORE-EEAT 80-item benchmark, and CITE domain rating → read `references/procedures/06-content-eeat-and-pruning.md` and `references/eeat-framework.md`, `references/core-eeat-framework.md`, `references/cite-domain-rating.md`.
 
 Scripts: `article_seo.py`, `readability.py`, `duplicate_content.py`
 
@@ -352,7 +352,7 @@ Minimum stack: GSC, GA4, PageSpeed Insights, rank tracker. Traffic drop diagnost
 
 Crawl budget rarely matters under 500 pages. Key checks: `site:domain.com` discrepancy, GSC Coverage status pages, sitemap URL health, search/template URLs in sitemap (must be noindexed), soft 404s, canonical conflicts, broken internal links. `<priority>` and `<changefreq>` tags are ignored by Google/Bing — omit them.
 
-For canonical validation steps, GSC remediation tables, and "Google chose different canonical" fixes → read `SKILL.md` § 11.
+For canonical validation steps, GSC remediation tables, and "Google chose different canonical" fixes → read `references/procedures/11-crawl-indexation.md`.
 
 Scripts: `sitemap_checker.py`, `canonical_checker.py`, `internal_links.py`, `broken_links.py`, `duplicate_content.py`
 
@@ -477,7 +477,7 @@ bash scripts/run_individual_checks.sh https://example.com
 
 | Script | Purpose |
 |---|---|
-| `generate_report.py` | Full-site HTML/XLSX dashboard (runs all scripts) |
+| `generate_report.py` | Full-site HTML/XLSX/PDF dashboard (runs all scripts) |
 | `validate_schema.py` | JSON-LD validation |
 | `robots_checker.py` | robots.txt + AI crawler access |
 | `pagespeed.py` | Core Web Vitals via PageSpeed API |
@@ -519,6 +519,14 @@ python scripts/generate_report.py https://example.com --format all --output repo
 
 Requires `openpyxl` (optional): `pip install openpyxl>=3.1.0`
 
+### PDF Export
+
+```bash
+python scripts/generate_report.py https://example.com --format pdf --output report.pdf
+```
+
+Requires **WeasyPrint** (optional): `pip install weasyprint` — see [WeasyPrint installation](https://doc.courtbouillon.org/weasyprint/stable/first_steps.html#installation) for OS libraries. **Fallback:** `--format html` then browser **Print → Save as PDF**.
+
 ### Extensions (Optional)
 
 Extensions add external data sources. Core scripts work without them.
@@ -528,20 +536,11 @@ Extensions add external data sources. Core scripts work without them.
 | Firecrawl | JS-rendered crawling | `bash extensions/firecrawl/install-generic.sh` |
 | DataForSEO | Live SERP, keywords, backlinks | `bash extensions/dataforseo/install-generic.sh` |
 
-See `extensions/README.md` for platform-specific install adapters (Claude Code, Cursor).
+See `references/optional-extensions-mcp.md` for install paths (plugin bundle); full monorepo: `extensions/README.md`.
 
 ### Subagent Definitions
 
-For parallel audit execution, subagent capability files live in `agents/`. Each platform interprets these natively — Cursor uses its Task tool, Claude Code uses its Agent tool, others read as context.
-
-| Agent | Scope |
-|-------|-------|
-| `seo-technical` | Crawlability, security, CWV, redirects |
-| `seo-content` | E-E-A-T, readability, duplicates |
-| `seo-schema` | JSON-LD validation |
-| `seo-geo` | AI search visibility, llms.txt, entities |
-| `seo-performance` | Core Web Vitals, page speed |
-| `seo-links` | Internal links, broken links, backlinks |
+For parallel audit execution, scopes and scripts are in **`agents/PARALLEL-AUDIT.md`** (single file). Each platform interprets these natively — Cursor uses its Task tool, Claude Code can use its Agent tool, others read as context. See `agents/README.md` for the orchestration pattern.
 
 ### Context Management for Long Sessions
 
@@ -551,16 +550,16 @@ If context fills mid-audit: compress completed findings into `[Section] Finding 
 
 ## Full Detail Reference
 
-This file provides enough context to route, audit, and execute. For the complete step-by-step procedures, examples, scoring frameworks, and edge cases, read `SKILL.md`. Key sections to load on demand:
+This file provides enough context to route, audit, and execute. For the routing shell and global guardrails, read `SKILL.md`. For step-by-step procedures, load the matching file from `references/procedures/` (see `references/procedures/README.md`). Key procedures on demand:
 
-| Need | Read in SKILL.md |
+| Need | Read |
 |---|---|
-| Full audit process with examples | § 2 |
-| GEO citation demonstration pattern | § 3 |
-| Technical audit full checklist | § 4 |
-| Schema validation checklist | § 5 |
-| Content pruning decision tree | § 6b |
-| Canonical remediation tables | § 11 |
-| Competitor analysis dimensions | § 8 |
-| Migration pre/post checklists | § 20 |
-| Execute + verify loop with examples | § 2 (Mode 3) |
+| Full audit process with examples | `references/procedures/02-full-site-audit.md` |
+| GEO citation demonstration pattern | `references/procedures/03-geo-ai-search.md` |
+| Technical audit full checklist | `references/procedures/04-technical-seo.md` |
+| Schema validation checklist | `references/procedures/05-schema-structured-data.md` |
+| Content pruning decision tree | `references/procedures/06-content-eeat-and-pruning.md` (§6b) |
+| Canonical remediation tables | `references/procedures/11-crawl-indexation.md` |
+| Competitor analysis dimensions | `references/procedures/08-competitor-analysis.md` |
+| Migration pre/post checklists | `references/procedures/20-site-migration.md` |
+| Execute + verify loop with examples | `references/procedures/02-full-site-audit.md` (Mode 3) |
